@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Selector - Wireframe Demo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="../assets/css/company-selector.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      min-height: 100vh;
+    }
+
+    /* Demo Controls */
+    .demo-controls {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(9, 26, 48, 0.15);
+      z-index: 3000;
+      max-width: 300px;
+    }
+
+    .demo-controls h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #091A30;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid rgba(9, 26, 48, 0.12);
+      background: #ffffff;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #091A30;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .demo-button:hover {
+      background: rgba(9, 26, 48, 0.04);
+      border-color: #FF002D;
+    }
+
+    .demo-button.active {
+      background: #FF002D;
+      color: #ffffff;
+      border-color: #FF002D;
+    }
+
+    /* Content Area */
+    .content-area {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .content-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(9, 26, 48, 0.08);
+      margin-bottom: 1.5rem;
+    }
+
+    .content-card h2 {
+      color: #091A30;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .content-card p {
+      color: rgba(9, 26, 48, 0.7);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       COMPANY SELECTOR COMPONENT
+       Estado: Múltiplas empresas cadastradas
+       ============================================ -->
+
+  <div class="company-selector-wrapper" id="companySelectorWrapper">
+    <div class="company-selector-container">
+
+      <!-- Branding Section -->
+      <div class="selector-branding">
+        <div class="selector-branding-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="selector-branding-text">
+          <div class="selector-branding-title">Financiamento</div>
+          <div class="selector-branding-subtitle">Sistema Expertzy</div>
+        </div>
+      </div>
+
+      <!-- Main Selector -->
+      <div class="company-selector" id="companySelector">
+
+        <!-- Selected Company Button -->
+        <button
+          class="company-selector-button"
+          id="companySelectorButton"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label="Selecionar empresa"
+        >
+          <div class="company-icon">
+            <i class="fas fa-building"></i>
+          </div>
+
+          <div class="company-info">
+            <div class="company-name" id="selectedCompanyName">Selecione uma empresa</div>
+            <div class="company-cnpj" id="selectedCompanyCNPJ">00.000.000/0000-00</div>
+          </div>
+
+          <span class="company-badge" id="companyBadge">3 cadastradas</span>
+
+          <i class="fas fa-chevron-down company-chevron"></i>
+
+          <!-- Loading Indicator (hidden by default) -->
+          <div class="loading-indicator" style="display: none;"></div>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="company-dropdown" id="companyDropdown" role="listbox" aria-label="Lista de empresas">
+
+          <!-- Search Input -->
+          <div class="company-search">
+            <input
+              type="text"
+              class="company-search-input"
+              id="companySearch"
+              placeholder="Buscar empresa por nome ou CNPJ..."
+              aria-label="Buscar empresa"
+            >
+          </div>
+
+          <!-- Company List -->
+          <div class="company-list" id="companyList">
+            <!-- Populated by JavaScript -->
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- New Company Section -->
+      <div class="new-company-section">
+        <button
+          class="btn-new-company"
+          id="btnNewCompany"
+          aria-label="Cadastrar nova empresa"
+        >
+          <i class="fas fa-plus btn-new-company-icon"></i>
+          <span>Nova Empresa</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================
+       CONFIRMATION MODAL
+       ============================================ -->
+
+  <div class="modal-overlay" id="confirmationModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2 class="modal-title" id="modalTitle">Alterações não salvas</h2>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-text">
+          Você possui alterações não salvas no formulário da empresa atual.
+          Deseja realmente trocar de empresa?
+        </p>
+
+        <div class="modal-warning">
+          <i class="fas fa-info-circle modal-warning-icon"></i>
+          <div>
+            <strong>Dados não salvos serão perdidos.</strong><br>
+            Recomendamos salvar o formulário antes de trocar de empresa.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal btn-modal-cancel" id="btnModalCancel">
+          Cancelar
+        </button>
+        <button class="btn-modal btn-modal-confirm" id="btnModalConfirm">
+          Trocar mesmo assim
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================
+       DEMO CONTENT AREA
+       ============================================ -->
+
+  <div class="content-area">
+    <div class="content-card">
+      <h2>Seção 1: Dados da Empresa</h2>
+      <p>
+        Este é um exemplo de conteúdo do formulário. O seletor de empresa
+        permanece fixo no topo enquanto você navega pelas 23 seções do sistema.
+      </p>
+    </div>
+
+    <div class="content-card">
+      <h2>Navegação Hierárquica</h2>
+      <p>
+        O sistema possui 7 seções principais com 23 tabs no total.
+        O seletor de empresa está sempre visível para facilitar a troca
+        entre diferentes CNPJs cadastrados.
+      </p>
+    </div>
+
+    <div class="content-card">
+      <h2>Auto-save e Sincronização</h2>
+      <p>
+        Dados são salvos automaticamente a cada 30 segundos (periódico) e
+        3 segundos após cada alteração (debounce). Ao trocar de empresa,
+        o sistema carrega os dados específicos daquele CNPJ.
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================
+       DEMO CONTROLS
+       ============================================ -->
+
+  <div class="demo-controls">
+    <h3>Estados do Componente</h3>
+    <button class="demo-button active" data-state="multiple">
+      Múltiplas Empresas (3)
+    </button>
+    <button class="demo-button" data-state="single">
+      1 Empresa Cadastrada
+    </button>
+    <button class="demo-button" data-state="empty">
+      Nenhuma Empresa
+    </button>
+    <button class="demo-button" data-state="loading">
+      Estado de Loading
+    </button>
+  </div>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+
+  <script>
+    // ===========================================
+    // MOCK DATA
+    // ===========================================
+
+    const mockCompanies = [
+      {
+        id: 1,
+        name: 'Indústria Exemplo S.A.',
+        cnpj: '12.345.678/0001-90',
+        active: true
+      },
+      {
+        id: 2,
+        name: 'Tecnologia Inovadora LTDA',
+        cnpj: '98.765.432/0001-10',
+        active: false
+      },
+      {
+        id: 3,
+        name: 'Comércio Global Importação e Exportação',
+        cnpj: '55.444.333/0001-22',
+        active: false
+      }
+    ];
+
+    // ===========================================
+    // STATE MANAGEMENT
+    // ===========================================
+
+    let currentState = 'multiple'; // multiple | single | empty | loading
+    let selectedCompany = mockCompanies[0];
+    let hasUnsavedChanges = false;
+    let pendingCompanyChange = null;
+
+    // ===========================================
+    // DOM ELEMENTS
+    // ===========================================
+
+    const companySelectorButton = document.getElementById('companySelectorButton');
+    const companyDropdown = document.getElementById('companyDropdown');
+    const companyList = document.getElementById('companyList');
+    const companySearch = document.getElementById('companySearch');
+    const selectedCompanyName = document.getElementById('selectedCompanyName');
+    const selectedCompanyCNPJ = document.getElementById('selectedCompanyCNPJ');
+    const companyBadge = document.getElementById('companyBadge');
+    const confirmationModal = document.getElementById('confirmationModal');
+    const btnModalCancel = document.getElementById('btnModalCancel');
+    const btnModalConfirm = document.getElementById('btnModalConfirm');
+    const btnNewCompany = document.getElementById('btnNewCompany');
+    const demoButtons = document.querySelectorAll('.demo-button');
+
+    // ===========================================
+    // RENDER FUNCTIONS
+    // ===========================================
+
+    function renderCompanyList(companies = mockCompanies) {
+      if (companies.length === 0) {
+        companyList.innerHTML = `
+          <div class="company-empty">
+            <div class="company-empty-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <div class="company-empty-title">Nenhuma empresa encontrada</div>
+            <div class="company-empty-text">
+              Cadastre sua primeira empresa para começar.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      companyList.innerHTML = companies.map(company => `
+        <div
+          class="company-item ${company.active ? 'selected' : ''}"
+          role="option"
+          aria-selected="${company.active}"
+          data-company-id="${company.id}"
+          tabindex="0"
+        >
+          <div class="company-item-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <div class="company-item-info">
+            <div class="company-item-name">${company.name}</div>
+            <div class="company-item-cnpj">${company.cnpj}</div>
+          </div>
+          <i class="fas fa-check company-item-check"></i>
+        </div>
+      `).join('');
+
+      // Add click listeners
+      document.querySelectorAll('.company-item').forEach(item => {
+        item.addEventListener('click', handleCompanySelect);
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCompanySelect.call(item);
+          }
+        });
+      });
+    }
+
+    function updateSelectedCompany() {
+      if (!selectedCompany) {
+        selectedCompanyName.textContent = 'Selecione uma empresa';
+        selectedCompanyCNPJ.textContent = '00.000.000/0000-00';
+        companyBadge.textContent = '0 cadastradas';
+        return;
+      }
+
+      selectedCompanyName.textContent = selectedCompany.name;
+      selectedCompanyCNPJ.textContent = selectedCompany.cnpj;
+
+      const count = mockCompanies.length;
+      companyBadge.textContent = count === 1 ? '1 cadastrada' : `${count} cadastradas`;
+    }
+
+    // ===========================================
+    // EVENT HANDLERS
+    // ===========================================
+
+    function toggleDropdown() {
+      const isActive = companyDropdown.classList.contains('active');
+
+      if (isActive) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+
+    function openDropdown() {
+      companyDropdown.classList.add('active');
+      companySelectorButton.classList.add('active');
+      companySelectorButton.setAttribute('aria-expanded', 'true');
+      companySearch.focus();
+    }
+
+    function closeDropdown() {
+      companyDropdown.classList.remove('active');
+      companySelectorButton.classList.remove('active');
+      companySelectorButton.setAttribute('aria-expanded', 'false');
+      companySearch.value = '';
+      renderCompanyList(mockCompanies);
+    }
+
+    function handleCompanySelect() {
+      const companyId = parseInt(this.dataset.companyId);
+      const company = mockCompanies.find(c => c.id === companyId);
+
+      if (!company || company.active) {
+        closeDropdown();
+        return;
+      }
+
+      // Check for unsaved changes
+      if (hasUnsavedChanges) {
+        pendingCompanyChange = company;
+        openConfirmationModal();
+        closeDropdown();
+        return;
+      }
+
+      // Switch company
+      switchCompany(company);
+      closeDropdown();
+    }
+
+    function switchCompany(company) {
+      // Simulate loading
+      setLoadingState(true);
+
+      setTimeout(() => {
+        // Update active states
+        mockCompanies.forEach(c => c.active = (c.id === company.id));
+        selectedCompany = company;
+
+        // Update UI
+        updateSelectedCompany();
+        renderCompanyList(mockCompanies);
+        setLoadingState(false);
+
+        console.log(`Switched to company: ${company.name}`);
+      }, 800);
+    }
+
+    function setLoadingState(isLoading) {
+      const loadingIndicator = document.querySelector('.loading-indicator');
+      const companySelector = document.getElementById('companySelector');
+
+      if (isLoading) {
+        companySelector.classList.add('loading');
+        loadingIndicator.style.display = 'block';
+      } else {
+        companySelector.classList.remove('loading');
+        loadingIndicator.style.display = 'none';
+      }
+    }
+
+    function openConfirmationModal() {
+      confirmationModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmationModal() {
+      confirmationModal.classList.remove('active');
+      document.body.style.overflow = '';
+      pendingCompanyChange = null;
+    }
+
+    function confirmCompanyChange() {
+      if (pendingCompanyChange) {
+        hasUnsavedChanges = false;
+        switchCompany(pendingCompanyChange);
+      }
+      closeConfirmationModal();
+    }
+
+    function handleSearch(e) {
+      const searchTerm = e.target.value.toLowerCase().trim();
+
+      if (!searchTerm) {
+        renderCompanyList(mockCompanies);
+        return;
+      }
+
+      const filtered = mockCompanies.filter(company => {
+        const nameMatch = company.name.toLowerCase().includes(searchTerm);
+        const cnpjMatch = company.cnpj.replace(/\D/g, '').includes(searchTerm.replace(/\D/g, ''));
+        return nameMatch || cnpjMatch;
+      });
+
+      renderCompanyList(filtered);
+    }
+
+    function handleNewCompany() {
+      alert('Modal de cadastro de nova empresa será aberto aqui.\n\nImplementação: formulário com campos CNPJ, Razão Social, etc.');
+      closeDropdown();
+    }
+
+    // ===========================================
+    // DEMO STATE SWITCHING
+    // ===========================================
+
+    function switchDemoState(state) {
+      currentState = state;
+
+      // Update button states
+      demoButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.state === state);
+      });
+
+      // Update component state
+      switch(state) {
+        case 'multiple':
+          mockCompanies.length = 3;
+          selectedCompany = mockCompanies[0];
+          mockCompanies.forEach(c => c.active = (c.id === 1));
+          setLoadingState(false);
+          break;
+
+        case 'single':
+          mockCompanies.length = 1;
+          selectedCompany = mockCompanies[0];
+          mockCompanies[0].active = true;
+          setLoadingState(false);
+          break;
+
+        case 'empty':
+          mockCompanies.length = 0;
+          selectedCompany = null;
+          setLoadingState(false);
+          break;
+
+        case 'loading':
+          setLoadingState(true);
+          setTimeout(() => setLoadingState(false), 3000);
+          return;
+      }
+
+      updateSelectedCompany();
+      renderCompanyList(mockCompanies);
+    }
+
+    // ===========================================
+    // EVENT LISTENERS
+    // ===========================================
+
+    companySelectorButton.addEventListener('click', toggleDropdown);
+    companySearch.addEventListener('input', handleSearch);
+    btnNewCompany.addEventListener('click', handleNewCompany);
+    btnModalCancel.addEventListener('click', closeConfirmationModal);
+    btnModalConfirm.addEventListener('click', confirmCompanyChange);
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const selector = document.getElementById('companySelector');
+      if (!selector.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Close modal on overlay click
+    confirmationModal.addEventListener('click', (e) => {
+      if (e.target === confirmationModal) {
+        closeConfirmationModal();
+      }
+    });
+
+    // Demo state buttons
+    demoButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchDemoState(btn.dataset.state);
+      });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDropdown();
+        closeConfirmationModal();
+      }
+    });
+
+    // Simulate unsaved changes after 2 seconds
+    setTimeout(() => {
+      hasUnsavedChanges = true;
+      console.log('Simulated unsaved changes - try switching companies now!');
+    }, 2000);
+
+    // ===========================================
+    // INITIALIZATION
+    // ===========================================
+
+    updateSelectedCompany();
+    renderCompanyList(mockCompanies);
+
+    // Sticky header effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const wrapper = document.getElementById('companySelectorWrapper');
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        wrapper.classList.add('scrolled');
+      } else {
+        wrapper.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+  </script>
+
+</body>
+</html>

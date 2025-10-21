@@ -1,0 +1,31 @@
+{
+  "name": "creditscore-pro",
+  "version": "1.0.0",
+  "description": "Sistema de Análise de Crédito e Compliance Financeiro",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite --open",
+    "start:legacy": "python3 -m http.server 8000",
+    "test": "playwright test",
+    "test:screenshots": "playwright test screenshots.spec.js",
+    "test:navigation": "playwright test navigation.spec.js",
+    "test:e2e": "playwright test",
+    "test:report": "playwright show-report test-results/html-report",
+    "test:debug": "playwright test --debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@vitejs/plugin-legacy": "^7.2.1",
+    "vite": "^7.1.10",
+    "vite-plugin-html": "^3.2.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^2.0.0"
+  }
+}

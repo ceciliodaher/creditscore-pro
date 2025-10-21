@@ -1,0 +1,95 @@
+{
+  "systemName": "CreditScore Pro",
+  "version": "1.0.0",
+  "modules": [
+    {
+      "id": 1,
+      "name": "Cadastro e Identificação",
+      "required": true,
+      "icon": "building"
+    },
+    {
+      "id": 2,
+      "name": "Demonstrações Financeiras",
+      "required": true,
+      "icon": "chart-line",
+      "submodules": ["balanco", "dre"]
+    },
+    {
+      "id": 3,
+      "name": "Endividamento",
+      "required": true,
+      "icon": "credit-card"
+    },
+    {
+      "id": 4,
+      "name": "Índices Financeiros",
+      "computed": true,
+      "icon": "calculator"
+    },
+    {
+      "id": 5,
+      "name": "Scoring de Crédito",
+      "computed": true,
+      "icon": "star"
+    },
+    {
+      "id": 6,
+      "name": "Compliance",
+      "required": true,
+      "icon": "shield-check"
+    },
+    {
+      "id": 7,
+      "name": "Recursos Humanos",
+      "required": false,
+      "icon": "users"
+    },
+    {
+      "id": 8,
+      "name": "Relatórios",
+      "computed": true,
+      "icon": "file-report"
+    }
+  ],
+  "scoring": {
+    "categorias": {
+      "cadastral": { "peso": 20, "minimo": 0, "maximo": 20 },
+      "financeiro": { "peso": 25, "minimo": 0, "maximo": 25 },
+      "pagamento": { "peso": 25, "minimo": 0, "maximo": 25 },
+      "endividamento": { "peso": 20, "minimo": 0, "maximo": 20 },
+      "garantias": { "peso": 10, "minimo": 0, "maximo": 10 }
+    },
+    "classificacoes": [
+      { "rating": "AAA", "min": 90, "max": 100, "risco": "Mínimo" },
+      { "rating": "AA", "min": 80, "max": 89, "risco": "Baixo" },
+      { "rating": "A", "min": 70, "max": 79, "risco": "Moderado-Baixo" },
+      { "rating": "BBB", "min": 60, "max": 69, "risco": "Moderado" },
+      { "rating": "BB", "min": 50, "max": 59, "risco": "Moderado-Alto" },
+      { "rating": "B", "min": 40, "max": 49, "risco": "Alto" },
+      { "rating": "C", "min": 30, "max": 39, "risco": "Muito Alto" },
+      { "rating": "D", "min": 0, "max": 29, "risco": "Extremo" }
+    ]
+  },
+  "indices": {
+    "liquidez": {
+      "corrente": { "ideal": ">= 1.5", "aceitavel": ">= 1.0", "critico": "< 1.0" },
+      "seca": { "ideal": ">= 1.0", "aceitavel": ">= 0.7", "critico": "< 0.7" },
+      "imediata": { "ideal": ">= 0.5", "aceitavel": ">= 0.3", "critico": "< 0.3" }
+    },
+    "rentabilidade": {
+      "margemBruta": { "ideal": ">= 30", "aceitavel": ">= 20", "critico": "< 20" },
+      "margemLiquida": { "ideal": ">= 10", "aceitavel": ">= 5", "critico": "< 5" },
+      "roe": { "ideal": ">= 15", "aceitavel": ">= 10", "critico": "< 10" }
+    },
+    "endividamento": {
+      "total": { "ideal": "<= 50", "aceitavel": "<= 70", "critico": "> 70" },
+      "financeiro": { "ideal": "<= 100", "aceitavel": "<= 150", "critico": "> 150" }
+    }
+  },
+  "alertas": {
+    "critico": ["liquidezBaixa", "prejuizoConsecutivo", "endividamentoAlto"],
+    "atencao": ["margemDecrescente", "aumendoEndividamento", "cycloLongo"],
+    "informativo": ["mudancaSocietaria", "novaOperacao"]
+  }
+}
