@@ -22,10 +22,16 @@
   "devDependencies": {
     "@playwright/test": "^1.55.1",
     "@vitejs/plugin-legacy": "^7.2.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.15",
     "vite": "^7.1.10",
     "vite-plugin-html": "^3.2.2"
   },
   "dependencies": {
-    "@anthropic-ai/claude-code": "^2.0.0"
+    "@anthropic-ai/claude-code": "^2.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
   }
 }
