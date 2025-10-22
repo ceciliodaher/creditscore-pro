@@ -158,7 +158,6 @@
     
     <!-- Scripts Core CreditScore -->
     <script type="module" src="../assets/js/core/creditscore-module.js"></script>
-    <script type="module" src="../assets/js/core/config-loader.js"></script>
     <script type="module" src="../assets/js/core/form-generator.js"></script>
     <script type="module" src="../assets/js/core/navigation-controller.js"></script>
     <script type="module" src="../assets/js/core/auto-save.js"></script>
@@ -180,73 +179,305 @@
         class CreditScoreProApp {
             constructor() {
                 this.config = null;
+                this.messages = null;
                 this.modules = new Map();
                 this.currentModule = 1;
                 this.formData = new Map();
                 this.initialized = false;
-                
+                this.hierarchicalNav = null;
+                this.dbManager = null;
+
                 console.log('🚀 CreditScore Pro App iniciando...');
             }
             
             /**
              * Inicialização principal da aplicação
+             *
+             * ⚠️ ORDEM CRÍTICA DE EXECUÇÃO:
+             *
+             * 1. loadConfig()
+             *    - Carrega config.json e messages.json via fetch
+             *    - Expõe window.CONFIG e window.MESSAGES (global)
+             *    - Atualiza título da página
+             *
+             * 2. checkDependencies()
+             *    - Valida que todas as classes estão disponíveis no window
+             *    - Lista: ConfigLoader, FormGenerator, NavigationController,
+             *             AutoSave, CreditScoreModule, HierarchicalNavigation,
+             *             CreditscoreIndexedDB
+             *
+             * 3. initBasicModules()
+             *    - ConfigLoader (sem dependências externas)
+             *    - FormGenerator (depende de config + messages)
+             *    - CreditScoreModule (depende de config + window.MESSAGES)
+             *
+             * 4. generateInterface()
+             *    - Gera tabs HTML baseado em config.modules
+             *    - Gera form content HTML usando FormGenerator
+             *    - **CRIA .tab-item no DOM** (crítico para próximo passo!)
+             *    - Aplica máscaras currency
+             *
+             * 5. initNavigationAndDB()
+             *    - HierarchicalNavigation (AGORA tabs existem no DOM!)
+             *    - Nota: CreditscoreIndexedDB já inicializado por CreditScoreModule
+             *
+             * 6. initDependentModules()
+             *    - NavigationController (depende de hierarchicalNav)
+             *    - AutoSave (depende de dbManager)
+             *
+             * 7. setupNavigation() + setupAutoSave()
+             *    - Configura event listeners para botões
+             *    - Ativa auto-save com intervalo configurado
+             *
+             * 8. attemptDataRestore()
+             *    - Tenta restaurar dados salvos do IndexedDB
+             *    - Confirma com usuário se há dados
+             *
+             * 9. showInterface()
+             *    - Esconde loading state
+             *    - Mostra formulário
+             *    - Sistema pronto para uso
+             *
+             * ⚠️ NÃO ALTERAR ORDEM - Race conditions podem ocorrer!
+             * Especialmente a ordem 4 → 5 (gerar interface antes de HierarchicalNavigation)
+             *
+             * @returns {Promise<void>}
+             * @throws {Error} Se inicialização falhar em qualquer etapa
+             *
+             * @see PHASE1-IMPLEMENTATION.md para detalhes completos
+             * @see ARCHITECTURAL-ANALYSIS.md para análise de dependências
+             */
+            /**
+             * Inicialização principal usando Dependency Injection
+             * ARQUITETURA: Two-Phase Init (Construction → Initialization)
+             *
+             * ORDEM CRÍTICA (NÃO ALTERAR):
+             *
+             * FASE 1: Configuração
+             *   - loadConfig() → window.CONFIG, window.MESSAGES
+             *   - checkDependencies()
+             *
+             * FASE 2: Instâncias SEM DOM
+             *   - ConfigLoader → window.configLoader (global)
+             *   - FormGenerator → this.modules.get('formGenerator')
+             *   - Database → window.CreditscoreIndexedDB, dbManager proxy
+             *
+             * FASE 3: Geração do DOM
+             *   - generateInterface() → cria .tab-item no DOM
+             *
+             * FASE 4: Instâncias PÓS-DOM
+             *   - HierarchicalNavigation.initAfterDOM() → this.hierarchicalNav
+             *   - NavigationController → injeta hierarchicalNav
+             *   - AutoSave → injeta navigationController
+             *   - CreditScoreModule → injeta TODAS as dependências
+             *
+             * FASE 5: Setup & Restore
+             * FASE 6: Validação & Finalização
              */
             async init() {
                 try {
-                    // 1. Carregar configuração
+                    // ========================================
+                    // FASE 1: CARREGAMENTO DE CONFIGURAÇÃO
+                    // ========================================
                     await this.loadConfig();
-                    
-                    // 2. Verificar dependências
+                    // Expõe: window.CONFIG, window.MESSAGES
+
                     this.checkDependencies();
-                    
-                    // 3. Inicializar módulos core
-                    await this.initCoreModules();
-                    
-                    // 4. Gerar interface
-                    await this.generateInterface();
-                    
-                    // 5. Configurar navegação
+                    // Valida: window.HierarchicalNavigation, FormGenerator, etc. existem
+
+                    // ========================================
+                    // FASE 2: CRIAÇÃO DE INSTÂNCIAS (SEM DOM)
+                    // ========================================
+
+                    // 2.1. ConfigLoader (PRIMEIRO - sem dependências)
+                    const configLoader = new window.ConfigLoader(this.config);
+                    await configLoader.init();
+                    window.configLoader = configLoader; // Expõe globalmente (CreditscoreIndexedDB depende)
+                    this.modules.set('config', configLoader);
+                    console.log('✅ ConfigLoader inicializado');
+
+                    // 2.2. FormGenerator (precisa de config + messages)
+                    const formGenerator = new window.FormGenerator(this.config, this.messages);
+                    await formGenerator.init();
+                    this.modules.set('formGenerator', formGenerator);
+                    console.log('✅ FormGenerator inicializado');
+
+                    // 2.3. CreditscoreIndexedDB (precisa de window.configLoader validado)
+                    await window.CreditscoreIndexedDB.openDatabase();
+                    this.dbManager = this.#createDBManagerProxy();
+                    console.log('✅ Database inicializado');
+
+                    // ========================================
+                    // FASE 3: GERAÇÃO DO DOM
+                    // ========================================
+                    // AGORA FormGenerator existe em this.modules.get('formGenerator')
+                    await this.generateInterface(); // Cria .tab-item no DOM
+
+                    // ========================================
+                    // FASE 4: INICIALIZAÇÃO PÓS-DOM
+                    // ========================================
+
+                    // 4.1. HierarchicalNavigation (AGORA .tab-item existe)
+                    this.hierarchicalNav = new window.HierarchicalNavigation();
+                    this.hierarchicalNav.initAfterDOM(); // ✅ Inicializa com DOM pronto
+                    window.hierarchicalNavigation = this.hierarchicalNav;
+                    console.log('✅ HierarchicalNavigation inicializado');
+
+                    // 4.2. NavigationController (precisa de hierarchicalNav)
+                    const navigationController = new window.NavigationController(
+                        this.config,
+                        this.messages,
+                        this.hierarchicalNav
+                    );
+                    await navigationController.init();
+                    this.modules.set('navigation', navigationController);
+                    console.log('✅ NavigationController inicializado');
+
+                    // 4.3. AutoSave (precisa de dbManager + navigationController)
+                    const autoSave = new window.AutoSave(
+                        this.config,
+                        this.messages,
+                        this.dbManager
+                    );
+                    await autoSave.init(null, navigationController); // null = creditScoreModule opcional
+                    this.modules.set('autoSave', autoSave);
+                    console.log('✅ AutoSave inicializado');
+
+                    // 4.4. CreditScoreModule (recebe TODAS as dependências)
+                    const creditScore = new window.CreditScoreModule(this.config);
+
+                    // ✅ INJETAR DEPENDÊNCIAS antes de init()
+                    creditScore.hierarchicalNav = this.hierarchicalNav;
+                    creditScore.navigationController = navigationController;
+                    creditScore.autoSave = autoSave;
+                    creditScore.dbManager = this.dbManager;
+                    creditScore.formGenerator = formGenerator;
+                    creditScore.scoringCriteria = this.scoringCriteria; // ✅ Passa scoring criteria para ScoringEngine
+
+                    await creditScore.init();
+                    this.modules.set('creditScore', creditScore);
+                    console.log('✅ CreditScoreModule inicializado');
+
+                    // ========================================
+                    // FASE 5: SETUP & RESTORE
+                    // ========================================
                     this.setupNavigation();
-                    
-                    // 6. Configurar auto-save
                     this.setupAutoSave();
-                    
-                    // 7. Tentar restaurar dados
                     await this.attemptDataRestore();
-                    
-                    // 8. Marcar como inicializado
+
+                    // ========================================
+                    // FASE 6: VALIDAÇÃO & FINALIZAÇÃO
+                    // ========================================
+                    // Validar que módulos foram criados na ordem correta
+                    this.#validateInitializationOrder();
+
                     this.initialized = true;
-                    
-                    // 9. Esconder loading e mostrar formulário
                     this.showInterface();
-                    
                     console.log('✅ CreditScore Pro inicializado com sucesso');
-                    
+
                 } catch (error) {
                     console.error('❌ Erro na inicialização:', error);
                     this.showError('Erro ao inicializar o sistema', error.message);
                 }
             }
-            
+
             /**
-             * Carrega configuração do sistema
+             * Cria proxy object para CreditscoreIndexedDB (static methods → instance-like)
+             * @private
+             */
+#createDBManagerProxy() {
+                return {
+                    init: async () => window.CreditscoreIndexedDB.openDatabase(),
+                    get: (storeName, key) => window.CreditscoreIndexedDB.get(storeName, key),
+                    save: (storeName, data) => window.CreditscoreIndexedDB.save(storeName, data),
+                    delete: (storeName, key) => window.CreditscoreIndexedDB.delete(storeName, key),
+                    getAll: (storeName, indexName) => window.CreditscoreIndexedDB.getAll(storeName, indexName),
+                    clear: (storeName) => window.CreditscoreIndexedDB.clear(storeName)
+                };
+            }
+
+            /**
+             * Valida ordem de inicialização
+             * Garante que dependências foram criadas na ordem correta
+             * @private
+             * @throws {Error} Se ordem está incorreta
+             */
+            #validateInitializationOrder() {
+                const requiredOrder = [
+                    'config',        // 1. ConfigLoader
+                    'formGenerator', // 2. FormGenerator
+                    // (dbManager não está em modules, é this.dbManager)
+                    // (generateInterface cria DOM)
+                    // (hierarchicalNav não está em modules, é this.hierarchicalNav)
+                    'navigation',    // 3. NavigationController
+                    'autoSave',      // 4. AutoSave
+                    'creditScore'    // 5. CreditScoreModule
+                ];
+
+                const moduleKeys = Array.from(this.modules.keys());
+
+                for (let i = 0; i < requiredOrder.length; i++) {
+                    const expected = requiredOrder[i];
+
+                    if (!this.modules.has(expected)) {
+                        throw new Error(`Ordem de inicialização incorreta: módulo "${expected}" deveria estar em posição ${i + 1}, mas não existe`);
+                    }
+
+                    // Verificar se existe antes dos esperados posteriormente
+                    const position = moduleKeys.indexOf(expected);
+                    for (let j = i + 1; j < requiredOrder.length; j++) {
+                        const laterModule = requiredOrder[j];
+                        const laterPosition = moduleKeys.indexOf(laterModule);
+
+                        if (laterPosition !== -1 && laterPosition < position) {
+                            throw new Error(`Ordem de inicialização incorreta: "${laterModule}" foi criado antes de "${expected}"`);
+                        }
+                    }
+                }
+
+                console.log('✅ Ordem de inicialização validada');
+            }
+
+            /**
+             * Carrega configuração do sistema e messages
              */
             async loadConfig() {
                 try {
-                    const response = await fetch('../../config/creditscore-config.json');
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    // Carregar config, messages E scoring-criteria em paralelo (Performance)
+                    const [configResponse, messagesResponse, scoringCriteriaResponse] = await Promise.all([
+                        fetch('../../config/creditscore-config.json'),
+                        fetch('../../config/messages.json'),
+                        fetch('../../config/scoring-criteria.json')
+                    ]);
+
+                    if (!configResponse.ok) {
+                        throw new Error(`Config: HTTP ${configResponse.status}: ${configResponse.statusText}`);
                     }
-                    
-                    this.config = await response.json();
-                    
+                    if (!messagesResponse.ok) {
+                        throw new Error(`Messages: HTTP ${messagesResponse.status}: ${messagesResponse.statusText}`);
+                    }
+                    if (!scoringCriteriaResponse.ok) {
+                        throw new Error(`Scoring Criteria: HTTP ${scoringCriteriaResponse.status}: ${scoringCriteriaResponse.statusText}`);
+                    }
+
+                    this.config = await configResponse.json();
+                    this.messages = await messagesResponse.json();
+                    this.scoringCriteria = await scoringCriteriaResponse.json();
+
+                    // Expor como globais para compatibilidade com módulos legados
+                    // TODO FASE 2: Remover após migrar CreditScoreModule para Dependency Injection
+                    window.CONFIG = this.config;
+                    window.MESSAGES = this.messages;
+
                     // Atualizar título da página
                     document.title = `${this.config.systemName} | Expertzy`;
                     document.getElementById('systemTitle').textContent = this.config.systemName;
                     document.getElementById('systemSubtitle').textContent = this.config.description;
-                    
+
                     console.log('✅ Configuração carregada:', this.config.systemName, 'v' + this.config.version);
-                    
+                    console.log('✅ Messages carregado');
+                    console.log('✅ Scoring Criteria carregado');
+
                 } catch (error) {
                     throw new Error(`Falha ao carregar configuração: ${error.message}`);
                 }
@@ -258,62 +489,88 @@
             checkDependencies() {
                 const requiredClasses = [
                     'ConfigLoader',
-                    'FormGenerator', 
+                    'FormGenerator',
                     'NavigationController',
                     'AutoSave',
-                    'CreditScoreModule'
+                    'CreditScoreModule',
+                    'HierarchicalNavigation',
+                    'CreditscoreIndexedDB'
                 ];
-                
+
                 const missing = requiredClasses.filter(cls => typeof window[cls] === 'undefined');
-                
+
                 if (missing.length > 0) {
                     throw new Error(`Dependências ausentes: ${missing.join(', ')}`);
                 }
-                
+
                 console.log('✅ Dependências verificadas');
             }
             
-            /**
-             * Inicializa módulos core
-             */
-            async initCoreModules() {
-                // ConfigLoader
-                this.modules.set('config', new window.ConfigLoader(this.config));
-                
-                // FormGenerator
-                this.modules.set('formGenerator', new window.FormGenerator(this.config));
-                
-                // NavigationController
-                this.modules.set('navigation', new window.NavigationController(this.config));
-                
-                // AutoSave
-                this.modules.set('autoSave', new window.AutoSave(this.config));
-                
-                // CreditScoreModule (main business logic)
-                this.modules.set('creditScore', new window.CreditScoreModule(this.config));
-                
-                // Inicializar todos os módulos
-                for (const [name, module] of this.modules) {
-                    if (typeof module.init === 'function') {
-                        await module.init();
-                        console.log(`✅ Módulo ${name} inicializado`);
-                    }
-                }
-            }
+            // ============================================
+            // MÉTODOS OBSOLETOS REMOVIDOS
+            // ============================================
+            // - initBasicModules() (substituído por fluxo único em init())
+            // - initNavigationAndDB() (substituído por fluxo único em init())
+            // - initDependentModules() (substituído por fluxo único em init())
+            //
+            // Razão: Two-Phase Initialization pattern agora implementado
+            // diretamente no método init() principal (linhas 254-329)
+            // ============================================
             
             /**
              * Gera interface baseada na configuração
+             * Cria tabs e form content dinamicamente
+             *
+             * ⚠️ PRÉ-REQUISITO: FormGenerator DEVE estar inicializado
+             * Este método é chamado na FASE 3 do init(), após FormGenerator ser criado na FASE 2
              */
             async generateInterface() {
                 const formGenerator = this.modules.get('formGenerator');
-                const navigation = this.modules.get('navigation');
-                
-                // Gerar navegação por abas
-                await navigation.generateTabs();
-                
-                // Gerar conteúdo dos formulários
-                await formGenerator.generateForms();
-                
+
+                // Validação crítica: FormGenerator DEVE existir
+                if (!formGenerator) {
+                    throw new Error('generateInterface: FormGenerator não inicializado - DEVE ser criado antes de chamar este método');
+                }
+
+                // 1. Gerar tabs de navegação
+                const tabsHTML = this.config.modules.map(module => `
+                    <div class="tab-item ${module.id === 1 ? 'active' : ''}" data-module="${module.id}">
+                        <span class="tab-icon">${module.icon}</span>
+                        <span class="tab-label">${module.title}</span>
+                        ${module.computed ? '<span class="computed-badge">Auto</span>' : ''}
+                    </div>
+                `).join('');
+
+                // Injetar tabs no DOM
+                const tabNav = document.getElementById('tabNavigation');
+                if (tabNav) {
+                    tabNav.innerHTML = tabsHTML;
+                }
+
+                // 2. Gerar conteúdo dos formulários para cada módulo
+                const formContentHTML = this.config.modules.map(module => {
+                    try {
+                        return formGenerator.generateModuleHTML(module.id);
+                    } catch (error) {
+                        console.error(`Erro ao gerar módulo ${module.id}:`, error);
+                        return `<div class="module-content error-state" data-module="${module.id}" style="display:none;">
+                            <h2>⚠️ Erro ao carregar módulo ${module.title}</h2>
+                            <p>${error.message}</p>
+                        </div>`;
+                    }
+                }).join('');
+
+                // Injetar form content no DOM
+                const formContent = document.getElementById('formContent');
+                if (formContent) {
+                    formContent.innerHTML = formContentHTML;
+                }
+
+                // 3. Ativar listeners de máscaras e validação
+                if (window.currencyMask) {
+                    window.currencyMask.init(); // ✅ Método correto: init() (não applyToAll)
+                }
+
                 console.log('✅ Interface gerada');
             }
             
@@ -322,19 +579,27 @@
              */
             setupNavigation() {
                 const navigation = this.modules.get('navigation');
-                
+
                 // Event listeners para botões de navegação
                 document.getElementById('nextBtn').addEventListener('click', () => {
-                    navigation.nextModule();
+                    // NavigationController.navigateToModule() já valida limites e dependências
+                    const nextModuleId = navigation.currentModule + 1;
+                    if (nextModuleId <= this.config.totalSteps) {
+                        navigation.navigateToModule(nextModuleId);
+                    }
                 });
-                
+
                 document.getElementById('prevBtn').addEventListener('click', () => {
-                    navigation.previousModule();
+                    // Navegação para trás sempre permitida
+                    const prevModuleId = navigation.currentModule - 1;
+                    if (prevModuleId >= 1) {
+                        navigation.navigateToModule(prevModuleId);
+                    }
                 });
-                
-                // Event listeners para tabs diretas
-                navigation.setupTabClickHandlers();
-                
+
+                // Tab click handlers já configurados por HierarchicalNavigation.initAfterDOM()
+                // Não é necessário chamar setupTabClickHandlers() aqui
+
                 console.log('✅ Navegação configurada');
             }
             

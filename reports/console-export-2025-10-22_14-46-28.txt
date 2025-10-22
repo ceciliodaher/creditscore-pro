@@ -1,0 +1,76 @@
+💰 Aplicando máscara monetária a 0 campos currency-mask.js:30:13
+✓ Currency Mask Module carregado currency-mask.js:148:9
+[PercentageCalculator] 0 produtos inicializados percentage-calculator.js:153:17
+[PercentageCalculator] 0 insumos inicializados percentage-calculator.js:168:17
+[PercentageCalculator] Pronto para uso percentage-calculator.js:178:17
+✅ ConfigLoader carregado config-loader.js:309:9
+✅ CreditscoreIndexedDB schema carregado creditscore-indexeddb-schema.js:128:9
+✅ FormGenerator carregado form-generator.js:1200:9
+✅ AutoSave carregado auto-save.js:697:9
+✅ CreditScoreModule carregado creditscore-module.js:752:9
+🚀 CreditScore Pro App iniciando... analise-credito.html:25:25
+✅ Configuração carregada: CreditScore Pro v1.0.0 analise-credito.html:212:29
+✅ Messages carregado analise-credito.html:213:29
+✅ Dependências verificadas analise-credito.html:240:25
+Erro ao gerar módulo 1: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 2: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 3: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 4: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 5: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 6: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 7: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+Erro ao gerar módulo 8: TypeError: can't access property "generateModuleHTML", formGenerator is undefined
+    formContentHTML analise-credito.html:507
+    generateInterface analise-credito.html:505
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:344:33
+❌ Erro na inicialização: TypeError: window.currencyMask.applyToAll is not a function
+    generateInterface analise-credito.html:525
+    init analise-credito.html:261
+    async* analise-credito.html:664
+    EventListener.handleEvent* analise-credito.html:662
+analise-credito.html:161:29

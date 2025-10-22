@@ -9,7 +9,6 @@
 import { FormGenerator } from './form-generator.js';
 import { NavigationController } from './navigation-controller.js';
 import { AutoSave } from './auto-save.js';
-import { IndexedDBManager } from '../database/indexeddb-manager.js';
 
 class CreditScoreModule {
     constructor(config) {
@@ -40,7 +39,7 @@ class CreditScoreModule {
         this.formGenerator = null;
         this.navigationController = null;
         this.autoSave = null;
-        this.dbManager = null;
+        this.dbManager = null; // Proxy to CreditscoreIndexedDB static methods
         this.hierarchicalNav = null; // tabs.js instance
         this.messages = null;
 
@@ -101,72 +100,76 @@ class CreditScoreModule {
     }
 
     /**
-     * Inicializa infraestrutura core: FormGenerator, NavigationController, AutoSave
-     * Conecta eventos entre os componentes
+     * Inicializa infraestrutura core com Dependency Injection
+     *
+     * ⚠️ ATENÇÃO: Este módulo usa Dependency Injection
+     * As dependências DEVEM ser injetadas ANTES de chamar init():
+     * - this.hierarchicalNav (HierarchicalNavigation instance)
+     * - this.navigationController (NavigationController instance)
+     * - this.autoSave (AutoSave instance)
+     * - this.dbManager (dbManager proxy)
+     * - this.formGenerator (FormGenerator instance)
+     *
+     * ORDEM CORRETA NO MAIN APP:
+     * 1. const creditScore = new CreditScoreModule(config)
+     * 2. creditScore.hierarchicalNav = hierarchicalNav
+     * 3. creditScore.navigationController = navigationController
+     * 4. creditScore.autoSave = autoSave
+     * 5. creditScore.dbManager = dbManager
+     * 6. creditScore.formGenerator = formGenerator
+     * 7. await creditScore.init() // <-- Valida dependências injetadas
+     *
+     * @throws {Error} Se qualquer dependência não foi injetada ou é inválida
      */
     async initCoreInfrastructure() {
-        console.log('🔧 Inicializando infraestrutura core...');
+        console.log('🔧 Validando dependências injetadas...');
 
-        // 1. Validar que HierarchicalNavigation (tabs.js) está disponível
-        if (!window.HierarchicalNavigation) {
-            throw new Error('CreditScoreModule: HierarchicalNavigation (tabs.js) não disponível - obrigatório para o fluxo');
+        // 1. Validar que HierarchicalNavigation foi injetado
+        if (!this.hierarchicalNav) {
+            throw new Error('CreditScoreModule: hierarchicalNav não foi injetado - obrigatório. Main app deve injetar via creditScore.hierarchicalNav = ...');
         }
-        this.hierarchicalNav = window.HierarchicalNavigation;
 
-        // 2. Validar que messages.json foi carregado
+        // Validar que é uma instância válida (tem getCurrentTab)
+        if (typeof this.hierarchicalNav.getCurrentTab !== 'function') {
+            throw new Error('CreditScoreModule: hierarchicalNav injetado não possui API esperada (getCurrentTab)');
+        }
+
+        // 2. Validar que NavigationController foi injetado
+        if (!this.navigationController) {
+            throw new Error('CreditScoreModule: navigationController não foi injetado - obrigatório. Main app deve injetar via creditScore.navigationController = ...');
+        }
+
+        // 3. Validar que AutoSave foi injetado
+        if (!this.autoSave) {
+            throw new Error('CreditScoreModule: autoSave não foi injetado - obrigatório. Main app deve injetar via creditScore.autoSave = ...');
+        }
+
+        // 4. Validar que dbManager foi injetado
+        if (!this.dbManager) {
+            throw new Error('CreditScoreModule: dbManager não foi injetado - obrigatório. Main app deve injetar via creditScore.dbManager = ...');
+        }
+
+        // Validar API esperada
+        if (typeof this.dbManager.save !== 'function' || typeof this.dbManager.get !== 'function') {
+            throw new Error('CreditScoreModule: dbManager injetado não possui API esperada (save, get)');
+        }
+
+        // 5. Validar que FormGenerator foi injetado
+        if (!this.formGenerator) {
+            throw new Error('CreditScoreModule: formGenerator não foi injetado - obrigatório. Main app deve injetar via creditScore.formGenerator = ...');
+        }
+
+        // 6. Validar que messages.json foi carregado globalmente
         if (!window.MESSAGES) {
             throw new Error('CreditScoreModule: window.MESSAGES não disponível - messages.json deve ser carregado');
         }
         this.messages = window.MESSAGES;
 
-        // 3. Instanciar IndexedDBManager
-        this.dbManager = new IndexedDBManager(
-            this.config.database.name,
-            this.config.database.version,
-            this.config.database.stores
-        );
-        await this.dbManager.init();
-        console.log('✅ IndexedDBManager inicializado');
-
-        // 4. Instanciar FormGenerator
-        this.formGenerator = new FormGenerator(this.config, this.dbManager, this.messages);
-        await this.formGenerator.init();
-        console.log('✅ FormGenerator inicializado');
-
-        // 5. Instanciar NavigationController
-        this.navigationController = new NavigationController(
-            this.config,
-            this.hierarchicalNav,
-            this.messages
-        );
-        await this.navigationController.init();
-        console.log('✅ NavigationController inicializado');
-
-        // 6. Instanciar AutoSave
-        // Validar config de auto-save - usar defaults apenas se não existirem
-        if (!this.config.autoSaveInterval) {
-            this.config.autoSaveInterval = 30000;
-            console.log('⚠️ autoSaveInterval não configurado, usando default: 30000ms');
-        }
-
-        if (!this.config.autoSaveMaxVersions) {
-            this.config.autoSaveMaxVersions = 10;
-            console.log('⚠️ autoSaveMaxVersions não configurado, usando default: 10');
-        }
-
-        const autoSaveConfig = {
-            interval: this.config.autoSaveInterval,
-            storeName: 'autosave',
-            maxVersions: this.config.autoSaveMaxVersions
-        };
-        this.autoSave = new AutoSave(autoSaveConfig, this.dbManager, this.messages);
-        await this.autoSave.init();
-        console.log('✅ AutoSave inicializado');
-
         // 7. Conectar eventos entre componentes
         this.setupCoreEventListeners();
 
-        console.log('✅ Infraestrutura core inicializada com sucesso');
+        console.log('✅ Todas as dependências validadas com sucesso');
+        console.log('✅ Infraestrutura core inicializada');
     }
 
     /**
@@ -370,36 +373,36 @@ class CreditScoreModule {
     async initCalculadores() {
         // Índices Financeiros Calculator
         if (window.IndicesFinanceirosCalculator) {
-            this.indicesCalculator = new window.IndicesFinanceirosCalculator(this.config);
+            this.indicesCalculator = new window.IndicesFinanceirosCalculator(this.config, this.messages); // ✅ Passa messages
             if (typeof this.indicesCalculator.init === 'function') {
                 await this.indicesCalculator.init();
             }
         }
-        
+
         // Scoring Engine
         if (window.ScoringEngine) {
-            this.scoringEngine = new window.ScoringEngine(this.config.scoring);
+            this.scoringEngine = new window.ScoringEngine(this.config, this.messages, this.scoringCriteria); // ✅ Passa config, messages E scoringCriteria
             if (typeof this.scoringEngine.init === 'function') {
                 await this.scoringEngine.init();
             }
         }
-        
+
         // Análise Vertical e Horizontal
         if (window.AnaliseVerticalHorizontal) {
-            this.analiseCalculator = new window.AnaliseVerticalHorizontal(this.config);
+            this.analiseCalculator = new window.AnaliseVerticalHorizontal(this.config, this.messages); // ✅ Passa messages
             if (typeof this.analiseCalculator.init === 'function') {
                 await this.analiseCalculator.init();
             }
         }
-        
+
         // Capital de Giro Calculator
         if (window.CapitalGiroCalculator) {
-            this.capitalGiroCalculator = new window.CapitalGiroCalculator(this.config);
+            this.capitalGiroCalculator = new window.CapitalGiroCalculator(this.config, this.messages); // ✅ Passa messages
             if (typeof this.capitalGiroCalculator.init === 'function') {
                 await this.capitalGiroCalculator.init();
             }
         }
-        
+
         console.log('✅ Calculadores inicializados');
     }
     

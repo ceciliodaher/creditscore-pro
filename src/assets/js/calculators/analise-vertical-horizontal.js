@@ -231,7 +231,7 @@ export class AnaliseVerticalHorizontal {
             }
 
             resultado[ano] = {
-                ativo: this.#calcularPercent ualBalanco(balanco.ativo, ativoTotal, 'ativo'),
+                ativo: this.#calcularPercentualBalanco(balanco.ativo, ativoTotal, 'ativo'),
                 passivo: this.#calcularPercentualBalanco(balanco.passivo, passivoTotal, 'passivo'),
                 patrimonioLiquido: this.#calcularPercentualBalanco(balanco.patrimonioLiquido, passivoTotal, 'pl'),
                 validacao: {
@@ -539,8 +539,8 @@ export class AnaliseVerticalHorizontal {
                     } else if (valor.variacao < 0) {
                         tendencias.queda.push(item);
                     }
-                } else if (variacaoABS < 5) {
-                    // Estabilidade (variação < 5%)
+                } else if (variacaoABS < this.thresholds.variacaoEstabilidade) {
+                    // Estabilidade (variação abaixo do threshold configurado)
                     tendencias.estabilidade.push({
                         tipo,
                         periodo,
@@ -608,24 +608,33 @@ export class AnaliseVerticalHorizontal {
                 const variacaoABS = Math.abs(valor.variacao);
 
                 if (variacaoABS >= this.thresholds.variacaoCritica) {
+                    // Tipos, severidades e mensagens vêm da configuração/messages (NO HARDCODED DATA)
                     alertas.criticos.push({
-                        tipo: 'variacao_critica',
-                        severidade: 'crítico',
+                        tipo: this.analiseConfig.alertTypes.variacaoCritica,
+                        severidade: this.analiseConfig.severidades.critico,
                         origem: tipo,
                         periodo,
                         item: chave,
                         variacao: valor.variacao,
-                        mensagem: `Variação crítica de ${valor.variacao.toFixed(2)}% em ${chave} (período ${periodo})`,
+                        mensagem: this.#formatMsg(this.messages.alertas.variacaoCritica, {
+                            variacao: valor.variacao.toFixed(2),
+                            item: chave,
+                            periodo,
+                        }),
                     });
                 } else if (variacaoABS >= this.thresholds.variacaoSignificativa) {
                     alertas.atencao.push({
-                        tipo: 'variacao_significativa',
-                        severidade: 'atenção',
+                        tipo: this.analiseConfig.alertTypes.variacaoSignificativa,
+                        severidade: this.analiseConfig.severidades.atencao,
                         origem: tipo,
                         periodo,
                         item: chave,
                         variacao: valor.variacao,
-                        mensagem: `Variação significativa de ${valor.variacao.toFixed(2)}% em ${chave} (período ${periodo})`,
+                        mensagem: this.#formatMsg(this.messages.alertas.variacaoSignificativa, {
+                            variacao: valor.variacao.toFixed(2),
+                            item: chave,
+                            periodo,
+                        }),
                     });
                 }
             } else if (typeof valor === 'object' && valor !== null && !Array.isArray(valor) && !valor.valorAnterior) {
@@ -643,19 +652,23 @@ export class AnaliseVerticalHorizontal {
      */
     #verificarMargemDecrescente(analiseHorizontalDRE, alertas) {
         for (const [periodo, variacoes] of Object.entries(analiseHorizontalDRE)) {
-            // Verificar margem bruta, EBITDA, margem líquida
-            const margens = ['lucroBruto', 'lucroLiquido'];
+            // Margens a monitorar vêm da configuração (NO HARDCODED DATA)
+            const margens = this.analiseConfig.margensMonitoradas;
 
             for (const margem of margens) {
-                if (variacoes[margem] && variacoes[margem].variacao < -10) {
+                if (variacoes[margem] && variacoes[margem].variacao < this.thresholds.margemDecrescenteMinima) {
                     alertas.atencao.push({
-                        tipo: 'margem_decrescente',
-                        severidade: 'atenção',
+                        tipo: this.analiseConfig.alertTypes.margemDecrescente,
+                        severidade: this.analiseConfig.severidades.atencao,
                         origem: 'dre',
                         periodo,
                         item: margem,
                         variacao: variacoes[margem].variacao,
-                        mensagem: `Margem ${margem} decresceu ${Math.abs(variacoes[margem].variacao).toFixed(2)}% no período ${periodo}`,
+                        mensagem: this.#formatMsg(this.messages.alertas.margemDecrescente, {
+                            margem,
+                            variacao: Math.abs(variacoes[margem].variacao).toFixed(2),
+                            periodo,
+                        }),
                     });
                 }
             }
@@ -683,11 +696,14 @@ export class AnaliseVerticalHorizontal {
                 // Quebrou a sequência
                 if (anosConsecutivosComPrejuizo >= 2) {
                     alertas.criticos.push({
-                        tipo: 'prejuizo_consecutivo',
-                        severidade: 'crítico',
+                        tipo: this.analiseConfig.alertTypes.prejuizoConsecutivo,
+                        severidade: this.analiseConfig.severidades.critico,
                         origem: 'dre',
                         anos: anosPrejuizo.slice(),
-                        mensagem: `Prejuízo consecutivo detectado em ${anosConsecutivosComPrejuizo} anos: ${anosPrejuizo.join(', ')}`,
+                        mensagem: this.#formatMsg(this.messages.alertas.prejuizoConsecutivo, {
+                            anos: anosConsecutivosComPrejuizo,
+                            lista: anosPrejuizo.join(', '),
+                        }),
                     });
                 }
                 anosConsecutivosComPrejuizo = 0;
@@ -698,11 +714,14 @@ export class AnaliseVerticalHorizontal {
         // Verificar ao final (se terminou com prejuízo)
         if (anosConsecutivosComPrejuizo >= 2) {
             alertas.criticos.push({
-                tipo: 'prejuizo_consecutivo',
-                severidade: 'crítico',
+                tipo: this.analiseConfig.alertTypes.prejuizoConsecutivo,
+                severidade: this.analiseConfig.severidades.critico,
                 origem: 'dre',
                 anos: anosPrejuizo.slice(),
-                mensagem: `Prejuízo consecutivo detectado em ${anosConsecutivosComPrejuizo} anos: ${anosPrejuizo.join(', ')}`,
+                mensagem: this.#formatMsg(this.messages.alertas.prejuizoConsecutivo, {
+                    anos: anosConsecutivosComPrejuizo,
+                    lista: anosPrejuizo.join(', '),
+                }),
             });
         }
     }
@@ -725,6 +744,28 @@ export class AnaliseVerticalHorizontal {
         document.dispatchEvent(event);
 
         console.warn(`⚠️ Alertas ${severidade} detectados na análise vertical/horizontal:`, alertas);
+    }
+
+    /**
+     * Formata mensagem substituindo placeholders
+     * @private
+     * @param {string} template - Template com placeholders {key}
+     * @param {Object} valores - Objeto com valores para substituir
+     * @returns {string} Mensagem formatada
+     */
+    #formatMsg(template, valores) {
+        if (!template) {
+            return '';
+        }
+
+        let resultado = template;
+
+        for (const [chave, valor] of Object.entries(valores)) {
+            const placeholder = `{${chave}}`;
+            resultado = resultado.replace(new RegExp(placeholder, 'g'), valor);
+        }
+
+        return resultado;
     }
 }
 

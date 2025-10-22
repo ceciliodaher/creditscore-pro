@@ -237,13 +237,115 @@ Supports 3 formats (defined in config):
 
 ### Tab Navigation
 
-**File:** `src/assets/js/tabs.js`
+**File:** `src/assets/js/tabs.js` (`HierarchicalNavigation` class)
 
 Handles multi-step navigation:
 - Tab switching with visual feedback
-- Progress tracking
-- Next/Previous navigation
-- Integration with FormCore
+- Progress tracking across 8 modules
+- Hierarchical section/tab structure (7 sections, 8 tabs)
+- Keyboard navigation support
+- Tab state persistence in localStorage
+- Integration with `NavigationController` for business logic
+
+**File:** `src/assets/js/core/navigation-controller.js` (`NavigationController` class)
+
+Business logic layer for navigation:
+- Validates module dependencies before navigation
+- Enforces required module completion
+- Tracks progress (0-100%)
+- Manages blocked/locked modules
+- Persists navigation state
+
+### Dependency Injection Architecture
+
+**Pattern Implemented:** Constructor-based Dependency Injection with Two-Phase Initialization
+
+The system follows a strict dependency injection pattern to ensure:
+- **Testability** - All dependencies can be mocked
+- **Explicit Dependencies** - No hidden dependencies or globals
+- **Fail-Fast** - Missing dependencies throw errors immediately
+- **No Circular Dependencies** - Initialization order is strictly controlled
+
+**Initialization Flow in `analise-credito.html`:**
+
+```javascript
+// FASE 1: LOAD CONFIGURATIONS
+await loadConfig(); // Loads config, messages, scoring-criteria
+
+// FASE 2: PRE-DEPENDENCIES (no dependencies)
+const configLoader = new ConfigLoader(config);
+const formGenerator = new FormGenerator(config, messages);
+
+// FASE 3: DATABASE
+const dbManager = createDBManagerProxy();
+await dbManager.init();
+
+// FASE 4: CORE MODULES (with dependency injection)
+const hierarchicalNav = new HierarchicalNavigation();
+hierarchicalNav.initAfterDOM(); // After formGenerator.generateInterface()
+
+const navigationController = new NavigationController(
+    config,
+    messages,
+    hierarchicalNav
+);
+await navigationController.init();
+
+const autoSave = new AutoSave(
+    config,
+    messages,
+    dbManager
+);
+await autoSave.init(null, navigationController);
+
+// FASE 5: CREDIT SCORE MODULE (receives ALL dependencies)
+const creditScore = new CreditScoreModule(config);
+creditScore.hierarchicalNav = hierarchicalNav;
+creditScore.navigationController = navigationController;
+creditScore.autoSave = autoSave;
+creditScore.dbManager = dbManager;
+creditScore.formGenerator = formGenerator;
+creditScore.scoringCriteria = scoringCriteria; // For ScoringEngine
+await creditScore.init();
+```
+
+**Key Dependencies:**
+
+- `CreditScoreModule` requires: config, hierarchicalNav, navigationController, autoSave, dbManager, formGenerator, scoringCriteria
+- All calculators require: config, messages
+- `ScoringEngine` additionally requires: criteria (from `scoring-criteria.json`)
+- `NavigationController` requires: config, messages, hierarchicalNav
+
+**Scoring Criteria Configuration:** `config/scoring-criteria.json`
+
+Defines thresholds and scoring rules for the credit scoring engine:
+- Thresholds for each category (cadastral, financial, capacidadePagamento, endividamento, garantias)
+- Point distribution per sub-category
+- Performance levels (excelente, bom, adequado, baixo, crítico)
+- Default values when data is incomplete
+- Alert and recommendation thresholds
+
+### Recent Architectural Fixes (2025-10-22)
+
+**Issue:** Constructor Parameter Mismatches
+Multiple calculator modules were being instantiated with incorrect parameters, causing initialization failures.
+
+**Fixed Modules:**
+1. `currency-mask.js` - Changed `applyToAll()` → `init()`
+2. `IndicesFinanceirosCalculator` - Added missing `messages` parameter
+3. `ScoringEngine` - Added missing `messages` and `criteria` parameters
+4. `AnaliseVerticalHorizontal` - Added missing `messages` parameter
+5. `CapitalGiroCalculator` - Added missing `messages` parameter
+6. `setupNavigation()` - Replaced non-existent methods with proper `navigateToModule(id)` calls
+
+**Root Cause:** During refactoring to implement Dependency Injection, constructor calls weren't updated to match new signatures.
+
+**Solution:**
+- Loaded `scoring-criteria.json` in parallel with other configs
+- Injected all required dependencies before calling `init()`
+- Updated all constructor calls to pass correct parameters
+
+**Result:** System now initializes successfully with all modules operational.
 
 ## Development Workflow
 

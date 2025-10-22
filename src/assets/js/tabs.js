@@ -28,19 +28,39 @@ class HierarchicalNavigation {
         // Protected tabs (Analyst mode only)
         this.protectedTabs = [6, 7, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
-        // Detectar automaticamente o número total de tabs baseado na página (NO FALLBACKS)
-        const tabItems = document.querySelectorAll('.tab-item');
-        if (tabItems.length === 0) {
-            throw new Error('HierarchicalNavigation: Nenhuma aba encontrada (.tab-item). Verifique o HTML.');
-        }
-        this.totalTabs = tabItems.length;
-
         // Tab states
         this.completedTabs = new Set();
         this.tabsWithErrors = new Set();
         this.tabsWithWarnings = new Set();
 
-        console.log(`[HierarchicalNavigation] Inicializado com ${this.totalTabs} abas em 7 seções`);
+        // Detectar tabs no DOM - não lançar erro se não existirem ainda
+        const tabItems = document.querySelectorAll('.tab-item');
+        this.totalTabs = tabItems.length;
+
+        if (this.totalTabs === 0) {
+            console.warn('⚠️ HierarchicalNavigation: Nenhuma aba encontrada ainda');
+            console.warn('👉 AÇÃO REQUERIDA: Main app DEVE chamar .initAfterDOM() após generateInterface()');
+            console.warn('📋 ORDEM CORRETA: generateInterface() → HierarchicalNavigation() → initAfterDOM()');
+            // NÃO chamar init() - será chamado em initAfterDOM()
+        } else {
+            console.log(`[HierarchicalNavigation] Inicializado com ${this.totalTabs} abas em 7 seções`);
+            this.init();
+        }
+    }
+
+    /**
+     * Inicialização tardia após generateInterface() criar as .tab-item no DOM
+     * DEVE ser chamado pelo main app após generateInterface()
+     */
+    initAfterDOM() {
+        const tabItems = document.querySelectorAll('.tab-item');
+        this.totalTabs = tabItems.length;
+
+        if (this.totalTabs === 0) {
+            throw new Error('HierarchicalNavigation.initAfterDOM: Nenhuma aba encontrada (.tab-item). DOM não foi gerado corretamente.');
+        }
+
+        console.log(`[HierarchicalNavigation] initAfterDOM: Detectadas ${this.totalTabs} abas em 7 seções`);
         this.init();
     }
 
@@ -606,18 +626,16 @@ class HierarchicalNavigation {
     }
 }
 
-// Initialize hierarchical navigation when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if we're on the form page
-    if (document.getElementById('projectForm')) {
-        window.hierarchicalNavigation = new HierarchicalNavigation();
-
-        // Legacy support: alias to window.tabNavigation for backwards compatibility
-        window.tabNavigation = window.hierarchicalNavigation;
-    }
-});
+// Export class to window (available immediately for dependency checks)
+if (typeof window !== 'undefined') {
+    window.HierarchicalNavigation = HierarchicalNavigation;
+}
 
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = HierarchicalNavigation;
 }
+
+// NOTE: Initialization is managed by CreditScoreProApp.initNavigationAndDB()
+// REMOVED auto-initialization DOMContentLoaded listener to prevent race condition
+// HierarchicalNavigation is now created AFTER generateInterface() creates .tab-item elements

@@ -77,20 +77,24 @@ export class AutoSave {
 
     /**
      * Inicialização assíncrona
-     * @param {Object} creditScoreModule - Instância do CreditScoreModule
-     * @param {Object} navigationController - Instância do NavigationController
+     * @param {Object|null} creditScoreModule - Instância do CreditScoreModule (opcional - pode ser null)
+     * @param {Object} navigationController - Instância do NavigationController (obrigatório)
      * @returns {Promise<boolean>}
      */
     async init(creditScoreModule, navigationController) {
-        if (!creditScoreModule) {
-            throw new Error('AutoSave: creditScoreModule obrigatório não fornecido');
-        }
-
-        if (!navigationController) {
-            throw new Error('AutoSave: navigationController obrigatório não fornecido');
-        }
-
+        // creditScoreModule é opcional - AutoSave pode funcionar sem ele
         this.module = creditScoreModule;
+
+        // navigationController é OBRIGATÓRIO
+        if (!navigationController) {
+            throw new Error('AutoSave: navigationController obrigatório não fornecido - DEVE ser passado no init()');
+        }
+
+        // Validar que navigationController tem a API esperada
+        if (typeof navigationController.currentModule !== 'number') {
+            throw new Error('AutoSave: navigationController inválido - currentModule deve ser number');
+        }
+
         this.navigationController = navigationController;
 
         // Verificar se database está disponível

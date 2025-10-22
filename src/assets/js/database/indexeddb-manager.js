@@ -349,7 +349,10 @@ class IndexedDBManager {
   }
 }
 
-// Exportar para uso global
+// Exportar como ES6 module
+export { IndexedDBManager };
+
+// Exportar para uso global (retrocompatibilidade)
 if (typeof window !== 'undefined') {
   window.IndexedDBManager = IndexedDBManager;
 }
