@@ -1,3 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Reports (opcional - remova se quiser versionar)
+reports/*.json
+reports/*.html
+reports/*.xml
+
+# Documentos - backups e versões
 documentos/financiamento/*.backup.json
 documentos/financiamento/*_v2.json
 documentos/financiamento/campos_estruturados_completo.json
