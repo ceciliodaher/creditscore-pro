@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import legacy from '@vitejs/plugin-legacy';
 
 /**
- * Configuração Vite para Portal Expertzy
+ * Configuração Vite para CreditScore Pro
  * Multi-page application com 5 entry points
  *
  * PRINCÍPIOS:
@@ -30,22 +30,8 @@ export default defineConfig({
     // Rollup options para multi-page
     rollupOptions: {
       input: {
-        // Portal principal
         main: resolve(__dirname, 'index.html'),
-
-        // Formulários de incentivos fiscais
-        cei: resolve(__dirname, 'src/pages/formulario-cei.html'),
-        progoias: resolve(__dirname, 'src/pages/formulario-progoias.html'),
-
-        // Novos módulos (serão criados)
-        financiamento: resolve(__dirname, 'src/pages/formulario-financiamento.html'),
-        inovacao: resolve(__dirname, 'src/pages/formulario-inovacao.html'),
-
-        // Questionário de mapeamento
-        questionario: resolve(__dirname, 'src/pages/questionario-mapeamento.html'),
-
-        // Seletor de programas
-        selector: resolve(__dirname, 'src/pages/selector.html')
+        analiseCredito: resolve(__dirname, 'src/pages/analise-credito.html')
       },
 
       // Configuração de code splitting
@@ -79,7 +65,7 @@ export default defineConfig({
     alias: {
       '@core': resolve(__dirname, 'src/assets/js/core'),
       '@database': resolve(__dirname, 'src/assets/js/database'),
-      '@shared': resolve(__dirname, 'src/assets/js/shared'),
+      '@shared': resolve(__dirname, 'src/shared'),
       '@utils': resolve(__dirname, 'src/assets/js/utils'),
       '@components': resolve(__dirname, 'src/assets/js/components'),
       '@calculators': resolve(__dirname, 'src/assets/js/calculators'),

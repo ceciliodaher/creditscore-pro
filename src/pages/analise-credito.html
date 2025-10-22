@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Expertzy Inteligência Tributária">
+    <meta name="description" content="CreditScore Pro - Sistema de Análise de Crédito e Compliance Financeiro">
+    <title>CreditScore Pro | Expertzy Inteligência Tributária</title>
+    
+    <!-- Estilos Base -->
+    <link rel="stylesheet" href="../assets/css/styles-base.css">
+    <link rel="stylesheet" href="../assets/css/tabs.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/expertzy_logo.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Expertzy -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../assets/images/logo-expertzy-branco.png" alt="Expertzy" class="logo-image">
+                </div>
+                
+                <div class="header-title">
+                    <h1 class="form-title" id="systemTitle">CreditScore Pro</h1>
+                    <p class="form-subtitle" id="systemSubtitle">Sistema de Análise de Crédito e Compliance Financeiro</p>
+                </div>
+                
+                <div class="header-actions">
+                    <button type="button" class="btn btn-secondary" id="importBtnHeader">
+                        📤 Importar
+                    </button>
+                    <input type="file" id="importJsonFileHeader" accept=".json" style="display: none;">
+                    
+                    <button type="button" class="btn btn-secondary" id="exportJsonBtn">
+                        💾 Exportar JSON
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="exportExcelBtn">
+                        📊 Excel
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="exportPDFBtn">
+                        📄 PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-info">
+            <span class="progress-text" id="progressText">Carregando...</span>
+            <span class="progress-percentage" id="progressPercentage">0%</span>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-navigation" id="tabNavigation">
+        <!-- Tabs serão geradas dinamicamente pelo JavaScript -->
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <form id="creditScoreForm" class="form-container" novalidate>
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading"></div>
+                    <p>Carregando configurações do sistema...</p>
+                </div>
+
+                <!-- Form Content será gerado dinamicamente -->
+                <div class="form-content" id="formContent" style="display: none;">
+                    <!-- Tab Contents serão injetados aqui -->
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions" id="formActions" style="display: none;">
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" disabled>
+                            ← Anterior
+                        </button>
+                        
+                        <button type="button" class="btn btn-secondary" id="saveBtn">
+                            💾 Salvar Rascunho
+                        </button>
+                        
+                        <button type="button" class="btn btn-primary" id="nextBtn">
+                            Próximo →
+                        </button>
+                        
+                        <button type="button" class="btn btn-success" id="finishBtn" style="display: none;">
+                            ✓ Finalizar Análise
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Alert Container -->
+    <div class="alert-container" id="alertContainer"></div>
+
+    <!-- Modal Container -->
+    <div class="modal" id="modalContainer">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Título</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo dinâmico -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn btn-secondary" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Status -->
+    <div class="save-status" id="saveStatus">
+        <span id="saveStatusText">💾 Salvo</span>
+    </div>
+
+    <!-- Scripts Core -->
+    <script type="module" src="../assets/js/utils/currency-mask.js"></script>
+    <script type="module" src="../assets/js/utils/cnpj-validator.js"></script>
+    <script type="module" src="../assets/js/utils/percentage-calculator.js"></script>
+    
+    <!-- Config Loader (deve vir antes do schema) -->
+    <script type="module" src="../assets/js/core/config-loader.js"></script>
+
+    <!-- Database Schema -->
+    <script type="module" src="../assets/js/database/creditscore-indexeddb-schema.js"></script>
+    <script type="module" src="../shared/validation.js"></script>
+    <script type="module" src="../assets/js/export.js"></script>
+    <script type="module" src="../assets/js/import.js"></script>
+    <script type="module" src="../assets/js/tabs.js"></script>
+    
+    <!-- Scripts Calculators -->
+    <script type="module" src="../assets/js/calculators/indices-financeiros.js"></script>
+    <script type="module" src="../assets/js/calculators/scoring-engine.js"></script>
+    <script type="module" src="../assets/js/calculators/analise-vertical-horizontal.js"></script>
+    <script type="module" src="../assets/js/calculators/capital-giro.js"></script>
+    
+    <!-- Scripts Core CreditScore -->
+    <script type="module" src="../assets/js/core/creditscore-module.js"></script>
+    <script type="module" src="../assets/js/core/config-loader.js"></script>
+    <script type="module" src="../assets/js/core/form-generator.js"></script>
+    <script type="module" src="../assets/js/core/navigation-controller.js"></script>
+    <script type="module" src="../assets/js/core/auto-save.js"></script>
+    
+    <!-- Main Application Script -->
+    <script type="module">
+        /**
+         * CREDITSCORE PRO - MAIN APPLICATION
+         * Sistema Modular de Análise de Crédito
+         * 
+         * PRINCÍPIOS:
+         * - KISS: Arquitetura simples e direta
+         * - DRY: Componentes reutilizáveis
+         * - SOLID: Separação de responsabilidades
+         * - NO HARDCODED DATA: Tudo vem da configuração
+         * - NO MOCK DATA: Apenas dados reais do usuário
+         */
+        
+        class CreditScoreProApp {
+            constructor() {
+                this.config = null;
+                this.modules = new Map();
+                this.currentModule = 1;
+                this.formData = new Map();
+                this.initialized = false;
+                
+                console.log('🚀 CreditScore Pro App iniciando...');
+            }
+            
+            /**
+             * Inicialização principal da aplicação
+             */
+            async init() {
+                try {
+                    // 1. Carregar configuração
+                    await this.loadConfig();
+                    
+                    // 2. Verificar dependências
+                    this.checkDependencies();
+                    
+                    // 3. Inicializar módulos core
+                    await this.initCoreModules();
+                    
+                    // 4. Gerar interface
+                    await this.generateInterface();
+                    
+                    // 5. Configurar navegação
+                    this.setupNavigation();
+                    
+                    // 6. Configurar auto-save
+                    this.setupAutoSave();
+                    
+                    // 7. Tentar restaurar dados
+                    await this.attemptDataRestore();
+                    
+                    // 8. Marcar como inicializado
+                    this.initialized = true;
+                    
+                    // 9. Esconder loading e mostrar formulário
+                    this.showInterface();
+                    
+                    console.log('✅ CreditScore Pro inicializado com sucesso');
+                    
+                } catch (error) {
+                    console.error('❌ Erro na inicialização:', error);
+                    this.showError('Erro ao inicializar o sistema', error.message);
+                }
+            }
+            
+            /**
+             * Carrega configuração do sistema
+             */
+            async loadConfig() {
+                try {
+                    const response = await fetch('../../config/creditscore-config.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    this.config = await response.json();
+                    
+                    // Atualizar título da página
+                    document.title = `${this.config.systemName} | Expertzy`;
+                    document.getElementById('systemTitle').textContent = this.config.systemName;
+                    document.getElementById('systemSubtitle').textContent = this.config.description;
+                    
+                    console.log('✅ Configuração carregada:', this.config.systemName, 'v' + this.config.version);
+                    
+                } catch (error) {
+                    throw new Error(`Falha ao carregar configuração: ${error.message}`);
+                }
+            }
+            
+            /**
+             * Verifica dependências obrigatórias
+             */
+            checkDependencies() {
+                const requiredClasses = [
+                    'ConfigLoader',
+                    'FormGenerator', 
+                    'NavigationController',
+                    'AutoSave',
+                    'CreditScoreModule'
+                ];
+                
+                const missing = requiredClasses.filter(cls => typeof window[cls] === 'undefined');
+                
+                if (missing.length > 0) {
+                    throw new Error(`Dependências ausentes: ${missing.join(', ')}`);
+                }
+                
+                console.log('✅ Dependências verificadas');
+            }
+            
+            /**
+             * Inicializa módulos core
+             */
+            async initCoreModules() {
+                // ConfigLoader
+                this.modules.set('config', new window.ConfigLoader(this.config));
+                
+                // FormGenerator
+                this.modules.set('formGenerator', new window.FormGenerator(this.config));
+                
+                // NavigationController
+                this.modules.set('navigation', new window.NavigationController(this.config));
+                
+                // AutoSave
+                this.modules.set('autoSave', new window.AutoSave(this.config));
+                
+                // CreditScoreModule (main business logic)
+                this.modules.set('creditScore', new window.CreditScoreModule(this.config));
+                
+                // Inicializar todos os módulos
+                for (const [name, module] of this.modules) {
+                    if (typeof module.init === 'function') {
+                        await module.init();
+                        console.log(`✅ Módulo ${name} inicializado`);
+                    }
+                }
+            }
+            
+            /**
+             * Gera interface baseada na configuração
+             */
+            async generateInterface() {
+                const formGenerator = this.modules.get('formGenerator');
+                const navigation = this.modules.get('navigation');
+                
+                // Gerar navegação por abas
+                await navigation.generateTabs();
+                
+                // Gerar conteúdo dos formulários
+                await formGenerator.generateForms();
+                
+                console.log('✅ Interface gerada');
+            }
+            
+            /**
+             * Configura sistema de navegação
+             */
+            setupNavigation() {
+                const navigation = this.modules.get('navigation');
+                
+                // Event listeners para botões de navegação
+                document.getElementById('nextBtn').addEventListener('click', () => {
+                    navigation.nextModule();
+                });
+                
+                document.getElementById('prevBtn').addEventListener('click', () => {
+                    navigation.previousModule();
+                });
+                
+                // Event listeners para tabs diretas
+                navigation.setupTabClickHandlers();
+                
+                console.log('✅ Navegação configurada');
+            }
+            
+            /**
+             * Configura auto-save
+             */
+            setupAutoSave() {
+                const autoSave = this.modules.get('autoSave');
+                
+                // Event listeners para mudanças no formulário
+                document.getElementById('creditScoreForm').addEventListener('input', () => {
+                    autoSave.scheduleAutoSave();
+                });
+                
+                document.getElementById('creditScoreForm').addEventListener('change', () => {
+                    autoSave.scheduleAutoSave();
+                });
+                
+                // Event listener para salvar manual
+                document.getElementById('saveBtn').addEventListener('click', () => {
+                    autoSave.saveNow();
+                });
+                
+                // Event listener para antes de sair da página
+                window.addEventListener('beforeunload', () => {
+                    autoSave.saveNow();
+                });
+                
+                console.log('✅ Auto-save configurado');
+            }
+            
+            /**
+             * Tenta restaurar dados salvos
+             */
+            async attemptDataRestore() {
+                const autoSave = this.modules.get('autoSave');
+                
+                try {
+                    const savedData = await autoSave.loadSavedData();
+                    
+                    if (savedData && Object.keys(savedData).length > 0) {
+                        const restore = confirm('Dados de uma sessão anterior foram encontrados. Deseja restaurá-los?');
+                        
+                        if (restore) {
+                            await this.restoreFormData(savedData);
+                            this.showAlert('success', 'Dados restaurados com sucesso');
+                        }
+                    }
+                } catch (error) {
+                    console.log('ℹ️ Nenhum dado anterior encontrado');
+                }
+            }
+            
+            /**
+             * Restaura dados no formulário
+             */
+            async restoreFormData(data) {
+                // Implementar restauração de dados
+                // TODO: Implementar lógica de restauração
+                console.log('📥 Restaurando dados:', data);
+            }
+            
+            /**
+             * Mostra interface principal
+             */
+            showInterface() {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('formContent').style.display = 'block';
+                document.getElementById('formActions').style.display = 'block';
+                document.getElementById('progressContainer').style.display = 'block';
+                document.getElementById('tabNavigation').style.display = 'flex';
+            }
+            
+            /**
+             * Mostra erro para o usuário
+             */
+            showError(title, message) {
+                const errorHtml = `
+                    <div class="alert alert-danger">
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                        <button onclick="location.reload()" class="btn btn-primary mt-3">
+                            Recarregar Página
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('loadingState').innerHTML = errorHtml;
+            }
+            
+            /**
+             * Mostra alerta para o usuário
+             */
+            showAlert(type, message) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible">
+                        ${message}
+                        <button type="button" class="alert-close" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                `;
+                
+                const container = document.getElementById('alertContainer');
+                container.innerHTML = alertHtml;
+                
+                // Auto-remove após 5 segundos
+                setTimeout(() => {
+                    const alert = container.querySelector('.alert');
+                    if (alert) alert.remove();
+                }, 5000);
+            }
+        }
+        
+        // Inicializar aplicação quando DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            window.creditScoreApp = new CreditScoreProApp();
+            window.creditScoreApp.init();
+        });
+        
+        // Prevenir perda de dados ao sair da página
+        window.addEventListener('beforeunload', (e) => {
+            if (window.creditScoreApp && window.creditScoreApp.initialized) {
+                e.preventDefault();
+                e.returnValue = 'Você tem alterações não salvas. Deseja realmente sair?';
+                return e.returnValue;
+            }
+        });
+    </script>
+</body>
+</html>

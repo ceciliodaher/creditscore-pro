@@ -1,0 +1,456 @@
+{
+  "metadata": {
+    "exportDate": "2025-10-22",
+    "systemVersion": "1.0.0",
+    "systemName": "CreditScore Pro",
+    "testScenario": "Empresa Risco Alto - Rating C",
+    "description": "Empresa com sérios problemas financeiros: liquidez crítica, prejuízos acumulados, alto endividamento, protestos e irregularidades cadastrais. Rejeição ou garantias robustas requeridas."
+  },
+
+  "cadastro": {
+    "razaoSocial": "Indústria Metalúrgica Gama Ltda",
+    "nomeFantasia": "Gama Metais",
+    "cnpj": "11.222.333/0001-44",
+    "inscricaoEstadual": "111.222.333.444",
+    "dataConstituicao": "2012-11-20",
+    "capitalSocial": 200000.00,
+    "regimeTributario": "Lucro Real",
+    "porte": "Pequena Empresa",
+    "ramoAtividade": "Fabricação de Estruturas Metálicas",
+    "cnae": "2511-0/00",
+
+    "endereco": {
+      "logradouro": "Rua Industrial",
+      "numero": "1200",
+      "complemento": "Galpão 5",
+      "bairro": "Distrito Industrial",
+      "cidade": "Guarulhos",
+      "uf": "SP",
+      "cep": "07220-500"
+    },
+
+    "contato": {
+      "email": "financeiro@gamametais.com.br",
+      "telefone": "(11) 2145-6789",
+      "site": ""
+    },
+
+    "composicaoSocietaria": [
+      {
+        "nome": "Carlos Eduardo Mendes",
+        "cpf": "789.456.123-00",
+        "participacao": 80.00,
+        "cargo": "Sócio Administrador"
+      },
+      {
+        "nome": "Lucia Helena Santos",
+        "cpf": "321.654.987-00",
+        "participacao": 20.00,
+        "cargo": "Sócio"
+      }
+    ],
+
+    "situacaoCadastral": "Ativa",
+    "tempoAtividade": 12.9,
+    "historicoProtestos": true,
+    "acoesTrabalhistas": 4
+  },
+
+  "demonstracoes": {
+    "anos": [2021, 2022, 2023],
+
+    "balancoPatrimonial": {
+      "2021": {
+        "ativo": {
+          "circulante": {
+            "caixa": 15000.00,
+            "contasBancarias": 35000.00,
+            "aplicacoesFinanceiras": 0.00,
+            "contasReceber": 280000.00,
+            "estoques": 320000.00,
+            "outros": 10000.00,
+            "total": 660000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 30000.00,
+            "investimentos": 0.00,
+            "imobilizado": 850000.00,
+            "intangivel": 10000.00,
+            "total": 890000.00
+          },
+          "total": 1550000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 380000.00,
+            "emprestimos": 250000.00,
+            "salarios": 95000.00,
+            "impostos": 120000.00,
+            "outros": 55000.00,
+            "total": 900000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 450000.00,
+            "financiamentos": 100000.00,
+            "outros": 0.00,
+            "total": 550000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 200000.00,
+            "reservas": 50000.00,
+            "lucrosAcumulados": -150000.00,
+            "total": 100000.00
+          },
+          "total": 1550000.00
+        }
+      },
+
+      "2022": {
+        "ativo": {
+          "circulante": {
+            "caixa": 8000.00,
+            "contasBancarias": 22000.00,
+            "aplicacoesFinanceiras": 0.00,
+            "contasReceber": 320000.00,
+            "estoques": 380000.00,
+            "outros": 15000.00,
+            "total": 745000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 35000.00,
+            "investimentos": 0.00,
+            "imobilizado": 820000.00,
+            "intangivel": 8000.00,
+            "total": 863000.00
+          },
+          "total": 1608000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 450000.00,
+            "emprestimos": 320000.00,
+            "salarios": 110000.00,
+            "impostos": 155000.00,
+            "outros": 65000.00,
+            "total": 1100000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 500000.00,
+            "financiamentos": 90000.00,
+            "outros": 0.00,
+            "total": 590000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 200000.00,
+            "reservas": 50000.00,
+            "lucrosAcumulados": -332000.00,
+            "total": -82000.00
+          },
+          "total": 1608000.00
+        }
+      },
+
+      "2023": {
+        "ativo": {
+          "circulante": {
+            "caixa": 3000.00,
+            "contasBancarias": 12000.00,
+            "aplicacoesFinanceiras": 0.00,
+            "contasReceber": 350000.00,
+            "estoques": 420000.00,
+            "outros": 18000.00,
+            "total": 803000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 40000.00,
+            "investimentos": 0.00,
+            "imobilizado": 780000.00,
+            "intangivel": 5000.00,
+            "total": 825000.00
+          },
+          "total": 1628000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 520000.00,
+            "emprestimos": 380000.00,
+            "salarios": 125000.00,
+            "impostos": 185000.00,
+            "outros": 75000.00,
+            "total": 1285000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 550000.00,
+            "financiamentos": 80000.00,
+            "outros": 0.00,
+            "total": 630000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 200000.00,
+            "reservas": 50000.00,
+            "lucrosAcumulados": -537000.00,
+            "total": -287000.00
+          },
+          "total": 1628000.00
+        }
+      }
+    },
+
+    "dre": {
+      "2021": {
+        "receitaBruta": 2500000.00,
+        "deducoes": 400000.00,
+        "receitaLiquida": 2100000.00,
+        "cmv": 1680000.00,
+        "lucro Bruto": 420000.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 105000.00,
+          "administrativas": 126000.00,
+          "pessoal": 252000.00,
+          "total": 483000.00
+        },
+        "ebitda": -63000.00,
+        "depreciacaoAmortizacao": 85000.00,
+        "lucroOperacional": -148000.00,
+        "receitasFinanceiras": 1000.00,
+        "despesasFinanceiras": 95000.00,
+        "resultadoFinanceiro": -94000.00,
+        "lucroAntesIR": -242000.00,
+        "impostoRenda": 0.00,
+        "lucroLiquido": -242000.00
+      },
+
+      "2022": {
+        "receitaBruta": 2300000.00,
+        "deducoes": 368000.00,
+        "receitaLiquida": 1932000.00,
+        "cmv": 1737600.00,
+        "lucro Bruto": 194400.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 96600.00,
+          "administrativas": 115920.00,
+          "pessoal": 231840.00,
+          "total": 444360.00
+        },
+        "ebitda": -249960.00,
+        "depreciacaoAmortizacao": 90000.00,
+        "lucroOperacional": -339960.00,
+        "receitasFinanceiras": 500.00,
+        "despesasFinanceiras": 110000.00,
+        "resultadoFinanceiro": -109500.00,
+        "lucroAntesIR": -449460.00,
+        "impostoRenda": 0.00,
+        "lucroLiquido": -449460.00
+      },
+
+      "2023": {
+        "receitaBruta": 2100000.00,
+        "deducoes": 336000.00,
+        "receitaLiquida": 1764000.00,
+        "cmv": 1764000.00,
+        "lucro Bruto": 0.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 88200.00,
+          "administrativas": 105840.00,
+          "pessoal": 211680.00,
+          "total": 405720.00
+        },
+        "ebitda": -405720.00,
+        "depreciacaoAmortizacao": 95000.00,
+        "lucroOperacional": -500720.00,
+        "receitasFinanceiras": 200.00,
+        "despesasFinanceiras": 125000.00,
+        "resultadoFinanceiro": -124800.00,
+        "lucroAntesIR": -625520.00,
+        "impostoRenda": 0.00,
+        "lucroLiquido": -625520.00
+      }
+    }
+  },
+
+  "endividamento": {
+    "dividasBancarias": [
+      {
+        "instituicao": "Banco do Brasil",
+        "tipo": "Capital de Giro",
+        "valorOriginal": 400000.00,
+        "saldoDevedor": 380000.00,
+        "dataContratacao": "2021-05-10",
+        "dataVencimento": "2024-05-10",
+        "taxaJuros": 22.5,
+        "garantias": ["Aval dos sócios", "Máquinas"],
+        "situacao": "Inadimplente",
+        "valorParcela": 18000.00,
+        "diasAtraso": 75
+      },
+      {
+        "instituicao": "Santander",
+        "tipo": "Financiamento Máquinas",
+        "valorOriginal": 700000.00,
+        "saldoDevedor": 550000.00,
+        "dataContratacao": "2020-02-15",
+        "dataVencimento": "2027-02-15",
+        "taxaJuros": 16.8,
+        "garantias": ["Alienação fiduciária das máquinas"],
+        "situacao": "Adimplente com renegociação",
+        "valorParcela": 12000.00,
+        "diasAtraso": 0
+      },
+      {
+        "instituicao": "Caixa Econômica Federal",
+        "tipo": "Empréstimo Emergencial",
+        "valorOriginal": 180000.00,
+        "saldoDevedor": 195000.00,
+        "dataContratacao": "2023-08-20",
+        "dataVencimento": "2024-08-20",
+        "taxaJuros": 28.0,
+        "garantias": ["Aval dos sócios"],
+        "situacao": "Adimplente",
+        "valorParcela": 16250.00,
+        "diasAtraso": 0
+      }
+    ],
+
+    "outrasObrigacoes": [
+      {
+        "tipo": "Fornecedores",
+        "valor": 520000.00,
+        "prazoMedio": 95
+      },
+      {
+        "tipo": "Impostos a Pagar",
+        "valor": 185000.00,
+        "prazoMedio": 120
+      },
+      {
+        "tipo": "Salários e Encargos",
+        "valor": 125000.00,
+        "prazoMedio": 15
+      }
+    ],
+
+    "historicoPagamentos": {
+      "atrasos12Meses": 8,
+      "protestos": 3,
+      "chequesSemFundo": 2,
+      "renegociacoes": 2
+    }
+  },
+
+  "compliance": {
+    "situacaoCadastral": {
+      "status": "Ativa com Restrições",
+      "dataConsulta": "2025-10-20",
+      "fonte": "Receita Federal"
+    },
+
+    "certidoesNegativas": {
+      "federal": {
+        "situacao": "Irregular",
+        "numero": "789.123.456-00",
+        "dataEmissao": "2025-06-15",
+        "validade": "2025-12-15",
+        "observacao": "Débitos em cobrança - R$ 245.000"
+      },
+      "estadual": {
+        "situacao": "Irregular",
+        "numero": "SP-321.987.654",
+        "dataEmissao": "2025-07-10",
+        "validade": "2026-01-10",
+        "observacao": "Parcelamento inadimplente"
+      },
+      "municipal": {
+        "situacao": "Regular",
+        "numero": "SP-GU-123.456",
+        "dataEmissao": "2025-09-20",
+        "validade": "2026-03-20"
+      },
+      "trabalhista": {
+        "situacao": "Pendência",
+        "numero": "TST-369.258.147",
+        "dataEmissao": "2025-08-05",
+        "validade": "2026-02-05",
+        "observacao": "4 ações trabalhistas em andamento"
+      },
+      "fgts": {
+        "situacao": "Irregular",
+        "numero": "FGTS-987.321.456",
+        "dataEmissao": "2025-07-20",
+        "validade": "2026-01-20",
+        "observacao": "Débitos não quitados"
+      }
+    },
+
+    "consultasExternas": {
+      "serasaScore": 280,
+      "boaVistaScore": 250,
+      "protestos": true,
+      "acoesJudiciais": 7,
+      "falencias": false,
+      "recuperacaoJudicial": false
+    }
+  },
+
+  "recursosHumanos": {
+    "estruturaPessoal": {
+      "totalFuncionarios": 22,
+      "distribuicao": {
+        "clt": 18,
+        "pj": 2,
+        "estagiarios": 0,
+        "terceirizados": 2
+      },
+      "departamentos": [
+        { "nome": "Produção", "quantidade": 12 },
+        { "nome": "Vendas", "quantidade": 4 },
+        { "nome": "Administrativo", "quantidade": 3 },
+        { "nome": "Logística", "quantidade": 3 }
+      ]
+    },
+
+    "folhaPagamento": {
+      "totalMensal": 88000.00,
+      "encargos": 26400.00,
+      "beneficios": 8800.00,
+      "totalComEncargos": 123200.00,
+      "mediaSalarial": 4890.00,
+      "maiorSalario": 12000.00,
+      "menorSalario": 2600.00
+    },
+
+    "indicadores": {
+      "turnover": 32.5,
+      "absenteismo": 9.8,
+      "horasExtras": 480,
+      "produtividade": "Baixa"
+    }
+  },
+
+  "observacoes": {
+    "pontosFortes": [
+      "Tempo de atividade superior a 12 anos",
+      "Imobilizado significativo (ativos fixos)"
+    ],
+    "pontosAtenção": [
+      "🔴 CRÍTICO: Liquidez corrente de apenas 0.62 (insolvência de curto prazo)",
+      "🔴 CRÍTICO: Patrimônio líquido negativo (-R$ 287.000) - Passivo a descoberto",
+      "🔴 CRÍTICO: Prejuízos consecutivos por 3 anos (total -R$ 1.317.000)",
+      "🔴 CRÍTICO: EBITDA negativo por 3 anos consecutivos",
+      "🔴 CRÍTICO: Receita em queda (-16% em 3 anos)",
+      "🔴 CRÍTICO: Margem bruta zerada em 2023 (CMV = Receita Líquida)",
+      "🔴 CRÍTICO: 3 protestos ativos",
+      "🔴 CRÍTICO: Inadimplência em empréstimo BB (75 dias de atraso)",
+      "🔴 CRÍTICO: Certidões federais, estaduais e FGTS irregulares",
+      "🔴 CRÍTICO: 4 ações trabalhistas em andamento",
+      "🔴 CRÍTICO: Score de crédito muito baixo (280 Serasa, 250 Boa Vista)",
+      "🔴 CRÍTICO: Endividamento total de 117% do ativo (insustentável)",
+      "🔴 CRÍTICO: Turnover altíssimo (32.5%) e absenteísmo (9.8%)",
+      "🔴 CRÍTICO: Impossibilidade de honrar compromissos de curto prazo",
+      "⚠️ Despesas financeiras consumindo 7% da receita líquida",
+      "⚠️ 8 atrasos nos últimos 12 meses",
+      "⚠️ 2 renegociações de dívidas",
+      "⚠️ Capital de giro negativo"
+    ],
+    "recomendacao": "⛔ REJEIÇÃO RECOMENDADA. Empresa apresenta sérios problemas financeiros com risco iminente de insolvência. Patrimônio líquido negativo, liquidez crítica, prejuízos acumulados, protestos, inadimplência bancária e irregularidades fiscais/trabalhistas. Não aprovar crédito mesmo com garantias robustas. Sugerir reestruturação completa ou recuperação judicial."
+  }
+}

@@ -1,0 +1,869 @@
+{
+  "system": {
+    "name": "CreditScore Pro",
+    "loading": "Carregando...",
+    "initializing": "Inicializando sistema...",
+    "ready": "Sistema pronto",
+    "error": "Erro",
+    "success": "Sucesso",
+    "warning": "Atenção",
+    "info": "Informação"
+  },
+  "modules": {
+    "creditScore": {
+      "initializing": "Inicializando Sistema de Análise de Crédito...",
+      "initialized": "CreditScoreModule inicializado com sucesso",
+      "instantiated": "CreditScoreModule instanciado",
+      "error": "Erro ao inicializar CreditScoreModule"
+    },
+    "configLoader": {
+      "instantiated": "ConfigLoader instanciado",
+      "initialized": "ConfigLoader inicializado",
+      "loaded": "Configuração carregada",
+      "validated": "Configuração validada com sucesso",
+      "error": "Erro ao carregar configuração"
+    },
+    "database": {
+      "loaded": "schema carregado",
+      "connected": "IndexedDB conectado",
+      "error": "Erro ao conectar IndexedDB",
+      "notValidated": "ConfigLoader não validado",
+      "notSupported": "IndexedDB não suportado pelo navegador"
+    },
+    "calculators": {
+      "initialized": "Calculadores inicializados"
+    },
+    "compliance": {
+      "initialized": "Compliance checker inicializado",
+      "notAvailable": "ComplianceChecker não disponível"
+    },
+    "exporters": {
+      "initialized": "Exportadores inicializados"
+    },
+    "cadastro": {
+      "title": "Cadastro e Identificação",
+      "description": "Informações cadastrais completas da empresa e composição societária",
+      "loading": "Carregando módulo de cadastro...",
+      "ready": "✅ Módulo de cadastro pronto",
+      "saving": "Salvando dados cadastrais...",
+      "saved": "✅ Dados cadastrais salvos",
+      "error": "❌ Erro no módulo de cadastro"
+    },
+    "demonstracoes": {
+      "title": "Demonstrações Financeiras",
+      "description": "Balanço Patrimonial e DRE dos últimos 3 anos",
+      "loading": "Carregando demonstrações financeiras...",
+      "ready": "✅ Módulo de demonstrações pronto",
+      "saving": "Salvando demonstrações...",
+      "saved": "✅ Demonstrações salvas",
+      "calculating": "Calculando análises financeiras...",
+      "calculated": "✅ Análises calculadas",
+      "error": "❌ Erro nas demonstrações financeiras",
+      "balance_error": "⚠️ Equação contábil não está balanceada: Ativo ≠ Passivo + PL"
+    },
+    "endividamento": {
+      "title": "Análise de Endividamento",
+      "description": "Detalhamento de dívidas bancárias e outras obrigações",
+      "loading": "Carregando análise de endividamento...",
+      "ready": "✅ Módulo de endividamento pronto",
+      "saving": "Salvando dados de endividamento...",
+      "saved": "✅ Dados de endividamento salvos",
+      "calculating": "Calculando indicadores de endividamento...",
+      "calculated": "✅ Indicadores calculados",
+      "error": "❌ Erro na análise de endividamento"
+    },
+    "indices": {
+      "title": "Índices Financeiros",
+      "description": "Cálculo automático de índices de liquidez, rentabilidade e estrutura",
+      "loading": "Calculando índices financeiros...",
+      "ready": "✅ Índices financeiros calculados",
+      "recalculating": "Recalculando índices...",
+      "error": "❌ Erro no cálculo de índices",
+      "insufficient_data": "⚠️ Dados insuficientes para calcular índices financeiros"
+    },
+    "scoring": {
+      "title": "Scoring de Crédito",
+      "description": "Classificação de risco baseada em análise multifatorial",
+      "loading": "Calculando scoring de crédito...",
+      "ready": "✅ Scoring calculado",
+      "recalculating": "Recalculando scoring...",
+      "calculated": "✅ Classificação de risco: ",
+      "error": "❌ Erro no cálculo de scoring",
+      "insufficient_data": "⚠️ Dados insuficientes para calcular scoring"
+    },
+    "complianceModule": {
+      "title": "Compliance e Verificações",
+      "description": "Verificações cadastrais e análise de conformidade regulatória",
+      "loading": "Carregando módulo de compliance...",
+      "ready": "✅ Módulo de compliance pronto",
+      "checking": "Executando verificações de compliance...",
+      "checked": "✅ Verificações concluídas",
+      "saving": "Salvando dados de compliance...",
+      "saved": "✅ Dados de compliance salvos",
+      "error": "❌ Erro nas verificações de compliance"
+    },
+    "recursosHumanos": {
+      "title": "Recursos Humanos",
+      "description": "Estrutura de pessoal e análise de folha de pagamento",
+      "loading": "Carregando módulo de RH...",
+      "ready": "✅ Módulo de RH pronto",
+      "saving": "Salvando dados de RH...",
+      "saved": "✅ Dados de RH salvos",
+      "calculating": "Calculando indicadores de RH...",
+      "calculated": "✅ Indicadores de RH calculados",
+      "error": "❌ Erro no módulo de RH"
+    },
+    "relatorios": {
+      "title": "Relatórios e Análises",
+      "description": "Geração de relatórios completos e exportação de dados",
+      "loading": "Carregando módulo de relatórios...",
+      "ready": "✅ Módulo de relatórios pronto",
+      "generating": "Gerando relatório completo...",
+      "generated": "✅ Relatório gerado",
+      "error": "❌ Erro ao gerar relatório",
+      "insufficient_data": "⚠️ Dados insuficientes para gerar relatório completo"
+    }
+  },
+  "validation": {
+    "configRequired": "Configuração obrigatória não fornecida",
+    "configInvalid": "Configuração inválida",
+    "configNotValidated": "Configuração não foi validada",
+    "configKeysMessage": "Chaves de configuração ausentes",
+    "configValid": "Configuração válida",
+    "dependenciesChecked": "Dependências verificadas",
+    "dependenciesRequired": "Dependências obrigatórias ausentes",
+    "dependenciesOptional": "Dependências opcionais ausentes",
+    "fieldRequired": "Campo obrigatório ausente",
+    "fieldType": "Campo deve ser do tipo",
+    "fieldMustBeNumber": "deve ser um número",
+    "fieldMustBeArray": "deve ser um array",
+    "fieldMustBeObject": "deve ser um objeto",
+    "minLessThanMax": "min deve ser menor que max",
+    "invalidData": "Dados inválidos"
+  },
+  "database": {
+    "notInitialized": "Database não inicializado",
+    "storeCreated": "Object store criado",
+    "savedSuccessfully": "Dados salvos com sucesso",
+    "loadedSuccessfully": "Dados carregados com sucesso",
+    "deletedSuccessfully": "Dados deletados com sucesso",
+    "clearedSuccessfully": "Store limpa com sucesso",
+    "errorSaving": "Erro ao salvar dados",
+    "errorLoading": "Erro ao carregar dados",
+    "errorDeleting": "Erro ao deletar dados",
+    "errorClearing": "Erro ao limpar store"
+  },
+  "forms": {
+    "dataRestored": "Dados do formulário restaurados",
+    "dataSaved": "Dados salvos",
+    "dataCleared": "Dados limpos",
+    "noPreviousData": "Nenhum dado anterior encontrado",
+    "restorePrompt": "Dados de uma sessão anterior foram encontrados. Deseja restaurá-los?",
+    "restoreSuccess": "Dados restaurados com sucesso",
+    "saveSuccess": "Salvo com sucesso",
+    "autoSaved": "Salvo automaticamente",
+    "saveError": "Erro ao salvar",
+    "restoring": "Restaurando dados"
+  },
+  "analysis": {
+    "starting": "Iniciando análise completa de crédito...",
+    "completed": "Análise completa finalizada",
+    "error": "Erro na análise completa",
+    "indicesCalculated": "Índices financeiros calculados",
+    "analysisCompleted": "Análise vertical/horizontal realizada",
+    "capitalAnalyzed": "Análise de capital de giro realizada",
+    "scoringCalculated": "Scoring de crédito calculado",
+    "complianceChecked": "Verificações de compliance realizadas"
+  },
+  "alerts": {
+    "criteriaDescriptions": {
+      "liquidezBaixa": "Liquidez corrente abaixo do mínimo recomendado",
+      "endividamentoAlto": "Nível de endividamento acima do limite aceitável",
+      "prejuizoConsecutivo": "Prejuízos em exercícios consecutivos",
+      "situacaoIrregular": "Irregularidades cadastrais identificadas",
+      "margemDecrescente": "Margem de lucro em queda",
+      "aumentoEndividamento": "Aumento significativo de endividamento",
+      "cicloLongo": "Ciclo operacional muito longo",
+      "certidoesPendentes": "Certidões negativas pendentes",
+      "mudancaSocietaria": "Mudança societária recente",
+      "novaOperacao": "Nova operação de crédito",
+      "melhoriaIndices": "Melhoria nos índices financeiros",
+      "default": "Critério atingido"
+    }
+  },
+  "recommendations": {
+    "approval": {
+      "type": "aprovacao",
+      "description": "Risco baixo. Aprovação recomendada com condições preferenciais.",
+      "priority": "alta"
+    },
+    "rejection": {
+      "type": "rejeicao",
+      "description": "Risco alto. Rejeição recomendada ou solicitar garantias adicionais.",
+      "priority": "alta"
+    },
+    "caution": {
+      "type": "cautela",
+      "description": "Risco moderado. Análise criteriosa recomendada.",
+      "priority": "media"
+    }
+  },
+  "status": {
+    "saved": "Salvo",
+    "saving": "Salvando...",
+    "loading": "Carregando...",
+    "processing": "Processando...",
+    "complete": "Completo",
+    "error": "Erro"
+  },
+  "buttons": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "finish": "Finalizar",
+    "export": "Exportar",
+    "import": "Importar",
+    "clear": "Limpar",
+    "reload": "Recarregar"
+  },
+  "errors": {
+    "loadConfig": "Falha ao carregar configuração",
+    "http": "HTTP",
+    "generic": "Ocorreu um erro",
+    "initialization": "Erro na inicialização",
+    "missingDependencies": "Dependências ausentes",
+    "invalidConfiguration": "Configuração inválida"
+  },
+  "icons": {
+    "loading": "🔄",
+    "success": "✅",
+    "error": "❌",
+    "warning": "⚠️",
+    "info": "ℹ️",
+    "save": "💾",
+    "search": "🔍",
+    "rocket": "🚀",
+    "download": "📥",
+    "wrench": "🔧"
+  },
+  "export": {
+    "json": {
+      "exporting": "Exportando para JSON...",
+      "exported": "✅ Arquivo JSON exportado",
+      "error": "❌ Erro ao exportar JSON"
+    },
+    "excel": {
+      "exporting": "Gerando planilha Excel...",
+      "exported": "✅ Planilha Excel gerada",
+      "error": "❌ Erro ao gerar Excel"
+    },
+    "pdf": {
+      "exporting": "Gerando relatório PDF...",
+      "exported": "✅ Relatório PDF gerado",
+      "error": "❌ Erro ao gerar PDF"
+    },
+    "no_data": "⚠️ Não há dados para exportar",
+    "incomplete_data": "⚠️ Dados incompletos. Preencha todos os módulos obrigatórios antes de exportar."
+  },
+  "import": {
+    "importing": "Importando dados...",
+    "imported": "✅ Dados importados com sucesso",
+    "error": "❌ Erro ao importar dados",
+    "invalid_file": "❌ Arquivo inválido",
+    "invalid_format": "❌ Formato de arquivo não suportado",
+    "confirm_overwrite": "Os dados atuais serão substituídos. Deseja continuar?"
+  },
+  "autosave": {
+    "enabled": "Auto-save ativado (30s)",
+    "disabled": "Auto-save desativado",
+    "saving": "💾 Salvando rascunho...",
+    "saved": "✅ Rascunho salvo automaticamente",
+    "error": "❌ Erro ao salvar rascunho",
+    "restored": "✅ Rascunho restaurado",
+    "restore_prompt": "Deseja restaurar o rascunho salvo anteriormente?",
+    "restore_yes": "Sim, restaurar",
+    "restore_no": "Não, começar novo"
+  },
+  "navigation": {
+    "next": "Próximo",
+    "previous": "Anterior",
+    "required_fields": "Por favor, preencha todos os campos obrigatórios",
+    "cannot_skip": "Não é possível pular este módulo obrigatório",
+    "calculating": "Calculando...",
+    "exit_confirm": "Deseja realmente sair? Dados não salvos serão perdidos."
+  },
+  "confirmations": {
+    "delete": "Tem certeza que deseja excluir?",
+    "overwrite": "Tem certeza que deseja sobrescrever os dados existentes?",
+    "exit": "Deseja realmente sair? Alterações não salvas serão perdidas.",
+    "reset": "Deseja limpar todos os dados e começar novamente?",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "calculators": {
+    "analiseVerticalHorizontal": {
+      "variacoes": {
+        "ambosZero": "Ambos os valores são zero",
+        "valorAnteriorZero": "Valor anterior era zero - variação indefinida"
+      },
+      "alertas": {
+        "variacaoCritica": "Variação crítica de {variacao}% em {item} (período {periodo})",
+        "variacaoSignificativa": "Variação significativa de {variacao}% em {item} (período {periodo})",
+        "margemDecrescente": "Margem {margem} decresceu {variacao}% no período {periodo}",
+        "prejuizoConsecutivo": "Prejuízo consecutivo detectado em {anos} anos: {lista}"
+      }
+    },
+    "capitalGiro": {
+      "cgl": {
+        "positivo": "Positivo - empresa tem recursos circulantes excedentes",
+        "neutro": "Neutro - recursos circulantes equilibrados",
+        "negativo": "Negativo - empresa depende de recursos de curto prazo",
+        "situacaoAdequado": "adequado",
+        "situacaoNeutro": "neutro",
+        "situacaoInsuficiente": "insuficiente"
+      },
+      "ncg": {
+        "positiva": "Positiva - empresa precisa financiar parte do ciclo operacional",
+        "neutra": "Neutra - ciclo operacional autofinanciado",
+        "negativa": "Negativa - fornecedores financiam parte do ciclo (favorável)",
+        "situacaoNecessitaFinanciamento": "necessita_financiamento",
+        "situacaoEquilibrado": "equilibrado",
+        "situacaoAutofinanciado": "autofinanciado"
+      },
+      "cdg": {
+        "positivo": "Positivo - recursos permanentes financiam ativo permanente com folga",
+        "neutro": "Neutro - recursos permanentes equilibrados",
+        "negativo": "Negativo - ativo permanente financiado por recursos de curto prazo (risco)",
+        "situacaoAdequado": "adequado",
+        "situacaoNeutro": "neutro",
+        "situacaoInadequado": "inadequado"
+      },
+      "tesouraria": {
+        "positivo": "Positivo - empresa tem folga financeira",
+        "neutro": "Neutro - situação equilibrada",
+        "negativo": "Negativo - empresa depende de empréstimos de curto prazo",
+        "situacaoFolga": "folga",
+        "situacaoEquilibrio": "equilibrio",
+        "situacaoDependencia": "dependencia"
+      },
+      "ciclos": {
+        "pmr": {
+          "descricao": "Prazo Médio de Recebimento",
+          "formula": "(Contas a Receber / Receita Líquida) × 360",
+          "alto": "Alto - empresa demora {dias} dias para receber (ideal: < {limiar} dias)",
+          "adequado": "Adequado - empresa recebe em {dias} dias",
+          "naoCalculado": "Não calculado - falta dados de contas a receber"
+        },
+        "pme": {
+          "descricao": "Prazo Médio de Estoque",
+          "formula": "(Estoques / CMV) × 360",
+          "calculado": "Produtos ficam em estoque por {dias} dias em média",
+          "naoCalculado": "Não calculado - empresa pode não ter estoques (serviços) ou falta dados"
+        },
+        "pmp": {
+          "descricao": "Prazo Médio de Pagamento",
+          "formula": "(Fornecedores / CMV) × 360",
+          "baixo": "Baixo - empresa paga fornecedores em {dias} dias (ideal: > {limiar} dias)",
+          "adequado": "Adequado - empresa paga em {dias} dias",
+          "naoCalculado": "Não calculado - falta dados de fornecedores"
+        },
+        "cicloOperacional": {
+          "descricao": "Ciclo Operacional",
+          "formula": "PMR + PME",
+          "calculado": "Desde a compra até o recebimento: {dias} dias",
+          "naoCalculado": "Não calculado - falta dados"
+        },
+        "cicloFinanceiro": {
+          "descricao": "Ciclo Financeiro (Ciclo de Caixa)",
+          "formula": "Ciclo Operacional - PMP",
+          "critico": "Crítico - empresa precisa financiar {dias} dias de operação",
+          "alto": "Alto - empresa precisa financiar {dias} dias de operação",
+          "adequado": "Adequado - empresa precisa financiar {dias} dias de operação",
+          "excelente": "Excelente - fornecedores financiam operação (ciclo negativo: {dias} dias)",
+          "naoCalculado": "Não calculado - falta dados"
+        }
+      },
+      "situacaoFinanceira": {
+        "situacao1": {
+          "tipo": "situacao1",
+          "descricao": "Sólida",
+          "risco": "baixo",
+          "recomendacao": "CDG financia NCG com folga. Situação financeira saudável.",
+          "diagnostico": "Empresa possui saldo de tesouraria positivo (R$ {t}) e necessidade de capital de giro positiva (R$ {n}). O capital de giro próprio é suficiente para financiar a operação com folga de R$ {t}. Capital de Giro Líquido: R$ {cgl}."
+        },
+        "situacao2": {
+          "tipo": "situacao2",
+          "descricao": "Insatisfatória",
+          "risco": "medio",
+          "recomendacao": "Empresa depende de empréstimos de curto prazo para financiar operação. Necessário aumentar capital próprio ou reduzir NCG.",
+          "diagnostico": "Empresa possui saldo de tesouraria negativo (R$ {t}) e necessidade de capital de giro positiva (R$ {n}). O capital de giro próprio é insuficiente, gerando dependência de empréstimos de curto prazo no valor de R$ {tABS}. Capital de Giro Líquido: R$ {cgl}."
+        },
+        "situacao3": {
+          "tipo": "situacao3",
+          "descricao": "Excelente",
+          "risco": "muito_baixo",
+          "recomendacao": "Fornecedores financiam a operação. Situação financeira ideal.",
+          "diagnostico": "Empresa possui saldo de tesouraria positivo (R$ {t}) e necessidade de capital de giro negativa (R$ {n}). Os fornecedores financiam a operação, liberando recursos próprios. Situação financeira ideal. Capital de Giro Líquido: R$ {cgl}."
+        },
+        "situacao4": {
+          "tipo": "situacao4",
+          "descricao": "Alto Risco",
+          "risco": "alto",
+          "recomendacao": "Dependência crítica de empréstimos de curto prazo. Risco de insolvência. Ação imediata necessária.",
+          "diagnostico": "Empresa possui saldo de tesouraria negativo (R$ {t}) e necessidade de capital de giro negativa (R$ {n}). Apesar dos fornecedores financiarem a operação, ainda há dependência crítica de empréstimos de curto prazo. Risco elevado de insolvência. Capital de Giro Líquido: R$ {cgl}."
+        }
+      },
+      "indicadores": {
+        "ncgSobreACAlto": "Alto - NCG representa {valor}% do AC (limite: {limiar}%)",
+        "ncgSobreACAdequado": "Adequado - NCG representa {valor}% do AC",
+        "cglSobreAC": "CGL representa {valor}% do Ativo Circulante",
+        "naoCalculado": "Não calculado"
+      },
+      "alertas": {
+        "situacaoAltoRisco": "Situação financeira de alto risco - dependência crítica de empréstimos de curto prazo",
+        "situacaoInsatisfatoria": "Situação financeira insatisfatória - empresa depende de empréstimos de curto prazo",
+        "cicloFinanceiroCritico": "Ciclo financeiro crítico: {dias} dias",
+        "cicloFinanceiroCriticoRecomendacao": "Reduzir PMR ou PME, ou aumentar PMP urgentemente",
+        "cicloFinanceiroAlto": "Ciclo financeiro alto: {dias} dias",
+        "cicloFinanceiroAltoRecomendacao": "Buscar redução do ciclo operacional ou aumento do prazo de pagamento",
+        "cicloFinanceiroNegativo": "Ciclo financeiro negativo: {dias} dias - fornecedores financiam operação",
+        "eficienciaBaixa": "Score de eficiência operacional baixo: {score}/100",
+        "eficienciaBaixaRecomendacao": "Revisar políticas de crédito, gestão de estoques e negociação com fornecedores"
+      }
+    },
+    "indicesFinanceiros": {
+      "liquidez": {
+        "corrente": {
+          "nome": "Liquidez Corrente",
+          "formula": "AC / PC",
+          "excelente": "Excelente - empresa tem {valor}x de ativos circulantes para cada R$ 1 de dívida CP",
+          "bom": "Bom - empresa tem {valor}x de ativos circulantes para cada R$ 1 de dívida CP",
+          "adequado": "Adequado - empresa tem {valor}x de ativos circulantes para cada R$ 1 de dívida CP",
+          "baixo": "Baixo - empresa tem apenas {valor}x de ativos circulantes para cada R$ 1 de dívida CP",
+          "critico": "Crítico - empresa tem apenas {valor}x de ativos circulantes para cada R$ 1 de dívida CP"
+        },
+        "seca": {
+          "nome": "Liquidez Seca",
+          "formula": "(AC - Estoques) / PC"
+        },
+        "imediata": {
+          "nome": "Liquidez Imediata",
+          "formula": "Disponível / PC"
+        },
+        "geral": {
+          "nome": "Liquidez Geral",
+          "formula": "(AC + RLP) / (PC + PNC)"
+        }
+      },
+      "rentabilidade": {
+        "margemBruta": {
+          "nome": "Margem Bruta",
+          "formula": "(Lucro Bruto / Receita Líquida) × 100"
+        },
+        "margemEBITDA": {
+          "nome": "Margem EBITDA",
+          "formula": "(EBITDA / Receita Líquida) × 100"
+        },
+        "margemLiquida": {
+          "nome": "Margem Líquida",
+          "formula": "(Lucro Líquido / Receita Líquida) × 100"
+        },
+        "roe": {
+          "nome": "ROE (Return on Equity)",
+          "formula": "(Lucro Líquido / Patrimônio Líquido) × 100"
+        },
+        "roa": {
+          "nome": "ROA (Return on Assets)",
+          "formula": "(Lucro Líquido / Ativo Total) × 100"
+        }
+      },
+      "estrutura": {
+        "pct": {
+          "nome": "Participação de Capital de Terceiros",
+          "formula": "Passivo Exigível / PL"
+        },
+        "imobilizacaoPL": {
+          "nome": "Imobilização do Patrimônio Líquido",
+          "formula": "Ativo Permanente / PL"
+        },
+        "imobilizacaoRNC": {
+          "nome": "Imobilização dos Recursos Não Correntes",
+          "formula": "Ativo Permanente / (PL + PNC)"
+        }
+      },
+      "atividade": {
+        "pmr": {
+          "nome": "Prazo Médio de Recebimento",
+          "formula": "(Contas a Receber / Receita) × 360"
+        },
+        "pmp": {
+          "nome": "Prazo Médio de Pagamento",
+          "formula": "(Fornecedores / CMV) × 360"
+        },
+        "giroEstoque": {
+          "nome": "Giro de Estoque",
+          "formula": "CMV / Estoque Médio"
+        },
+        "cicloOperacional": {
+          "nome": "Ciclo Operacional",
+          "formula": "PMR + PME"
+        },
+        "cicloFinanceiro": {
+          "nome": "Ciclo Financeiro",
+          "formula": "Ciclo Operacional - PMP"
+        }
+      },
+      "zScore": {
+        "nome": "Z-Score de Altman",
+        "formula": "1.2×X1 + 1.4×X2 + 3.3×X3 + 0.6×X4 + 1.0×X5",
+        "zonaSegura": "Zona Segura (Z > 2.99) - baixo risco de falência",
+        "zonaCinza": "Zona Cinza (1.81 < Z < 2.99) - risco moderado de falência",
+        "zonaPerigo": "Zona de Perigo (Z < 1.81) - alto risco de falência"
+      },
+      "interpretacoes": {
+        "naoCalculado": "Não calculado - dados insuficientes",
+        "percentual": "{valor}%",
+        "vezes": "{valor}x",
+        "dias": "{valor} dias"
+      },
+      "alertas": {
+        "liquidezBaixa": "Liquidez corrente abaixo de {limiar}",
+        "liquidezCritica": "Liquidez corrente crítica: {valor}",
+        "margemNegativa": "Margem {tipo} negativa: {valor}%",
+        "endividamentoAlto": "Endividamento alto: {valor}x do PL",
+        "zScorePerigo": "Z-Score indica alto risco de falência: {valor}"
+      }
+    },
+    "scoringEngine": {
+      "nome": "Scoring de Crédito",
+      "descricao": "Modelo proprietário de classificação de risco baseado em análise multifatorial ponderada",
+      "categorias": {
+        "cadastral": {
+          "nome": "Situação Cadastral",
+          "peso": 20,
+          "descricao": "Avalia regularidade fiscal, tempo de atividade, histórico de protestos e situação dos sócios",
+          "criterios": {
+            "regularidadeFiscal": {
+              "nome": "Regularidade Fiscal",
+              "excelente": "Todas as certidões negativas válidas e em dia",
+              "bom": "Certidões negativas com pequenas pendências",
+              "adequado": "Certidões com pendências administrativas regularizáveis",
+              "baixo": "Certidões com débitos fiscais significativos",
+              "critico": "Certidões com débitos graves ou em execução fiscal"
+            },
+            "tempoAtividade": {
+              "nome": "Tempo de Atividade",
+              "excelente": "Mais de 10 anos de atividade - {anos} anos",
+              "bom": "Entre 5 e 10 anos de atividade - {anos} anos",
+              "adequado": "Entre 2 e 5 anos de atividade - {anos} anos",
+              "baixo": "Entre 1 e 2 anos de atividade - {anos} ano(s)",
+              "critico": "Menos de 1 ano de atividade - {meses} meses"
+            },
+            "historicoProtestos": {
+              "nome": "Histórico de Protestos",
+              "excelente": "Sem protestos nos últimos 5 anos",
+              "bom": "Protestos baixos e quitados (< R$ {limiar})",
+              "adequado": "Protestos quitados de valores moderados",
+              "baixo": "Protestos em aberto de valores significativos",
+              "critico": "Múltiplos protestos em aberto ou de alto valor"
+            },
+            "situacaoSocios": {
+              "nome": "Situação dos Sócios",
+              "excelente": "Sócios sem restrições cadastrais",
+              "bom": "Sócios com pequenas restrições regularizáveis",
+              "adequado": "Sócios com restrições moderadas",
+              "baixo": "Sócios com restrições graves em outras empresas",
+              "critico": "Sócios com falências ou fraudes anteriores"
+            }
+          }
+        },
+        "financeiro": {
+          "nome": "Demonstrações Financeiras",
+          "peso": 25,
+          "descricao": "Avalia evolução de faturamento, lucratividade, qualidade das demonstrações e consistência dos dados",
+          "criterios": {
+            "evolucaoFaturamento": {
+              "nome": "Evolução do Faturamento",
+              "excelente": "Crescimento consistente > 20% ao ano - {crescimento}% a.a.",
+              "bom": "Crescimento moderado entre 10% e 20% ao ano - {crescimento}% a.a.",
+              "adequado": "Crescimento estável entre 0% e 10% ao ano - {crescimento}% a.a.",
+              "baixo": "Queda moderada entre 0% e -10% ao ano - {crescimento}% a.a.",
+              "critico": "Queda acentuada > 10% ao ano - {crescimento}% a.a."
+            },
+            "evolucaoLucratividade": {
+              "nome": "Evolução da Lucratividade",
+              "excelente": "Margem líquida > 10% e crescente - {margem}%",
+              "bom": "Margem líquida entre 5% e 10% - {margem}%",
+              "adequado": "Margem líquida entre 2% e 5% - {margem}%",
+              "baixo": "Margem líquida entre 0% e 2% - {margem}%",
+              "critico": "Margem líquida negativa (prejuízo) - {margem}%"
+            },
+            "qualidadeDemonstracoes": {
+              "nome": "Qualidade das Demonstrações",
+              "excelente": "Demonstrações auditadas por auditoria independente",
+              "bom": "Demonstrações assinadas por contador CRC válido",
+              "adequado": "Demonstrações completas mas sem auditoria",
+              "baixo": "Demonstrações incompletas ou inconsistências menores",
+              "critico": "Demonstrações incompletas ou com inconsistências graves"
+            },
+            "consistenciaDados": {
+              "nome": "Consistência dos Dados",
+              "excelente": "Equação contábil balanceada, sem inconsistências",
+              "bom": "Pequenas inconsistências de arredondamento (< 0.1%)",
+              "adequado": "Inconsistências moderadas (< 1%)",
+              "baixo": "Inconsistências relevantes (1% a 5%)",
+              "critico": "Inconsistências graves (> 5%) ou equação não balanceada"
+            }
+          }
+        },
+        "capacidadePagamento": {
+          "nome": "Capacidade de Pagamento",
+          "peso": 25,
+          "descricao": "Avalia liquidez corrente, cobertura de juros, geração de caixa e capital de giro",
+          "criterios": {
+            "liquidezCorrente": {
+              "nome": "Liquidez Corrente",
+              "excelente": "Liquidez > 2.0 - {valor}x",
+              "bom": "Liquidez entre 1.5 e 2.0 - {valor}x",
+              "adequado": "Liquidez entre 1.2 e 1.5 - {valor}x",
+              "baixo": "Liquidez entre 1.0 e 1.2 - {valor}x",
+              "critico": "Liquidez < 1.0 - {valor}x"
+            },
+            "coberturaJuros": {
+              "nome": "Cobertura de Juros",
+              "excelente": "EBITDA cobre > 5x as despesas financeiras",
+              "bom": "EBITDA cobre entre 3x e 5x as despesas financeiras",
+              "adequado": "EBITDA cobre entre 2x e 3x as despesas financeiras",
+              "baixo": "EBITDA cobre entre 1x e 2x as despesas financeiras",
+              "critico": "EBITDA não cobre despesas financeiras (< 1x)"
+            },
+            "geracaoCaixa": {
+              "nome": "Geração de Caixa",
+              "excelente": "Geração de caixa operacional > 15% da receita",
+              "bom": "Geração de caixa operacional entre 10% e 15% da receita",
+              "adequado": "Geração de caixa operacional entre 5% e 10% da receita",
+              "baixo": "Geração de caixa operacional entre 0% e 5% da receita",
+              "critico": "Queima de caixa operacional (fluxo negativo)"
+            },
+            "capitalGiro": {
+              "nome": "Capital de Giro",
+              "excelente": "Situação Financeira Tipo 1 ou 3 - CDG financia NCG com folga",
+              "bom": "CGL positivo > 20% do AC",
+              "adequado": "CGL positivo entre 10% e 20% do AC",
+              "baixo": "CGL positivo mas < 10% do AC",
+              "critico": "Situação Financeira Tipo 2 ou 4 - dependência de empréstimos CP"
+            }
+          }
+        },
+        "endividamento": {
+          "nome": "Endividamento",
+          "peso": 20,
+          "descricao": "Avalia nível de endividamento, composição da dívida e histórico de pagamentos",
+          "criterios": {
+            "nivelEndividamento": {
+              "nome": "Nível de Endividamento",
+              "excelente": "Passivo Exigível < 50% do PL - {valor}%",
+              "bom": "Passivo Exigível entre 50% e 100% do PL - {valor}%",
+              "adequado": "Passivo Exigível entre 100% e 200% do PL - {valor}%",
+              "baixo": "Passivo Exigível entre 200% e 300% do PL - {valor}%",
+              "critico": "Passivo Exigível > 300% do PL - {valor}%"
+            },
+            "composicaoEndividamento": {
+              "nome": "Composição do Endividamento",
+              "excelente": "Dívida CP < 30% do total - {valor}%",
+              "bom": "Dívida CP entre 30% e 50% do total - {valor}%",
+              "adequado": "Dívida CP entre 50% e 70% do total - {valor}%",
+              "baixo": "Dívida CP entre 70% e 85% do total - {valor}%",
+              "critico": "Dívida CP > 85% do total - {valor}%"
+            },
+            "historicoPagamentos": {
+              "nome": "Histórico de Pagamentos",
+              "excelente": "Sem atrasos nos últimos 24 meses",
+              "bom": "Pequenos atrasos (< 30 dias) esporádicos",
+              "adequado": "Atrasos moderados (30-60 dias) ocasionais",
+              "baixo": "Atrasos frequentes ou superiores a 60 dias",
+              "critico": "Inadimplência atual ou renegociações recentes"
+            }
+          }
+        },
+        "garantias": {
+          "nome": "Garantias e Relacionamento",
+          "peso": 10,
+          "descricao": "Avalia garantias disponíveis, tempo de relacionamento e operações anteriores",
+          "criterios": {
+            "garantiasDisponiveis": {
+              "nome": "Garantias Disponíveis",
+              "excelente": "Garantias reais > 150% do valor solicitado",
+              "bom": "Garantias reais entre 100% e 150% do valor",
+              "adequado": "Garantias reais entre 80% e 100% do valor",
+              "baixo": "Garantias insuficientes (< 80%) ou apenas fidejussórias",
+              "critico": "Sem garantias ou garantias inadequadas"
+            },
+            "tempoRelacionamento": {
+              "nome": "Tempo de Relacionamento",
+              "excelente": "Relacionamento > 5 anos com a instituição",
+              "bom": "Relacionamento entre 2 e 5 anos",
+              "adequado": "Relacionamento entre 1 e 2 anos",
+              "baixo": "Relacionamento entre 6 meses e 1 ano",
+              "critico": "Relacionamento < 6 meses ou novo cliente"
+            },
+            "operacoesAnteriores": {
+              "nome": "Operações Anteriores",
+              "excelente": "Múltiplas operações liquidadas sem atrasos",
+              "bom": "Operações anteriores com pequenos atrasos pontuais",
+              "adequado": "Operações anteriores com atrasos moderados",
+              "baixo": "Operações com atrasos significativos mas regularizadas",
+              "critico": "Sem histórico ou operações com problemas graves"
+            }
+          }
+        }
+      },
+      "classificacoes": {
+        "AAA": {
+          "rating": "AAA",
+          "risco": "Mínimo",
+          "faixa": "90-100 pontos",
+          "descricao": "Risco de crédito mínimo - excelente situação financeira e cadastral",
+          "interpretacao": "Empresa apresenta excelente situação financeira, cadastral e capacidade de pagamento. Demonstra solidez patrimonial, geração de caixa consistente, baixo endividamento e regularidade fiscal completa. Risco de inadimplência praticamente inexistente.",
+          "recomendacao": "Crédito aprovado com condições preferenciais. Limites elevados podem ser concedidos com garantias mínimas.",
+          "acoes": [
+            "Aprovar operação com taxas competitivas",
+            "Considerar aumento de limite de crédito",
+            "Propor relacionamento de longo prazo"
+          ]
+        },
+        "AA": {
+          "rating": "AA",
+          "risco": "Baixo",
+          "faixa": "80-89 pontos",
+          "descricao": "Risco de crédito baixo - boa situação financeira e cadastral",
+          "interpretacao": "Empresa apresenta boa situação financeira e cadastral. Demonstra capacidade adequada de pagamento, estrutura patrimonial sólida e regularidade fiscal. Pequenas vulnerabilidades podem existir mas não representam risco significativo.",
+          "recomendacao": "Crédito aprovado com condições favoráveis. Garantias adequadas ao valor da operação.",
+          "acoes": [
+            "Aprovar operação com taxas atrativas",
+            "Monitorar evolução dos indicadores trimestralmente",
+            "Considerar produtos complementares"
+          ]
+        },
+        "A": {
+          "rating": "A",
+          "risco": "Moderado-Baixo",
+          "faixa": "70-79 pontos",
+          "descricao": "Risco de crédito moderado-baixo - situação financeira satisfatória",
+          "interpretacao": "Empresa apresenta situação financeira satisfatória com alguns pontos de atenção. Capacidade de pagamento adequada mas pode apresentar vulnerabilidades pontuais. Endividamento controlado e situação cadastral regular.",
+          "recomendacao": "Crédito aprovado mediante garantias adequadas. Prazo e valores alinhados à capacidade de pagamento.",
+          "acoes": [
+            "Aprovar operação com garantias proporcionais",
+            "Acompanhar indicadores mensalmente",
+            "Solicitar demonstrações financeiras atualizadas semestralmente"
+          ]
+        },
+        "BBB": {
+          "rating": "BBB",
+          "risco": "Moderado",
+          "faixa": "60-69 pontos",
+          "descricao": "Risco de crédito moderado - situação financeira dentro da normalidade com atenção",
+          "interpretacao": "Empresa apresenta situação financeira dentro da normalidade mas requer atenção. Pode apresentar vulnerabilidades em indicadores de liquidez ou endividamento. Capacidade de pagamento presente mas com menor margem de segurança.",
+          "recomendacao": "Crédito aprovado com análise criteriosa. Garantias reforçadas e acompanhamento próximo necessários.",
+          "acoes": [
+            "Aprovar operação com garantias reforçadas",
+            "Estabelecer covenants financeiros",
+            "Acompanhamento mensal com revisão de limites",
+            "Solicitar plano de ação para melhorias identificadas"
+          ]
+        },
+        "BB": {
+          "rating": "BB",
+          "risco": "Moderado-Alto",
+          "faixa": "50-59 pontos",
+          "descricao": "Risco de crédito moderado-alto - situação financeira requer atenção especial",
+          "interpretacao": "Empresa apresenta situação financeira que requer atenção especial. Vulnerabilidades em múltiplos indicadores (liquidez, endividamento ou rentabilidade). Capacidade de pagamento comprometida em cenários adversos.",
+          "recomendacao": "Crédito condicional mediante garantias substanciais e prazo reduzido. Análise individualizada necessária.",
+          "acoes": [
+            "Avaliar garantias superiores ao valor da operação",
+            "Considerar operações de curto prazo apenas",
+            "Exigir acompanhamento mensal com demonstrações",
+            "Solicitar plano de recuperação detalhado",
+            "Revisar relacionamento comercial"
+          ]
+        },
+        "B": {
+          "rating": "B",
+          "risco": "Alto",
+          "faixa": "40-49 pontos",
+          "descricao": "Risco de crédito alto - situação financeira vulnerável",
+          "interpretacao": "Empresa apresenta situação financeira vulnerável com múltiplas fragilidades. Liquidez comprometida, endividamento elevado ou prejuízos recorrentes. Capacidade de pagamento significativamente reduzida.",
+          "recomendacao": "Crédito não recomendado. Se excepcional, exigir garantias superiores, prazos curtos e mitigadores relevantes.",
+          "acoes": [
+            "Negar novas operações até melhoria dos indicadores",
+            "Acompanhar posições existentes semanalmente",
+            "Exigir plano de reestruturação com metas claras",
+            "Considerar execução de garantias se aplicável",
+            "Provisionar adequadamente para perdas"
+          ]
+        },
+        "C": {
+          "rating": "C",
+          "risco": "Muito Alto",
+          "faixa": "30-39 pontos",
+          "descricao": "Risco de crédito muito alto - situação financeira crítica",
+          "interpretacao": "Empresa apresenta situação financeira crítica com graves deficiências. Liquidez insuficiente, endividamento excessivo, prejuízos consecutivos ou irregularidades cadastrais. Probabilidade elevada de inadimplência.",
+          "recomendacao": "Crédito negado. Recuperação de operações existentes prioritária.",
+          "acoes": [
+            "Negar qualquer nova operação",
+            "Iniciar cobrança intensificada de posições em aberto",
+            "Avaliar execução imediata de garantias",
+            "Negociar renegociação com garantias adicionais",
+            "Provisionar integralmente para perda",
+            "Considerar ações judiciais se necessário"
+          ]
+        },
+        "D": {
+          "rating": "D",
+          "risco": "Extremo",
+          "faixa": "0-29 pontos",
+          "descricao": "Risco de crédito extremo - situação financeira de insolvência iminente",
+          "interpretacao": "Empresa apresenta situação de insolvência iminente ou já instalada. Múltiplas deficiências graves em todos os critérios avaliados. Incapacidade manifesta de honrar compromissos. Risco de perda total.",
+          "recomendacao": "Crédito vedado. Medidas emergenciais de recuperação necessárias.",
+          "acoes": [
+            "Vedar qualquer operação",
+            "Executar imediatamente todas as garantias disponíveis",
+            "Iniciar procedimentos de recuperação judicial/falência",
+            "Provisionar 100% das operações",
+            "Acionar jurídico para medidas cabíveis",
+            "Comunicar às autoridades competentes se fraude identificada"
+          ]
+        }
+      },
+      "scoring": {
+        "pontuacaoTotal": "Pontuação Total: {pontos} pontos",
+        "classificacaoFinal": "Classificação: {rating} - {risco}",
+        "distribuicaoPontos": "Distribuição de Pontos",
+        "detalhamentoCategorias": "Detalhamento por Categoria"
+      },
+      "mensagens": {
+        "calculoIniciado": "Iniciando cálculo do scoring de crédito...",
+        "calculoConcluido": "Scoring calculado: {rating} ({pontos} pontos)",
+        "dadosInsuficientes": "Dados insuficientes para calcular scoring - necessário: {faltando}",
+        "categoriaAvaliada": "Categoria {nome}: {pontos}/{peso} pontos",
+        "criterioAvaliado": "• {nome}: {avaliacao}"
+      },
+      "alertas": {
+        "scoringBaixo": "Scoring abaixo de 60 pontos - risco moderado ou superior",
+        "scoringCritico": "Scoring crítico abaixo de 40 pontos - risco alto/muito alto",
+        "scoringExtremo": "Scoring extremo abaixo de 30 pontos - risco de insolvência",
+        "categoriaCritica": "Categoria {nome} com pontuação crítica: {pontos}/{peso}",
+        "criterioCritico": "Critério crítico identificado: {criterio}"
+      },
+      "recomendacoes": {
+        "melhorarCadastral": "Regularizar situação cadastral e fiscal para aumentar pontuação",
+        "melhorarFinanceiro": "Melhorar qualidade e consistência das demonstrações financeiras",
+        "melhorarCapacidade": "Fortalecer indicadores de liquidez e geração de caixa",
+        "melhorarEndividamento": "Reduzir nível de endividamento e melhorar perfil da dívida",
+        "melhorarGarantias": "Oferecer garantias adicionais ou fortalecer relacionamento"
+      }
+    }
+  }
+}

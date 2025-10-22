@@ -1,0 +1,704 @@
+/**
+ * Company Selector Component
+ * Sistema de Financiamento - Expertzy Portal
+ *
+ * Design System:
+ * - Primary Red: #FF002D
+ * - Navy Blue: #091A30
+ * - Typography: Inter (300-700)
+ */
+
+/* ============================================
+   STICKY HEADER CONTAINER
+   ============================================ */
+
+.company-selector-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #091A30 0%, #0d2240 100%);
+  border-bottom: 2px solid #FF002D;
+  box-shadow: 0 4px 12px rgba(9, 26, 48, 0.15);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.company-selector-wrapper.scrolled {
+  box-shadow: 0 6px 20px rgba(9, 26, 48, 0.25);
+  padding: 0.75rem 0;
+}
+
+.company-selector-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ============================================
+   BRANDING SECTION
+   ============================================ */
+
+.selector-branding {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.selector-branding-icon {
+  width: 36px;
+  height: 36px;
+  background: #FF002D;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.selector-branding-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.selector-branding-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.selector-branding-subtitle {
+  font-size: 0.75rem;
+  font-weight: 300;
+  opacity: 0.5;
+}
+
+/* ============================================
+   MAIN SELECTOR COMPONENT
+   ============================================ */
+
+.company-selector {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Dropdown Button */
+.company-selector-button {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.company-selector-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.company-selector-button:hover::before {
+  transform: translateX(100%);
+}
+
+.company-selector-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #FF002D;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 0, 45, 0.15);
+}
+
+.company-selector-button:active {
+  transform: translateY(0);
+}
+
+.company-selector-button.active {
+  border-color: #FF002D;
+  background: rgba(255, 0, 45, 0.08);
+}
+
+/* Icon Section */
+.company-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #FF002D 0%, #cc0024 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(255, 0, 45, 0.3);
+}
+
+/* Content Section */
+.company-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: left;
+  min-width: 0;
+}
+
+.company-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.company-cnpj {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Badge Section */
+.company-badge {
+  background: rgba(255, 0, 45, 0.15);
+  border: 1px solid #FF002D;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #FF002D;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Chevron Icon */
+.company-chevron {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.company-selector-button.active .company-chevron {
+  transform: rotate(180deg);
+  color: #FF002D;
+}
+
+/* ============================================
+   DROPDOWN MENU
+   ============================================ */
+
+.company-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(9, 26, 48, 0.2);
+  border: 1px solid rgba(9, 26, 48, 0.08);
+  max-height: 400px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+}
+
+.company-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Search Input */
+.company-search {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(9, 26, 48, 0.08);
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
+.company-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 1px solid rgba(9, 26, 48, 0.12);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #091A30;
+  background: #f8f9fa;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23091A30' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.35-4.35'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 1rem center;
+  background-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.company-search-input:focus {
+  outline: none;
+  border-color: #FF002D;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.08);
+}
+
+/* Company List */
+.company-list {
+  padding: 0.5rem;
+}
+
+.company-item {
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.company-item:hover {
+  background: rgba(9, 26, 48, 0.04);
+  border-color: rgba(9, 26, 48, 0.08);
+}
+
+.company-item.selected {
+  background: rgba(255, 0, 45, 0.05);
+  border-color: #FF002D;
+}
+
+.company-item.selected .company-item-name {
+  color: #FF002D;
+  font-weight: 600;
+}
+
+.company-item-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #091A30 0%, #0d2240 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.company-item.selected .company-item-icon {
+  background: linear-gradient(135deg, #FF002D 0%, #cc0024 100%);
+}
+
+.company-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.company-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #091A30;
+  margin-bottom: 0.125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.company-item-cnpj {
+  font-size: 0.75rem;
+  color: rgba(9, 26, 48, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+.company-item-check {
+  font-size: 1rem;
+  color: #FF002D;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.company-item.selected .company-item-check {
+  opacity: 1;
+}
+
+/* Empty State */
+.company-empty {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: rgba(9, 26, 48, 0.6);
+}
+
+.company-empty-icon {
+  font-size: 3rem;
+  color: rgba(9, 26, 48, 0.2);
+  margin-bottom: 1rem;
+}
+
+.company-empty-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #091A30;
+  margin-bottom: 0.5rem;
+}
+
+.company-empty-text {
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   NEW COMPANY BUTTON
+   ============================================ */
+
+.new-company-section {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-new-company {
+  background: #FF002D;
+  border: none;
+  border-radius: 12px;
+  padding: 0.875rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255, 0, 45, 0.3);
+}
+
+.btn-new-company:hover {
+  background: #cc0024;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 0, 45, 0.4);
+}
+
+.btn-new-company:active {
+  transform: translateY(0);
+}
+
+.btn-new-company-icon {
+  font-size: 1rem;
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.company-selector.loading .company-selector-button {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FF002D;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ============================================
+   CONFIRMATION MODAL
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(9, 26, 48, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: calc(100% - 2rem);
+  box-shadow: 0 20px 60px rgba(9, 26, 48, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #FF002D 0%, #cc0024 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #091A30;
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-body {
+  margin-bottom: 2rem;
+}
+
+.modal-text {
+  font-size: 0.9375rem;
+  color: rgba(9, 26, 48, 0.8);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.modal-warning {
+  background: rgba(255, 0, 45, 0.05);
+  border-left: 3px solid #FF002D;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #091A30;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.modal-warning-icon {
+  font-size: 1.125rem;
+  color: #FF002D;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-modal {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-modal-cancel {
+  background: rgba(9, 26, 48, 0.08);
+  color: #091A30;
+}
+
+.btn-modal-cancel:hover {
+  background: rgba(9, 26, 48, 0.12);
+}
+
+.btn-modal-confirm {
+  background: #FF002D;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(255, 0, 45, 0.3);
+}
+
+.btn-modal-confirm:hover {
+  background: #cc0024;
+  box-shadow: 0 4px 12px rgba(255, 0, 45, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .company-selector-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .selector-branding {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .company-selector {
+    max-width: 100%;
+  }
+
+  .new-company-section {
+    width: 100%;
+  }
+
+  .btn-new-company {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .company-badge {
+    display: none;
+  }
+
+  .selector-branding-text {
+    display: none;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-modal {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .company-selector-wrapper {
+    padding: 0.75rem 0;
+  }
+
+  .company-selector-container {
+    padding: 0 1rem;
+  }
+
+  .company-selector-button {
+    padding: 0.75rem 1rem;
+  }
+
+  .company-name {
+    font-size: 0.875rem;
+  }
+
+  .company-cnpj {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.company-selector-button:focus-visible,
+.btn-new-company:focus-visible,
+.company-item:focus-visible {
+  outline: 2px solid #FF002D;
+  outline-offset: 2px;
+}
+
+.company-search-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.15);
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.company-item {
+  animation: slideIn 0.3s ease forwards;
+}
+
+.company-item:nth-child(1) { animation-delay: 0.05s; }
+.company-item:nth-child(2) { animation-delay: 0.1s; }
+.company-item:nth-child(3) { animation-delay: 0.15s; }
+.company-item:nth-child(4) { animation-delay: 0.2s; }
+.company-item:nth-child(5) { animation-delay: 0.25s; }

@@ -1,0 +1,178 @@
+{
+  "thresholds": {
+    "cadastral": {
+      "tempoAtividade": {
+        "excelente": 10,
+        "bom": 5,
+        "adequado": 2,
+        "baixo": 1
+      },
+      "protestoLimiar": 10000,
+      "certidoes": {
+        "percentualExcelente": 1.0,
+        "percentualBom": 0.8,
+        "percentualAdequado": 0.6,
+        "problemasMaximoBaixo": 2
+      },
+      "socios": {
+        "restricoesLevesMaximo": 0.5
+      }
+    },
+    "financeiro": {
+      "crescimentoFaturamento": {
+        "excelente": 0.20,
+        "bom": 0.10,
+        "adequado": 0,
+        "baixo": -0.10
+      },
+      "margemLiquida": {
+        "excelente": 0.10,
+        "bom": 0.05,
+        "adequado": 0.02,
+        "baixo": 0
+      },
+      "inconsistenciaToleravel": {
+        "bom": 0.001,
+        "adequado": 0.01,
+        "baixo": 0.05
+      },
+      "demonstracoes": {
+        "camposFaltandoMaximoBaixo": 1
+      }
+    },
+    "capacidadePagamento": {
+      "liquidezCorrente": {
+        "excelente": 2.0,
+        "bom": 1.5,
+        "adequado": 1.2,
+        "baixo": 1.0
+      },
+      "coberturaJuros": {
+        "excelente": 5,
+        "bom": 3,
+        "adequado": 2,
+        "baixo": 1
+      },
+      "geracaoCaixa": {
+        "excelente": 0.15,
+        "bom": 0.10,
+        "adequado": 0.05,
+        "baixo": 0
+      },
+      "cglSobreAC": {
+        "excelente": 0.20,
+        "bom": 0.10,
+        "adequado": 0
+      }
+    },
+    "endividamento": {
+      "endividamentoSobrePL": {
+        "excelente": 0.50,
+        "bom": 1.0,
+        "adequado": 2.0,
+        "baixo": 3.0
+      },
+      "dividaCPSobreTotal": {
+        "excelente": 0.30,
+        "bom": 0.50,
+        "adequado": 0.70,
+        "baixo": 0.85
+      },
+      "historicoPagamentos": {
+        "atrasoLeve": 30,
+        "atrasoModerado": 60,
+        "atrasosModeradosMaximo": 0.2
+      }
+    },
+    "garantias": {
+      "garantiasSobreValor": {
+        "excelente": 1.50,
+        "bom": 1.0,
+        "adequado": 0.80
+      },
+      "tempoRelacionamento": {
+        "excelente": 5,
+        "bom": 2,
+        "adequado": 1,
+        "baixo": 0.5
+      },
+      "operacoesAnteriores": {
+        "atrasoLeve": 30,
+        "atrasoModerado": 60,
+        "minimoExcelente": 1
+      }
+    }
+  },
+  "pontuacao": {
+    "categorias": {
+      "cadastral": {
+        "regularidadeFiscal": 5,
+        "tempoAtividade": 5,
+        "historicoProtestos": 5,
+        "situacaoSocios": 5
+      },
+      "financeiro": {
+        "evolucaoFaturamento": 6.25,
+        "evolucaoLucratividade": 6.25,
+        "qualidadeDemonstracoes": 6.25,
+        "consistenciaDados": 6.25
+      },
+      "capacidadePagamento": {
+        "liquidezCorrente": 6.25,
+        "coberturaJuros": 6.25,
+        "geracaoCaixa": 6.25,
+        "capitalGiro": 6.25
+      },
+      "endividamento": {
+        "nivelEndividamento": 6.67,
+        "composicaoEndividamento": 6.67,
+        "historicoPagamentos": 6.66
+      },
+      "garantias": {
+        "garantiasDisponiveis": 3.33,
+        "tempoRelacionamento": 3.33,
+        "operacoesAnteriores": 3.34
+      }
+    },
+    "niveis": {
+      "excelente": 1.0,
+      "bom": 0.8,
+      "adequado": 0.6,
+      "baixo": 0.4,
+      "critico": 0.2
+    }
+  },
+  "defaults": {
+    "pontuacaoSemDados": {
+      "regularidadeFiscal": 3,
+      "protestos": 3,
+      "socios": 4,
+      "sociosCompliance": 4,
+      "coberturaJuros": 3.75,
+      "geracaoCaixa": 3.75,
+      "historicoPagamentos": 4,
+      "garantias": 2,
+      "relacionamento": 2,
+      "operacoesAnteriores": 2
+    },
+    "multiplicadoresProtesto": {
+      "limiarBaixo": 1,
+      "limiarAlto": 5
+    }
+  },
+  "alertas": {
+    "pontuacao": {
+      "extremo": 30,
+      "critico": 40,
+      "baixo": 60
+    },
+    "categoria": {
+      "percentualCritico": 0.5
+    }
+  },
+  "recomendacoes": {
+    "categoria": {
+      "percentualMinimo": 0.7
+    }
+  }
+}

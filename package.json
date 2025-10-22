@@ -1,7 +1,7 @@
 {
   "name": "creditscore-pro",
   "version": "1.0.0",
-  "description": "Sistema de Análise de Crédito e Compliance Financeiro",
+  "description": "CreditScore Pro - Sistema de Análise de Crédito e Compliance Financeiro",
   "type": "module",
   "scripts": {
     "dev": "vite",

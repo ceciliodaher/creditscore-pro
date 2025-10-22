@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Expertzy Inteligência Tributária">
+    <meta name="description" content="CreditScore Pro - Sistema de Análise de Crédito e Compliance Financeiro">
+    <title>CreditScore Pro | Expertzy Inteligência Tributária</title>
+    <link rel="stylesheet" href="src/assets/css/styles-base.css">
+    <style>
+        /* Estilos específicos da landing page */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 0, 45, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-logo {
+            max-width: 280px;
+            height: auto;
+            margin: 0 auto 40px;
+            display: block;
+            filter: brightness(1.1);
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: var(--font-light);
+            color: var(--white);
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--gray-300);
+            margin-bottom: 48px;
+            font-weight: var(--font-regular);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--gray-400);
+            margin-bottom: 64px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero {
+            padding: 18px 48px;
+            font-size: 18px;
+            font-weight: var(--font-semibold);
+            border-radius: var(--border-radius-lg);
+            transition: all 0.3s ease;
+        }
+
+        .btn-hero-primary {
+            background: var(--expertzy-red);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 8px 30px rgba(255, 0, 45, 0.3);
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--red-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255, 0, 45, 0.4);
+        }
+
+        .btn-hero-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-hero-secondary:hover {
+            background: var(--white);
+            color: var(--navy);
+            transform: translateY(-3px);
+        }
+
+        .features {
+            padding: 100px 40px;
+            background: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            border-color: var(--expertzy-red);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--expertzy-red), var(--red-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--white);
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: var(--font-semibold);
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            font-size: 16px;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .footer {
+            background: var(--navy);
+            color: var(--white);
+            padding: 40px;
+            text-align: center;
+            border-top: 3px solid var(--expertzy-red);
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--gray-300);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="src/assets/images/logo-expertzy-azul.png" alt="Expertzy" class="hero-logo">
+            
+            <h1 class="hero-title">CreditScore Pro</h1>
+            
+            <p class="hero-subtitle">
+                Sistema Avançado de Análise de Crédito e Compliance Financeiro
+            </p>
+            
+            <p class="hero-description">
+                Plataforma completa para análise de risco de crédito empresarial, due diligence financeira 
+                e monitoramento de compliance. Tomada de decisão baseada em dados com scoring automático, 
+                análise de demonstrações financeiras e verificação de conformidade regulatória.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="src/pages/analise-credito.html" class="btn btn-hero btn-hero-primary">
+                    Iniciar Análise
+                </a>
+                <button class="btn btn-hero btn-hero-secondary" onclick="scrollToFeatures()">
+                    Conheça os Recursos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Análise Financeira</h3>
+                <p class="feature-description">
+                    Análise completa de balanços, DRE e demonstrações financeiras com cálculo automático 
+                    de índices de liquidez, rentabilidade e endividamento.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3 class="feature-title">Scoring de Crédito</h3>
+                <p class="feature-description">
+                    Sistema proprietário de classificação de risco com pontuação de 0 a 100 pontos, 
+                    considerando múltiplos indicadores e tendências históricas.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3 class="feature-title">Due Diligence</h3>
+                <p class="feature-description">
+                    Verificação cadastral completa, análise societária, consulta a bases externas 
+                    e identificação de riscos potenciais.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Indicadores Financeiros</h3>
+                <p class="feature-description">
+                    Mais de 20 indicadores financeiros calculados automaticamente, incluindo ciclos 
+                    operacionais, capital de giro e análise de tendências.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3 class="feature-title">Compliance</h3>
+                <p class="feature-description">
+                    Verificação automática de conformidade regulatória, alertas de irregularidades 
+                    e validação de certidões negativas.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📄</div>
+                <h3 class="feature-title">Relatórios Completos</h3>
+                <p class="feature-description">
+                    Geração de relatórios profissionais em PDF e Excel com análises detalhadas, 
+                    recomendações e limites de crédito sugeridos.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            © 2025 Expertzy Inteligência Tributária | Desenvolvido com tecnologia avançada
+        </p>
+    </footer>
+
+    <script>
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+    </script>
+</body>
+</html>

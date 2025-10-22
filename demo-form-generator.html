@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormGenerator Demo - CreditScore Pro</title>
+    <link rel="stylesheet" href="/src/assets/css/styles-base.css">
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-controls button {
+            padding: 10px 20px;
+            background: var(--expertzy-red);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .demo-controls button:hover {
+            background: var(--red-dark);
+        }
+
+        #output {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            min-height: 400px;
+        }
+
+        .error-box {
+            background: #fee;
+            border: 1px solid var(--danger);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            color: var(--danger);
+            margin: 10px 0;
+        }
+
+        .success-box {
+            background: #efe;
+            border: 1px solid var(--success);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            color: var(--success);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>FormGenerator Demo</h1>
+            <p>Teste do componente de geração dinâmica de formulários</p>
+        </div>
+
+        <div class="demo-controls">
+            <button onclick="testInstantiation()">1. Test Instantiation</button>
+            <button onclick="testModuleGeneration()">2. Test Module HTML</button>
+            <button onclick="testFieldGeneration()">3. Test Field Generation</button>
+            <button onclick="testInjection()">4. Test DOM Injection</button>
+            <button onclick="testEventListeners()">5. Test Event Listeners</button>
+            <button onclick="clearOutput()">Clear Output</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="output"></div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script type="module">
+        import { FormGenerator } from '/src/assets/js/core/form-generator.js';
+        import { DocumentValidator } from '/src/shared/validators/document-validator.js';
+        import { CurrencyFormatter } from '/src/shared/formatters/currency-formatter.js';
+
+        // Expose globally for demo
+        window.FormGenerator = FormGenerator;
+        window.DocumentValidator = DocumentValidator;
+        window.CurrencyFormatter = CurrencyFormatter;
+
+        // Load configs
+        const configResponse = await fetch('/config/creditscore-config.json');
+        const messagesResponse = await fetch('/config/messages.json');
+
+        window.demoConfig = await configResponse.json();
+        window.demoMessages = await messagesResponse.json();
+
+        console.log('✅ Demo dependencies loaded');
+        showSuccess('Dependencies loaded successfully');
+
+        // Test functions
+        window.testInstantiation = function() {
+            try {
+                const generator = new FormGenerator(window.demoConfig, window.demoMessages);
+                showSuccess('FormGenerator instantiated successfully!');
+                console.log('Generator:', generator);
+            } catch (error) {
+                showError(`Instantiation failed: ${error.message}`);
+            }
+        };
+
+        window.testModuleGeneration = async function() {
+            try {
+                const generator = new FormGenerator(window.demoConfig, window.demoMessages);
+                await generator.init();
+
+                // Generate computed module HTML
+                const computedHTML = generator.generateModuleHTML(4); // indices
+
+                // Generate input module HTML
+                const inputHTML = generator.generateModuleHTML(1); // cadastro
+
+                document.getElementById('output').innerHTML = `
+                    <h3>Computed Module (Indices):</h3>
+                    <pre style="background: white; padding: 10px; overflow: auto;">${escapeHtml(computedHTML)}</pre>
+                    <hr>
+                    <h3>Input Module (Cadastro):</h3>
+                    <pre style="background: white; padding: 10px; overflow: auto;">${escapeHtml(inputHTML)}</pre>
+                `;
+
+                showSuccess('Module HTML generated successfully!');
+            } catch (error) {
+                showError(`Module generation failed: ${error.message}`);
+            }
+        };
+
+        window.testFieldGeneration = async function() {
+            try {
+                const generator = new FormGenerator(window.demoConfig, window.demoMessages);
+                await generator.init();
+
+                const fields = [
+                    {
+                        type: 'text',
+                        name: 'razaoSocial',
+                        label: 'Razão Social',
+                        required: true,
+                        placeholder: 'Digite a razão social'
+                    },
+                    {
+                        type: 'cnpj',
+                        name: 'cnpj',
+                        label: 'CNPJ',
+                        required: true
+                    },
+                    {
+                        type: 'email',
+                        name: 'email',
+                        label: 'E-mail',
+                        required: false
+                    },
+                    {
+                        type: 'currency',
+                        name: 'capitalSocial',
+                        label: 'Capital Social'
+                    },
+                    {
+                        type: 'percentage',
+                        name: 'participacao',
+                        label: 'Participação (%)'
+                    },
+                    {
+                        type: 'select',
+                        name: 'regimeTributario',
+                        label: 'Regime Tributário',
+                        options: ['Simples Nacional', 'Lucro Presumido', 'Lucro Real']
+                    },
+                    {
+                        type: 'textarea',
+                        name: 'observacoes',
+                        label: 'Observações',
+                        rows: 4
+                    }
+                ];
+
+                let html = '<div style="display: grid; gap: 20px;">';
+                fields.forEach(field => {
+                    html += generator.generateFormField(field);
+                });
+                html += '</div>';
+
+                document.getElementById('output').innerHTML = html;
+                showSuccess('Field HTML generated successfully!');
+            } catch (error) {
+                showError(`Field generation failed: ${error.message}`);
+            }
+        };
+
+        window.testInjection = async function() {
+            try {
+                const generator = new FormGenerator(window.demoConfig, window.demoMessages);
+                await generator.init();
+
+                const html = generator.generateModuleHTML(1); // cadastro
+                generator.injectIntoDOM('output', html);
+
+                showSuccess('HTML injected into DOM successfully!');
+            } catch (error) {
+                showError(`DOM injection failed: ${error.message}`);
+            }
+        };
+
+        window.testEventListeners = async function() {
+            try {
+                const generator = new FormGenerator(window.demoConfig, window.demoMessages);
+                await generator.init();
+
+                // Generate and inject fields
+                const fields = [
+                    {
+                        type: 'cnpj',
+                        name: 'cnpj',
+                        label: 'CNPJ (teste de validação)',
+                        required: true,
+                        helpText: 'Digite um CNPJ válido e pressione Tab para validar'
+                    },
+                    {
+                        type: 'currency',
+                        name: 'valor',
+                        label: 'Valor Monetário (teste de máscara)',
+                        helpText: 'Digite valores numéricos para testar a máscara'
+                    }
+                ];
+
+                let html = '<div data-module="test" style="padding: 20px; background: white; border-radius: 8px;">';
+                fields.forEach(field => {
+                    html += generator.generateFormField(field);
+                });
+                html += '</div>';
+
+                document.getElementById('output').innerHTML = html;
+
+                // Attach event listeners
+                generator.attachEventListeners(1); // Module ID doesn't matter for test module
+
+                showSuccess('Event listeners attached! Try typing in the fields.');
+            } catch (error) {
+                showError(`Event listener attachment failed: ${error.message}`);
+            }
+        };
+
+        window.clearOutput = function() {
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('status').innerHTML = '';
+        };
+
+        window.showSuccess = function(message) {
+            document.getElementById('status').innerHTML = `
+                <div class="success-box">
+                    ✅ ${message}
+                </div>
+            `;
+        };
+
+        window.showError = function(message) {
+            document.getElementById('status').innerHTML = `
+                <div class="error-box">
+                    ❌ ${message}
+                </div>
+            `;
+        };
+
+        window.escapeHtml = function(html) {
+            return html
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        };
+    </script>
+</body>
+</html>

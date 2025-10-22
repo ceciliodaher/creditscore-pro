@@ -1,0 +1,427 @@
+{
+  "metadata": {
+    "exportDate": "2025-10-22",
+    "systemVersion": "1.0.0",
+    "systemName": "CreditScore Pro",
+    "testScenario": "Empresa Excelente - Rating AAA",
+    "description": "Empresa de tecnologia saudável com excelentes indicadores financeiros, liquidez alta, rentabilidade crescente e baixo endividamento."
+  },
+
+  "cadastro": {
+    "razaoSocial": "Tech Solutions Ltda",
+    "nomeFantasia": "Tech Solutions",
+    "cnpj": "12.345.678/0001-90",
+    "inscricaoEstadual": "123.456.789.012",
+    "dataConstituicao": "2018-03-15",
+    "capitalSocial": 500000.00,
+    "regimeTributario": "Lucro Real",
+    "porte": "Média Empresa",
+    "ramoAtividade": "Desenvolvimento de Software",
+    "cnae": "6201-5/00",
+
+    "endereco": {
+      "logradouro": "Av. Paulista",
+      "numero": "1500",
+      "complemento": "Sala 1201",
+      "bairro": "Bela Vista",
+      "cidade": "São Paulo",
+      "uf": "SP",
+      "cep": "01310-100"
+    },
+
+    "contato": {
+      "email": "contato@techsolutions.com.br",
+      "telefone": "(11) 3456-7890",
+      "site": "www.techsolutions.com.br"
+    },
+
+    "composicaoSocietaria": [
+      {
+        "nome": "João Silva Santos",
+        "cpf": "123.456.789-00",
+        "participacao": 60.00,
+        "cargo": "Sócio Administrador"
+      },
+      {
+        "nome": "Maria Oliveira Costa",
+        "cpf": "987.654.321-00",
+        "participacao": 40.00,
+        "cargo": "Sócio"
+      }
+    ],
+
+    "situacaoCadastral": "Ativa",
+    "tempoAtividade": 6.5,
+    "historicoProtestos": false,
+    "acoesTrabalhistas": 0
+  },
+
+  "demonstracoes": {
+    "anos": [2021, 2022, 2023],
+
+    "balancoPatrimonial": {
+      "2021": {
+        "ativo": {
+          "circulante": {
+            "caixa": 150000.00,
+            "contasBancarias": 350000.00,
+            "aplicacoesFinanceiras": 200000.00,
+            "contasReceber": 500000.00,
+            "estoques": 100000.00,
+            "outros": 50000.00,
+            "total": 1350000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 200000.00,
+            "investimentos": 100000.00,
+            "imobilizado": 1200000.00,
+            "intangivel": 150000.00,
+            "total": 1650000.00
+          },
+          "total": 3000000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 300000.00,
+            "emprestimos": 200000.00,
+            "salarios": 150000.00,
+            "impostos": 120000.00,
+            "outros": 30000.00,
+            "total": 800000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 800000.00,
+            "financiamentos": 200000.00,
+            "outros": 0.00,
+            "total": 1000000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 500000.00,
+            "reservas": 400000.00,
+            "lucrosAcumulados": 300000.00,
+            "total": 1200000.00
+          },
+          "total": 3000000.00
+        }
+      },
+
+      "2022": {
+        "ativo": {
+          "circulante": {
+            "caixa": 180000.00,
+            "contasBancarias": 420000.00,
+            "aplicacoesFinanceiras": 250000.00,
+            "contasReceber": 600000.00,
+            "estoques": 120000.00,
+            "outros": 60000.00,
+            "total": 1630000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 220000.00,
+            "investimentos": 120000.00,
+            "imobilizado": 1300000.00,
+            "intangivel": 180000.00,
+            "total": 1820000.00
+          },
+          "total": 3450000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 350000.00,
+            "emprestimos": 220000.00,
+            "salarios": 180000.00,
+            "impostos": 140000.00,
+            "outros": 40000.00,
+            "total": 930000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 850000.00,
+            "financiamentos": 180000.00,
+            "outros": 0.00,
+            "total": 1030000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 500000.00,
+            "reservas": 500000.00,
+            "lucrosAcumulados": 490000.00,
+            "total": 1490000.00
+          },
+          "total": 3450000.00
+        }
+      },
+
+      "2023": {
+        "ativo": {
+          "circulante": {
+            "caixa": 220000.00,
+            "contasBancarias": 480000.00,
+            "aplicacoesFinanceiras": 300000.00,
+            "contasReceber": 700000.00,
+            "estoques": 140000.00,
+            "outros": 70000.00,
+            "total": 1910000.00
+          },
+          "naoCirculante": {
+            "realizavelLongoPrazo": 240000.00,
+            "investimentos": 150000.00,
+            "imobilizado": 1400000.00,
+            "intangivel": 200000.00,
+            "total": 1990000.00
+          },
+          "total": 3900000.00
+        },
+        "passivo": {
+          "circulante": {
+            "fornecedores": 400000.00,
+            "emprestimos": 250000.00,
+            "salarios": 200000.00,
+            "impostos": 160000.00,
+            "outros": 50000.00,
+            "total": 1060000.00
+          },
+          "naoCirculante": {
+            "emprestimosLongoPrazo": 900000.00,
+            "financiamentos": 150000.00,
+            "outros": 0.00,
+            "total": 1050000.00
+          },
+          "patrimonioLiquido": {
+            "capitalSocial": 500000.00,
+            "reservas": 600000.00,
+            "lucrosAcumulados": 690000.00,
+            "total": 1790000.00
+          },
+          "total": 3900000.00
+        }
+      }
+    },
+
+    "dre": {
+      "2021": {
+        "receitaBruta": 5000000.00,
+        "deducoes": 800000.00,
+        "receitaLiquida": 4200000.00,
+        "cpm": 2100000.00,
+        "lucro Bruto": 2100000.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 420000.00,
+          "administrativas": 630000.00,
+          "pessoal": 840000.00,
+          "total": 1890000.00
+        },
+        "ebitda": 210000.00,
+        "depreciacaoAmortizacao": 120000.00,
+        "lucroOperacional": 90000.00,
+        "receitasFinanceiras": 50000.00,
+        "despesasFinanceiras": 80000.00,
+        "resultadoFinanceiro": -30000.00,
+        "lucroAntesIR": 60000.00,
+        "impostoRenda": 18000.00,
+        "lucroLiquido": 42000.00
+      },
+
+      "2022": {
+        "receitaBruta": 6500000.00,
+        "deducoes": 1040000.00,
+        "receitaLiquida": 5460000.00,
+        "cmv": 2730000.00,
+        "lucro Bruto": 2730000.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 546000.00,
+          "administrativas": 819000.00,
+          "pessoal": 1092000.00,
+          "total": 2457000.00
+        },
+        "ebitda": 273000.00,
+        "depreciacaoAmortizacao": 140000.00,
+        "lucroOperacional": 133000.00,
+        "receitasFinanceiras": 65000.00,
+        "despesasFinanceiras": 85000.00,
+        "resultadoFinanceiro": -20000.00,
+        "lucroAntesIR": 113000.00,
+        "impostoRenda": 34000.00,
+        "lucroLiquido": 79000.00
+      },
+
+      "2023": {
+        "receitaBruta": 8000000.00,
+        "deducoes": 1280000.00,
+        "receitaLiquida": 6720000.00,
+        "cmv": 3360000.00,
+        "lucro Bruto": 3360000.00,
+        "despesasOperacionais": {
+          "vendasMarketing": 672000.00,
+          "administrativas": 1008000.00,
+          "pessoal": 1344000.00,
+          "total": 3024000.00
+        },
+        "ebitda": 336000.00,
+        "depreciacaoAmortizacao": 160000.00,
+        "lucroOperacional": 176000.00,
+        "receitasFinanceiras": 80000.00,
+        "despesasFinanceiras": 90000.00,
+        "resultadoFinanceiro": -10000.00,
+        "lucroAntesIR": 166000.00,
+        "impostoRenda": 50000.00,
+        "lucroLiquido": 116000.00
+      }
+    }
+  },
+
+  "endividamento": {
+    "dividasBancarias": [
+      {
+        "instituicao": "Banco do Brasil",
+        "tipo": "Capital de Giro",
+        "valorOriginal": 500000.00,
+        "saldoDevedor": 300000.00,
+        "dataContratacao": "2022-06-15",
+        "dataVencimento": "2025-06-15",
+        "taxaJuros": 12.5,
+        "garantias": ["Aval dos sócios", "Recebíveis"],
+        "situacao": "Adimplente",
+        "valorParcela": 15000.00,
+        "diasAtraso": 0
+      },
+      {
+        "instituicao": "Santander",
+        "tipo": "Financiamento Equipamentos",
+        "valorOriginal": 800000.00,
+        "saldoDevedor": 550000.00,
+        "dataContratacao": "2021-09-01",
+        "dataVencimento": "2026-09-01",
+        "taxaJuros": 10.8,
+        "garantias": ["Alienação fiduciária dos equipamentos"],
+        "situacao": "Adimplente",
+        "valorParcela": 18000.00,
+        "diasAtraso": 0
+      }
+    ],
+
+    "outrasObrigacoes": [
+      {
+        "tipo": "Fornecedores",
+        "valor": 400000.00,
+        "prazoMedio": 45
+      },
+      {
+        "tipo": "Impostos a Pagar",
+        "valor": 160000.00,
+        "prazoMedio": 30
+      },
+      {
+        "tipo": "Salários e Encargos",
+        "valor": 200000.00,
+        "prazoMedio": 5
+      }
+    ],
+
+    "historicoPagamentos": {
+      "atrasos12Meses": 0,
+      "protestos": 0,
+      "chequesSemFundo": 0,
+      "renegociacoes": 0
+    }
+  },
+
+  "compliance": {
+    "situacaoCadastral": {
+      "status": "Ativa",
+      "dataConsulta": "2025-10-20",
+      "fonte": "Receita Federal"
+    },
+
+    "certidoesNegativas": {
+      "federal": {
+        "situacao": "Regular",
+        "numero": "123.456.789-00",
+        "dataEmissao": "2025-10-15",
+        "validade": "2026-04-15"
+      },
+      "estadual": {
+        "situacao": "Regular",
+        "numero": "SP-987.654.321",
+        "dataEmissao": "2025-10-10",
+        "validade": "2026-04-10"
+      },
+      "municipal": {
+        "situacao": "Regular",
+        "numero": "SP-SP-456.789",
+        "dataEmissao": "2025-10-12",
+        "validade": "2026-04-12"
+      },
+      "trabalhista": {
+        "situacao": "Regular",
+        "numero": "TST-147.258.369",
+        "dataEmissao": "2025-10-18",
+        "validade": "2026-04-18"
+      },
+      "fgts": {
+        "situacao": "Regular",
+        "numero": "FGTS-789.456.123",
+        "dataEmissao": "2025-10-16",
+        "validade": "2026-04-16"
+      }
+    },
+
+    "consultasExternas": {
+      "serasaScore": 850,
+      "boaVistaScore": 820,
+      "protestos": false,
+      "acoesJudiciais": 0,
+      "falencias": false,
+      "recuperacaoJudicial": false
+    }
+  },
+
+  "recursosHumanos": {
+    "estruturaPessoal": {
+      "totalFuncionarios": 45,
+      "distribuicao": {
+        "clt": 40,
+        "pj": 5,
+        "estagiarios": 3,
+        "terceirizados": 2
+      },
+      "departamentos": [
+        { "nome": "Desenvolvimento", "quantidade": 25 },
+        { "nome": "Vendas", "quantidade": 8 },
+        { "nome": "Administrativo", "quantidade": 7 },
+        { "nome": "Suporte", "quantidade": 5 }
+      ]
+    },
+
+    "folhaPagamento": {
+      "totalMensal": 280000.00,
+      "encargos": 84000.00,
+      "beneficios": 36000.00,
+      "totalComEncargos": 400000.00,
+      "mediaSalarial": 7000.00,
+      "maiorSalario": 18000.00,
+      "menorSalario": 3500.00
+    },
+
+    "indicadores": {
+      "turnover": 8.5,
+      "absenteismo": 2.1,
+      "horasExtras": 120,
+      "produtividade": "Alta"
+    }
+  },
+
+  "observacoes": {
+    "pontosFortes": [
+      "Crescimento consistente de receita (60% em 3 anos)",
+      "Liquidez excelente (1.80 em 2023)",
+      "Lucratividade crescente",
+      "Baixo endividamento relativo",
+      "Histórico de pagamentos impecável",
+      "Certidões todas regulares",
+      "Setor de tecnologia em expansão"
+    ],
+    "pontosAtenção": [
+      "Nenhum ponto crítico identificado"
+    ],
+    "recomendacao": "Aprovação com condições preferenciais. Cliente apresenta excelentes indicadores financeiros, crescimento sustentável e histórico de adimplência impecável."
+  }
+}

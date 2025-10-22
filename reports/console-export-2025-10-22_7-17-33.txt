@@ -1,0 +1,19 @@
+O carregamento de um módulo de “http://localhost:3001/src/assets/js/calculators/capital-giro.js” foi bloqueado devido a um tipo MIME não permitido (“”). analise-credito.html
+O carregamento de um módulo de “http://localhost:3001/src/assets/js/calculators/analise-vertical-horizontal.js” foi bloqueado devido a um tipo MIME não permitido (“”). analise-credito.html
+O carregamento de um módulo de “http://localhost:3001/src/assets/js/core/navigation-controller.js” foi bloqueado devido a um tipo MIME não permitido (“”). analise-credito.html
+O carregamento de um módulo de “http://localhost:3001/src/assets/js/core/auto-save.js” foi bloqueado devido a um tipo MIME não permitido (“”). analise-credito.html
+O carregamento de um módulo de “http://localhost:3001/src/assets/js/core/form-generator.js” foi bloqueado devido a um tipo MIME não permitido (“”). analise-credito.html
+💰 Aplicando máscara monetária a 0 campos currency-mask.js:30:13
+✓ Currency Mask Module carregado currency-mask.js:148:9
+[PercentageCalculator] 0 produtos inicializados percentage-calculator.js:153:17
+[PercentageCalculator] 0 insumos inicializados percentage-calculator.js:168:17
+[PercentageCalculator] Pronto para uso percentage-calculator.js:178:17
+✅ ConfigLoader carregado config-loader.js:309:9
+✅ CreditscoreIndexedDB schema carregado creditscore-indexeddb-schema.js:128:9
+✅ CreditScoreModule carregado creditscore-module.js:574:9
+🚀 CreditScore Pro App iniciando... analise-credito.html:22:25
+✅ Configuração carregada: CreditScore Pro v1.0.0 analise-credito.html:82:29
+❌ Erro na inicialização: Error: Dependências ausentes: FormGenerator, NavigationController, AutoSave
+    checkDependencies analise-credito.html:270
+    init analise-credito.html:200
+analise-credito.html:60:29
