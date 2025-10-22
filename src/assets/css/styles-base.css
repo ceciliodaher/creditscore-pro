@@ -311,6 +311,40 @@ body::after {
     max-width: none;
 }
 
+/* Form Grid Layout - Inspirado no Mapeador Projetos */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Grid para resultados computados */
+.computed-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.computed-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.computed-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
 .form-label {
     display: block;
     margin-bottom: 8px;
@@ -693,44 +727,58 @@ textarea.form-control {
     .container {
         max-width: 960px;
     }
+
+    .form-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
 }
 
 @media (max-width: 768px) {
     .container {
         padding: 0 16px;
     }
-    
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .computed-results {
+        grid-template-columns: 1fr;
+    }
+
     .header-content {
         flex-direction: column;
         gap: 16px;
         text-align: center;
     }
-    
+
     .header-actions {
         width: 100%;
         justify-content: center;
         flex-wrap: wrap;
     }
-    
+
     .modal-content {
         max-width: 95%;
         max-height: 95vh;
         margin: 16px;
     }
-    
+
     .card {
         padding: 24px 20px;
     }
-    
+
     .btn {
         font-size: 14px;
         padding: 10px 20px;
     }
-    
+
     .table {
         font-size: 13px;
     }
-    
+
     .table th,
     .table td {
         padding: 10px 12px;

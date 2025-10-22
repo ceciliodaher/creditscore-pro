@@ -167,7 +167,9 @@ export class FormGenerator {
                 </div>
 
                 <form class="module-form" data-module-form="${module.name}">
-                    ${fields.map(field => this.generateFormField(field)).join('\n')}
+                    <div class="form-grid">
+                        ${fields.map(field => this.generateFormField(field)).join('\n')}
+                    </div>
 
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" data-action="save-draft">
@@ -525,7 +527,7 @@ export class FormGenerator {
         const maxlengthAttr = maxlength ? `maxlength="${maxlength}"` : '';
 
         return `
-            <div class="form-group">
+            <div class="form-group full-width">
                 ${label ? `
                     <label for="${fieldId}" class="form-label">
                         ${label}
@@ -570,7 +572,7 @@ export class FormGenerator {
         const tableId = `table-${name}`;
 
         return `
-            <div class="form-group table-group">
+            <div class="form-group table-group full-width">
                 ${label ? `<h3 class="table-label">${label}</h3>` : ''}
 
                 <div class="table-responsive">
