@@ -282,5 +282,44 @@
       "novaOperacao",
       "melhoriaIndices"
     ]
+  },
+
+  "analiseVerticalHorizontal": {
+    "thresholds": {
+      "variacaoSignificativa": 20,
+      "variacaoCritica": 50,
+      "inconsistenciaMaxima": 1,
+      "variacaoEstabilidade": 5,
+      "margemDecrescenteMinima": -10
+    },
+    "camposObrigatoriosDRE": [
+      "receitaBruta",
+      "deducoes",
+      "receitaLiquida",
+      "custosProdutos",
+      "lucroBruto",
+      "despesasOperacionais",
+      "lucroLiquido"
+    ],
+    "margensMonitoradas": [
+      "lucroBruto",
+      "lucroLiquido"
+    ],
+    "tendencias": {
+      "crescimento": "crescimento",
+      "queda": "queda",
+      "estavel": "estável"
+    },
+    "alertTypes": {
+      "variacaoCritica": "variacao_critica",
+      "variacaoSignificativa": "variacao_significativa",
+      "margemDecrescente": "margem_decrescente",
+      "prejuizoConsecutivo": "prejuizo_consecutivo"
+    },
+    "severidades": {
+      "critico": "crítico",
+      "atencao": "atenção",
+      "informativo": "informativo"
+    }
   }
 }

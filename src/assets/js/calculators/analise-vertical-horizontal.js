@@ -41,16 +41,21 @@ export class AnaliseVerticalHorizontal {
             throw new Error('AnaliseVerticalHorizontal: config.alerts obrigatório');
         }
 
+        if (!config.analiseVerticalHorizontal) {
+            throw new Error('AnaliseVerticalHorizontal: config.analiseVerticalHorizontal obrigatório');
+        }
+
+        if (!messages.calculators || !messages.calculators.analiseVerticalHorizontal) {
+            throw new Error('AnaliseVerticalHorizontal: messages.calculators.analiseVerticalHorizontal obrigatório');
+        }
+
         this.config = config;
-        this.messages = messages;
+        this.messages = messages.calculators.analiseVerticalHorizontal;
+        this.analiseConfig = config.analiseVerticalHorizontal;
         this.initialized = false;
 
-        // Limiares de alerta (configuráveis)
-        this.thresholds = {
-            variacaoSignificativa: 20, // % - variação considerada significativa
-            variacaoCritica: 50,       // % - variação considerada crítica
-            inconsistenciaMaxima: 1,   // R$ - diferença máxima aceitável em equação contábil
-        };
+        // Limiares de alerta vêm da configuração (NO HARDCODED DATA)
+        this.thresholds = this.analiseConfig.thresholds;
     }
 
     /**
@@ -352,15 +357,8 @@ export class AnaliseVerticalHorizontal {
             throw new Error(`AnaliseVerticalHorizontal: dre[${ano}].receitaLiquida deve ser número`);
         }
 
-        const camposObrigatorios = [
-            'receitaBruta',
-            'deducoes',
-            'receitaLiquida',
-            'custosProdutos',
-            'lucroBruto',
-            'despesasOperacionais',
-            'lucroLiquido',
-        ];
+        // Campos obrigatórios vêm da configuração (NO HARDCODED DATA)
+        const camposObrigatorios = this.analiseConfig.camposObrigatoriosDRE;
 
         for (const campo of camposObrigatorios) {
             if (typeof dre[campo] !== 'number') {
@@ -445,7 +443,7 @@ export class AnaliseVerticalHorizontal {
                             valorAtual,
                             variacao: 0,
                             variacaoABS: 0,
-                            observacao: 'Ambos os valores são zero',
+                            observacao: this.messages.variacoes.ambosZero,
                         };
                     } else {
                         resultado[chave] = {
@@ -453,18 +451,26 @@ export class AnaliseVerticalHorizontal {
                             valorAtual,
                             variacao: null,
                             variacaoABS: Math.abs(valorAtual),
-                            observacao: 'Valor anterior era zero - variação indefinida',
+                            observacao: this.messages.variacoes.valorAnteriorZero,
                         };
                     }
                 } else {
                     const variacao = ((valorAtual - valorAnterior) / Math.abs(valorAnterior)) * 100;
+
+                    // Tendências vêm da configuração (NO HARDCODED DATA)
+                    const tendencias = this.analiseConfig.tendencias;
+                    const tendencia = variacao > 0
+                        ? tendencias.crescimento
+                        : variacao < 0
+                        ? tendencias.queda
+                        : tendencias.estavel;
 
                     resultado[chave] = {
                         valorAnterior,
                         valorAtual,
                         variacao,
                         variacaoABS: Math.abs(valorAtual - valorAnterior),
-                        tendencia: variacao > 0 ? 'crescimento' : variacao < 0 ? 'queda' : 'estável',
+                        tendencia,
                     };
                 }
             } else if (typeof valorAtual === 'object' && valorAtual !== null && typeof valorAnterior === 'object' && valorAnterior !== null) {
