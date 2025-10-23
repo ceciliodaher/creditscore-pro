@@ -46,3 +46,4 @@ reports/*.xml
 documentos/financiamento/*.backup.json
 documentos/financiamento/*_v2.json
 documentos/financiamento/campos_estruturados_completo.json
+.mcp.json
