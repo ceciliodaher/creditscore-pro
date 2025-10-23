@@ -148,16 +148,16 @@
         ]
       },
       "financeiro": {
-        "peso": 25,
+        "peso": 22,
         "criterios": [
           "evolucaoFaturamento",
-          "evolucaoLucratividade",
-          "qualidadeDemonstracoes",
-          "consistenciaDados"
+          "margens",
+          "roeRoa",
+          "evolucaoPatrimonial"
         ]
       },
       "capacidadePagamento": {
-        "peso": 25,
+        "peso": 23,
         "criterios": [
           "liquidezCorrente",
           "coberturaJuros",
@@ -170,15 +170,17 @@
         "criterios": [
           "nivelEndividamento",
           "composicaoEndividamento",
+          "inadimplenciaHistorica",
           "historicoPagamentos"
         ]
       },
-      "garantias": {
-        "peso": 10,
+      "estruturaConcentracao": {
+        "peso": 15,
         "criterios": [
+          "concentracaoRisco",
+          "cicloOperacional",
           "garantiasDisponiveis",
-          "tempoRelacionamento",
-          "operacoesAnteriores"
+          "tempoRelacionamento"
         ]
       }
     },

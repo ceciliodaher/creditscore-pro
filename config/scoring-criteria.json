@@ -38,6 +38,12 @@
       },
       "demonstracoes": {
         "camposFaltandoMaximoBaixo": 1
+      },
+      "evolucaoPatrimonial": {
+        "excelente": 0.10,
+        "bom": 0.05,
+        "adequado": 0,
+        "critico": -0.01
       }
     },
     "capacidadePagamento": {
@@ -82,9 +88,27 @@
         "atrasoLeve": 30,
         "atrasoModerado": 60,
         "atrasosModeradosMaximo": 0.2
+      },
+      "inadimplenciaHistorica": {
+        "excelente": 0.025,
+        "bom": 0.035,
+        "adequado": 0.045,
+        "critico": 0.05
       }
     },
-    "garantias": {
+    "estruturaConcentracao": {
+      "concentracaoRisco": {
+        "excelente": 0.30,
+        "bom": 0.40,
+        "adequado": 0.50,
+        "critico": 0.60
+      },
+      "cicloFinanceiro": {
+        "excelente": 30,
+        "bom": 45,
+        "adequado": 60,
+        "critico": 90
+      },
       "garantiasSobreValor": {
         "excelente": 1.50,
         "bom": 1.0,
@@ -95,11 +119,6 @@
         "bom": 2,
         "adequado": 1,
         "baixo": 0.5
-      },
-      "operacoesAnteriores": {
-        "atrasoLeve": 30,
-        "atrasoModerado": 60,
-        "minimoExcelente": 1
       }
     }
   },
@@ -112,26 +131,28 @@
         "situacaoSocios": 5
       },
       "financeiro": {
-        "evolucaoFaturamento": 6.25,
-        "evolucaoLucratividade": 6.25,
-        "qualidadeDemonstracoes": 6.25,
-        "consistenciaDados": 6.25
+        "evolucaoFaturamento": 6,
+        "margens": 6,
+        "roeRoa": 5,
+        "evolucaoPatrimonial": 5
       },
       "capacidadePagamento": {
-        "liquidezCorrente": 6.25,
-        "coberturaJuros": 6.25,
-        "geracaoCaixa": 6.25,
-        "capitalGiro": 6.25
+        "liquidezCorrente": 6,
+        "coberturaJuros": 7,
+        "geracaoCaixa": 5,
+        "capitalGiro": 5
       },
       "endividamento": {
-        "nivelEndividamento": 6.67,
-        "composicaoEndividamento": 6.67,
-        "historicoPagamentos": 6.66
+        "nivelEndividamento": 6,
+        "composicaoEndividamento": 4,
+        "inadimplenciaHistorica": 5,
+        "historicoPagamentos": 5
       },
-      "garantias": {
-        "garantiasDisponiveis": 3.33,
-        "tempoRelacionamento": 3.33,
-        "operacoesAnteriores": 3.34
+      "estruturaConcentracao": {
+        "concentracaoRisco": 6,
+        "cicloOperacional": 4,
+        "garantiasDisponiveis": 3,
+        "tempoRelacionamento": 2
       }
     },
     "niveis": {
@@ -147,13 +168,15 @@
       "regularidadeFiscal": 3,
       "protestos": 3,
       "socios": 4,
-      "sociosCompliance": 4,
-      "coberturaJuros": 3.75,
-      "geracaoCaixa": 3.75,
-      "historicoPagamentos": 4,
-      "garantias": 2,
-      "relacionamento": 2,
-      "operacoesAnteriores": 2
+      "evolucaoPatrimonial": 3,
+      "coberturaJuros": 4,
+      "geracaoCaixa": 3,
+      "inadimplenciaHistorica": 3,
+      "historicoPagamentos": 3,
+      "concentracaoRisco": 3,
+      "cicloOperacional": 2.4,
+      "garantias": 1.8,
+      "relacionamento": 1.2
     },
     "multiplicadoresProtesto": {
       "limiarBaixo": 1,
@@ -168,6 +191,11 @@
     },
     "categoria": {
       "percentualCritico": 0.5
+    },
+    "scoringDinamico": {
+      "variacaoCritica": 15,
+      "variacaoAtencao": 10,
+      "variacaoInformativa": 5
     }
   },
   "recomendacoes": {

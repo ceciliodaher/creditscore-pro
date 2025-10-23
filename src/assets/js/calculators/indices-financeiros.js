@@ -531,6 +531,105 @@ export class IndicesFinanceirosCalculator {
      * @param {Object} dre
      * @returns {Object}
      */
+    // ==================== EVOLUÇÃO PATRIMONIAL ====================
+    /**
+     * Calcula Evolução Patrimonial (Adaptado do Sicoob GRC)
+     * Fórmula: ((PL Atual - PL Anterior) / PL Anterior) × 100
+     * Interpretação: Crescimento do patrimônio líquido ao longo do tempo
+     * 
+     * @private
+     * @param {Array} balancosMultiAno - Array de balanços ordenados (ano mais recente primeiro)
+     * @returns {Object}
+     */
+    #calcularEvolucaoPatrimonial(balancosMultiAno) {
+        // Validação de entrada
+        if (!balancosMultiAno || !Array.isArray(balancosMultiAno)) {
+            return {
+                valor: null,
+                valorFormatado: '-',
+                status: 'indefinido',
+                nome: 'Evolução Patrimonial',
+                interpretacao: 'Dados de múltiplos anos não disponíveis'
+            };
+        }
+
+        // Precisa de pelo menos 2 anos de dados
+        if (balancosMultiAno.length < 2) {
+            return {
+                valor: null,
+                valorFormatado: '-',
+                status: 'indefinido',
+                nome: 'Evolução Patrimonial',
+                interpretacao: 'Necessário pelo menos 2 anos de balanço para calcular evolução'
+            };
+        }
+
+        // Obter PL do ano mais recente e anterior
+        const balancoAtual = balancosMultiAno[0];
+        const balancoAnterior = balancosMultiAno[1];
+
+        const plAtual = parseFloat(balancoAtual.patrimonioLiquido);
+        const plAnterior = parseFloat(balancoAnterior.patrimonioLiquido);
+
+        // Validação rigorosa de valores obrigatórios
+        if (isNaN(plAtual)) {
+            return {
+                valor: null,
+                valorFormatado: '-',
+                status: 'indefinido',
+                nome: 'Evolução Patrimonial',
+                interpretacao: 'Patrimônio Líquido atual ausente ou inválido'
+            };
+        }
+
+        if (isNaN(plAnterior) || plAnterior === 0) {
+            return {
+                valor: null,
+                valorFormatado: '-',
+                status: 'indefinido',
+                nome: 'Evolução Patrimonial',
+                interpretacao: 'Patrimônio Líquido anterior ausente, inválido ou zerado'
+            };
+        }
+
+        // Calcular evolução percentual
+        const evolucaoPercentual = ((plAtual - plAnterior) / plAnterior) * 100;
+
+        // Classificação baseada em scoring-criteria.json (thresholds.financeiro.evolucaoPatrimonial)
+        // excelente: 10%, bom: 5%, adequado: 0%, critico: < 0%
+        let status, cor;
+        if (evolucaoPercentual >= 10) {
+            status = 'excelente';
+            cor = '#4CAF50'; // Verde
+        } else if (evolucaoPercentual >= 5) {
+            status = 'bom';
+            cor = '#8BC34A'; // Verde claro
+        } else if (evolucaoPercentual >= 0) {
+            status = 'adequado';
+            cor = '#FF9800'; // Laranja
+        } else if (evolucaoPercentual >= -5) {
+            status = 'baixo';
+            cor = '#FF5722'; // Laranja escuro
+        } else {
+            status = 'crítico';
+            cor = '#F44336'; // Vermelho
+        }
+
+        return {
+            valor: evolucaoPercentual,
+            valorFormatado: `${evolucaoPercentual >= 0 ? '+' : ''}${evolucaoPercentual.toFixed(1)}%`,
+            status,
+            cor,
+            nome: 'Evolução Patrimonial',
+            interpretacao: evolucaoPercentual >= 0
+                ? `Crescimento patrimonial de ${evolucaoPercentual.toFixed(1)}% no período`
+                : `Redução patrimonial de ${Math.abs(evolucaoPercentual).toFixed(1)}% no período`,
+            plAtual: plAtual,
+            plAnterior: plAnterior,
+            variacao: plAtual - plAnterior
+        };
+    }
+
     #calcularZScore(balanco, dre) {
         const ativoTotal = balanco.ativoTotal;
         const ac = this.#somarValores(balanco.ativo.circulante);

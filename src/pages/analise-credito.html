@@ -1419,62 +1419,343 @@
                     <!-- ========================================= -->
                     <!-- SEÇÃO 3: ANÁLISE DE ENDIVIDAMENTO -->
                     <!-- ========================================= -->
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 3: ANÁLISE DE ENDIVIDAMENTO -->
+                    <!-- ========================================= -->
                     <div class="form-section" data-module="endividamento" id="section-3" role="tabpanel">
                         <div class="section-header">
                             <h2 class="section-title">💳 Análise de Endividamento</h2>
-                            <p class="section-description">Dívidas bancárias, obrigações e indicadores de endividamento</p>
+                            <p class="section-description">Detalhamento de dívidas bancárias e outras obrigações financeiras</p>
                         </div>
 
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="instituicaoFinanceira">Instituição Financeira *</label>
-                                <input type="text" id="instituicaoFinanceira" name="instituicaoFinanceira" required>
+                        <!-- Botão Adicionar Dívida + Contador -->
+                        <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <button type="button" id="addDividaBtn" class="btn btn-primary">
+                                ➕ Adicionar Dívida
+                            </button>
+                            <span id="totalDividas" style="color: #666; font-size: 0.9rem;">
+                                Total de dívidas cadastradas: <strong>0</strong>
+                            </span>
+                        </div>
+
+                        <!-- Tabela de Dívidas -->
+                        <div class="endividamento-container" style="overflow-x: auto; margin-bottom: 2rem;">
+                            <table class="endividamento-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <thead>
+                                    <tr style="background: #091A30; color: white;">
+                                        <th style="padding: 12px; text-align: left; min-width: 180px; font-size: 0.85rem; text-transform: uppercase;">Instituição Financeira</th>
+                                        <th style="padding: 12px; text-align: left; min-width: 150px; font-size: 0.85rem; text-transform: uppercase;">Tipo de Dívida</th>
+                                        <th style="padding: 12px; text-align: right; min-width: 130px; font-size: 0.85rem; text-transform: uppercase;">Valor Original (R$)</th>
+                                        <th style="padding: 12px; text-align: right; min-width: 130px; font-size: 0.85rem; text-transform: uppercase;">Saldo Devedor (R$)</th>
+                                        <th style="padding: 12px; text-align: center; min-width: 100px; font-size: 0.85rem; text-transform: uppercase;">Taxa Juros (%)</th>
+                                        <th style="padding: 12px; text-align: center; min-width: 120px; font-size: 0.85rem; text-transform: uppercase;">Vencimento</th>
+                                        <th style="padding: 12px; text-align: center; min-width: 120px; font-size: 0.85rem; text-transform: uppercase;">Status</th>
+                                        <th style="padding: 12px; text-align: left; min-width: 150px; font-size: 0.85rem; text-transform: uppercase;">Garantias</th>
+                                        <th style="padding: 12px; text-align: center; min-width: 80px; font-size: 0.85rem; text-transform: uppercase;">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dividasTableBody">
+                                    <!-- Empty State -->
+                                    <tr id="emptyState">
+                                        <td colspan="9" style="padding: 3rem; text-align: center; color: #999;">
+                                            Nenhuma dívida cadastrada. Clique em "Adicionar Dívida" para começar.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Resumo Consolidado -->
+                        <div class="resumo-endividamento" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #FF002D;">
+                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">DÍVIDA TOTAL</h4>
+                                <span id="dividaTotal" class="valor-destaque" style="font-size: 1.8rem; font-weight: 700; color: #091A30;">R$ 0,00</span>
+                            </div>
+                            <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #FF9800;">
+                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">CURTO PRAZO (&lt; 12 meses)</h4>
+                                <span id="dividaCurtoPrazo" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">R$ 0,00</span>
+                                <small id="percentualCP" style="color: #666; display: block; margin-top: 0.5rem;">0%</small>
+                            </div>
+                            <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">LONGO PRAZO (&gt; 12 meses)</h4>
+                                <span id="dividaLongoPrazo" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">R$ 0,00</span>
+                                <small id="percentualLP" style="color: #666; display: block; margin-top: 0.5rem;">0%</small>
+                            </div>
+                            <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2196F3;">
+                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">NÚMERO DE DÍVIDAS</h4>
+                                <span id="numeroDividas" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">0</span>
+                                <small id="statusGeral" style="color: #666; display: block; margin-top: 0.5rem;">-</small>
+                            </div>
+                        </div>
+
+                        <!-- Índices Calculados -->
+                        <div id="indicesEndividamentoSection" style="margin-top: 2rem; display: none;">
+                            <h3 style="color: #091A30; font-size: 1.2rem; margin-bottom: 1rem; font-weight: 600;">
+                                📊 Índices de Endividamento Calculados
+                            </h3>
+
+                            <!-- Container de Alertas -->
+                            <div id="alertasEndividamento" style="margin-bottom: 1.5rem;">
+                                <!-- Alertas serão inseridos aqui dinamicamente -->
                             </div>
 
-                            <div class="form-group">
-                                <label for="tipoDivida">Tipo de Dívida *</label>
-                                <select id="tipoDivida" name="tipoDivida" required>
-                                    <option value="">Selecione</option>
-                                    <option value="capital_giro">Capital de Giro</option>
-                                    <option value="investimento">Investimento</option>
-                                    <option value="leasing">Leasing/Arrendamento</option>
-                                    <option value="cheque_especial">Cheque Especial</option>
-                                    <option value="outros">Outros</option>
-                                </select>
+                            <!-- Tabela de Índices -->
+                            <div style="overflow-x: auto;">
+                                <table class="tabela-indices" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <thead>
+                                        <tr style="background: #f8f9fa; border-bottom: 2px solid #ddd;">
+                                            <th style="padding: 12px; text-align: left; font-weight: 600; color: #091A30;">Índice</th>
+                                            <th style="padding: 12px; text-align: center; font-weight: 600; color: #091A30;">Valor</th>
+                                            <th style="padding: 12px; text-align: center; font-weight: 600; color: #091A30;">Status</th>
+                                            <th style="padding: 12px; text-align: left; font-weight: 600; color: #091A30;">Interpretação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="indicesEndividamentoTableBody">
+                                        <!-- Linhas serão inseridas dinamicamente -->
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <div class="form-group">
-                                <label for="valorOriginal">Valor Original (R$) *</label>
-                                <input type="text" id="valorOriginal" name="valorOriginal" data-mask="currency" required>
+                            <p style="margin-top: 1rem; font-size: 0.85rem; color: #666;">
+                                * Índices calculados automaticamente com base no Balanço Patrimonial (Módulo 2) e nas dívidas cadastradas.
+                            </p>
+                        </div>
+
+                        <!-- Inadimplência Histórica (> 90 dias) -->
+                        <div class="inadimplencia-section">
+                            <h3 class="subsection-title">⏱️ Inadimplência Histórica (> 90 dias)</h3>
+                            <p class="subsection-description">Análise de atrasos superiores a 90 dias em contas a pagar e receber</p>
+
+                            <div class="form-grid">
+                                <!-- Contas a Pagar -->
+                                <div class="form-group-card">
+                                    <h4 class="card-title">📤 Contas a Pagar</h4>
+
+                                    <div class="form-group">
+                                        <label for="contasPagarTotal">Total de Contas a Pagar (R$)</label>
+                                        <input type="text" id="contasPagarTotal" name="contasPagarTotal" data-mask="currency">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="contasPagar90Dias">Contas a Pagar > 90 dias (R$)</label>
+                                        <input type="text" id="contasPagar90Dias" name="contasPagar90Dias" data-mask="currency">
+                                    </div>
+
+                                    <div class="indicador-box">
+                                        <span class="indicador-label">Percentual de Inadimplência:</span>
+                                        <span id="inadimplenciaFornecedoresPerc" class="indicador-value">-</span>
+                                    </div>
+                                </div>
+
+                                <!-- Contas a Receber -->
+                                <div class="form-group-card">
+                                    <h4 class="card-title">📥 Contas a Receber</h4>
+
+                                    <div class="form-group">
+                                        <label for="contasReceberTotal">Total de Contas a Receber (R$)</label>
+                                        <input type="text" id="contasReceberTotal" name="contasReceberTotal" data-mask="currency">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="contasReceber90Dias">Contas a Receber > 90 dias (R$)</label>
+                                        <input type="text" id="contasReceber90Dias" name="contasReceber90Dias" data-mask="currency">
+                                    </div>
+
+                                    <div class="indicador-box">
+                                        <span class="indicador-label">Percentual de Inadimplência:</span>
+                                        <span id="inadimplenciaClientesPerc" class="indicador-value">-</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="saldoDevedor">Saldo Devedor Atual (R$) *</label>
-                                <input type="text" id="saldoDevedor" name="saldoDevedor" data-mask="currency" required>
+                            <!-- Alertas de Inadimplência -->
+                            <div id="alertasInadimplencia" class="alertas-container">
+                                <!-- Alertas inseridos dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Concentração de Risco -->
+                        <div class="concentracao-section">
+                            <h3 class="subsection-title">🎯 Concentração de Risco</h3>
+                            <p class="subsection-description">Análise da dependência de principais clientes e fornecedores</p>
+
+                            <!-- Top 5 Clientes -->
+                            <div class="concentracao-clientes-container">
+                                <h4 class="group-title">👥 Top 5 Clientes</h4>
+
+                                <div class="clientes-list" id="clientesList">
+                                    <div class="cliente-item">
+                                        <div class="form-group">
+                                            <label>Nome do Cliente</label>
+                                            <input type="text" name="cliente_nome_1" class="cliente-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Receita Anual (R$)</label>
+                                            <input type="text" name="cliente_receita_1" class="cliente-receita" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% do Faturamento</label>
+                                            <span class="cliente-percentual" data-index="1">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cliente-item">
+                                        <div class="form-group">
+                                            <label>Nome do Cliente</label>
+                                            <input type="text" name="cliente_nome_2" class="cliente-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Receita Anual (R$)</label>
+                                            <input type="text" name="cliente_receita_2" class="cliente-receita" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% do Faturamento</label>
+                                            <span class="cliente-percentual" data-index="2">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cliente-item">
+                                        <div class="form-group">
+                                            <label>Nome do Cliente</label>
+                                            <input type="text" name="cliente_nome_3" class="cliente-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Receita Anual (R$)</label>
+                                            <input type="text" name="cliente_receita_3" class="cliente-receita" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% do Faturamento</label>
+                                            <span class="cliente-percentual" data-index="3">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cliente-item">
+                                        <div class="form-group">
+                                            <label>Nome do Cliente</label>
+                                            <input type="text" name="cliente_nome_4" class="cliente-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Receita Anual (R$)</label>
+                                            <input type="text" name="cliente_receita_4" class="cliente-receita" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% do Faturamento</label>
+                                            <span class="cliente-percentual" data-index="4">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cliente-item">
+                                        <div class="form-group">
+                                            <label>Nome do Cliente</label>
+                                            <input type="text" name="cliente_nome_5" class="cliente-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Receita Anual (R$)</label>
+                                            <input type="text" name="cliente_receita_5" class="cliente-receita" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% do Faturamento</label>
+                                            <span class="cliente-percentual" data-index="5">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="concentracao-resultado">
+                                    <span class="resultado-label">Concentração Total (Top 5):</span>
+                                    <span id="concentracaoClientesTotal" class="resultado-value">-</span>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="taxaJuros">Taxa de Juros (% a.a.) *</label>
-                                <input type="text" id="taxaJuros" name="taxaJuros" data-mask="percentage" required>
+                            <!-- Top 5 Fornecedores -->
+                            <div class="concentracao-fornecedores-container">
+                                <h4 class="group-title">🏭 Top 5 Fornecedores</h4>
+
+                                <div class="fornecedores-list" id="fornecedoresList">
+                                    <div class="fornecedor-item">
+                                        <div class="form-group">
+                                            <label>Nome do Fornecedor</label>
+                                            <input type="text" name="fornecedor_nome_1" class="fornecedor-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Compras Anuais (R$)</label>
+                                            <input type="text" name="fornecedor_compras_1" class="fornecedor-compras" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% das Compras</label>
+                                            <span class="fornecedor-percentual" data-index="1">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fornecedor-item">
+                                        <div class="form-group">
+                                            <label>Nome do Fornecedor</label>
+                                            <input type="text" name="fornecedor_nome_2" class="fornecedor-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Compras Anuais (R$)</label>
+                                            <input type="text" name="fornecedor_compras_2" class="fornecedor-compras" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% das Compras</label>
+                                            <span class="fornecedor-percentual" data-index="2">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fornecedor-item">
+                                        <div class="form-group">
+                                            <label>Nome do Fornecedor</label>
+                                            <input type="text" name="fornecedor_nome_3" class="fornecedor-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Compras Anuais (R$)</label>
+                                            <input type="text" name="fornecedor_compras_3" class="fornecedor-compras" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% das Compras</label>
+                                            <span class="fornecedor-percentual" data-index="3">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fornecedor-item">
+                                        <div class="form-group">
+                                            <label>Nome do Fornecedor</label>
+                                            <input type="text" name="fornecedor_nome_4" class="fornecedor-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Compras Anuais (R$)</label>
+                                            <input type="text" name="fornecedor_compras_4" class="fornecedor-compras" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% das Compras</label>
+                                            <span class="fornecedor-percentual" data-index="4">-</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="fornecedor-item">
+                                        <div class="form-group">
+                                            <label>Nome do Fornecedor</label>
+                                            <input type="text" name="fornecedor_nome_5" class="fornecedor-nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Compras Anuais (R$)</label>
+                                            <input type="text" name="fornecedor_compras_5" class="fornecedor-compras" data-mask="currency">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>% das Compras</label>
+                                            <span class="fornecedor-percentual" data-index="5">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="concentracao-resultado">
+                                    <span class="resultado-label">Concentração Total (Top 5):</span>
+                                    <span id="concentracaoFornecedoresTotal" class="resultado-value">-</span>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="vencimento">Data de Vencimento *</label>
-                                <input type="date" id="vencimento" name="vencimento" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="statusDivida">Status *</label>
-                                <select id="statusDivida" name="statusDivida" required>
-                                    <option value="">Selecione</option>
-                                    <option value="adimplente">Adimplente</option>
-                                    <option value="inadimplente">Inadimplente</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="garantias">Garantias Oferecidas</label>
-                                <textarea id="garantias" name="garantias" rows="3"></textarea>
+                            <!-- Alertas de Concentração -->
+                            <div id="alertasConcentracao" class="alertas-container">
+                                <!-- Alertas inseridos dinamicamente -->
                             </div>
                         </div>
                     </div>
@@ -1691,7 +1972,12 @@
     <script type="module" src="../assets/js/calculators/scoring-engine.js"></script>
     <script type="module" src="../assets/js/calculators/analise-vertical-horizontal.js"></script>
     <script type="module" src="../assets/js/calculators/capital-giro.js"></script>
-    
+
+    <!-- Endividamento Module -->
+    <script type="module" src="../assets/js/components/endividamento-manager.js"></script>
+    <script type="module" src="../assets/js/calculators/endividamento-calculator.js"></script>
+    <script type="module" src="../assets/js/components/endividamento-integration.js"></script>
+
     <!-- Scripts Core CreditScore -->
     <script type="module" src="../assets/js/core/creditscore-module.js"></script>
     <script type="module" src="../assets/js/core/form-generator.js"></script>
@@ -1893,6 +2179,21 @@
                     await creditScore.init();
                     this.modules.set('creditScore', creditScore);
                     console.log('✅ CreditScoreModule inicializado');
+
+                    // 4.5. EndividamentoIntegration (precisa de config, messages, dbManager)
+                    if (window.EndividamentoIntegration) {
+                        const endividamentoIntegration = new window.EndividamentoIntegration(
+                            this.config,
+                            this.messages,
+                            this.dbManager
+                        );
+                        await endividamentoIntegration.init(null); // null = empresaId (será definido quando empresa for selecionada)
+                        this.modules.set('endividamento', endividamentoIntegration);
+                        window.endividamentoIntegration = endividamentoIntegration; // Expor globalmente
+                        console.log('✅ EndividamentoIntegration inicializado');
+                    } else {
+                        console.warn('⚠️ EndividamentoIntegration não disponível');
+                    }
 
                     // ========================================
                     // FASE 5: SETUP & RESTORE

@@ -67,15 +67,23 @@ export class ScoringEngine {
         const financeiro = this.#avaliarFinanceiro(data.demonstracoes, data.indices);
         const capacidadePagamento = this.#avaliarCapacidadePagamento(data.indices, data.capitalGiro);
         const endividamento = this.#avaliarEndividamento(data.endividamento, data.demonstracoes);
-        const garantias = this.#avaliarGarantias(data.garantias, data.relacionamento);
+        
+        // NOVA CATEGORIA: Estrutura e Concentração (substitui antiga "garantias")
+        const estruturaConcentracao = this.#avaliarEstrutura({
+            concentracao: data.concentracao,
+            ciclos: data.ciclos,
+            garantias: data.garantias,
+            relacionamento: data.relacionamento
+        });
 
         // Calcular pontuação total (0-100)
+        // Cadastral: 20 + Financeiro: 22 + CapPag: 23 + Endividamento: 20 + Estrutura: 15 = 100
         const pontuacaoTotal = Math.round(
             cadastral.pontuacao +
             financeiro.pontuacao +
             capacidadePagamento.pontuacao +
             endividamento.pontuacao +
-            garantias.pontuacao
+            estruturaConcentracao.pontuacao
         );
 
         // Determinar classificação de risco (AAA a D)
@@ -87,7 +95,7 @@ export class ScoringEngine {
             financeiro,
             capacidadePagamento,
             endividamento,
-            garantias
+            estruturaConcentracao
         });
 
         // Gerar recomendações
@@ -96,7 +104,7 @@ export class ScoringEngine {
             financeiro,
             capacidadePagamento,
             endividamento,
-            garantias
+            estruturaConcentracao
         });
 
         return {
@@ -107,14 +115,15 @@ export class ScoringEngine {
                 financeiro,
                 capacidadePagamento,
                 endividamento,
-                garantias
+                estruturaConcentracao
             },
             alertas,
             recomendacoes,
             mensagemFinal: this.#formatMsg(this.msg.mensagens.calculoConcluido, {
                 rating: classificacao.rating,
                 pontos: pontuacaoTotal
-            })
+            }),
+            timestamp: new Date().toISOString()
         };
     }
 
@@ -200,31 +209,31 @@ export class ScoringEngine {
      * @private
      */
     #avaliarFinanceiro(demonstracoes, indices) {
-        const peso = this.config.categorias.financeiro.peso;
+        const peso = 22; // Atualizado de 25 para 22 conforme novo scoring
         const msgCategoria = this.msg.categorias.financeiro;
 
         let pontos = 0;
         const criterios = {};
 
-        // Critério 1: Evolução do Faturamento
+        // Critério 1: Evolução do Faturamento (6 pts)
         const evolucaoFaturamento = this.#avaliarEvolucaoFaturamento(demonstracoes);
         criterios.evolucaoFaturamento = evolucaoFaturamento;
         pontos += evolucaoFaturamento.pontos;
 
-        // Critério 2: Evolução da Lucratividade
+        // Critério 2: Margens (6 pts) - consolidado de evolucaoLucratividade
         const evolucaoLucratividade = this.#avaliarEvolucaoLucratividade(indices);
-        criterios.evolucaoLucratividade = evolucaoLucratividade;
+        criterios.margens = evolucaoLucratividade;
         pontos += evolucaoLucratividade.pontos;
 
-        // Critério 3: Qualidade das Demonstrações
+        // Critério 3: ROE/ROA (5 pts) - consolidado de qualidadeDemonstracoes
         const qualidadeDemonstracoes = this.#avaliarQualidadeDemonstracoes(demonstracoes);
-        criterios.qualidadeDemonstracoes = qualidadeDemonstracoes;
+        criterios.roeRoa = qualidadeDemonstracoes;
         pontos += qualidadeDemonstracoes.pontos;
 
-        // Critério 4: Consistência dos Dados
-        const consistenciaDados = this.#avaliarConsistenciaDados(demonstracoes);
-        criterios.consistenciaDados = consistenciaDados;
-        pontos += consistenciaDados.pontos;
+        // Critério 4: Evolução Patrimonial (5 pts) - NOVO
+        const evolucaoPatrimonial = this.#avaliarEvolucaoPatrimonial(demonstracoes);
+        criterios.evolucaoPatrimonial = evolucaoPatrimonial;
+        pontos += evolucaoPatrimonial.pontos;
 
         return {
             nome: msgCategoria.nome,
@@ -278,23 +287,28 @@ export class ScoringEngine {
      * @private
      */
     #avaliarEndividamento(endividamento, demonstracoes) {
-        const peso = this.config.categorias.endividamento.peso;
+        const peso = 20; // Mantido em 20 pontos
         const msgCategoria = this.msg.categorias.endividamento;
 
         let pontos = 0;
         const criterios = {};
 
-        // Critério 1: Nível de Endividamento
+        // Critério 1: Nível de Endividamento (6 pts - antes 6.67)
         const nivelEndividamento = this.#avaliarNivelEndividamento(demonstracoes);
         criterios.nivelEndividamento = nivelEndividamento;
         pontos += nivelEndividamento.pontos;
 
-        // Critério 2: Composição do Endividamento
+        // Critério 2: Composição do Endividamento (4 pts - antes 6.67)
         const composicaoEndividamento = this.#avaliarComposicaoEndividamento(demonstracoes);
         criterios.composicaoEndividamento = composicaoEndividamento;
         pontos += composicaoEndividamento.pontos;
 
-        // Critério 3: Histórico de Pagamentos
+        // Critério 3: Inadimplência Histórica (5 pts) - NOVO
+        const inadimplenciaHistorica = this.#avaliarInadimplenciaHistorica(endividamento.inadimplencia);
+        criterios.inadimplenciaHistorica = inadimplenciaHistorica;
+        pontos += inadimplenciaHistorica.pontos;
+
+        // Critério 4: Histórico de Pagamentos (5 pts - antes 6.66)
         const historicoPagamentos = this.#avaliarHistoricoPagamentos(endividamento);
         criterios.historicoPagamentos = historicoPagamentos;
         pontos += historicoPagamentos.pontos;
@@ -692,6 +706,89 @@ export class ScoringEngine {
                 avaliacao: this.#formatMsg(msgCriterio.critico, { margem: margemPercentual })
             };
         }
+    }
+
+    /**
+     * Avalia Evolução Patrimonial (NOVO - Adaptado Sicoob GRC)
+     * Critério: Crescimento do PL ao longo do tempo
+     * Pontuação: 5 pontos (integrado à categoria Financeiro)
+     * @private
+     * @param {Object} demonstracoes - Demonstrações financeiras multi-ano
+     * @returns {Object}
+     */
+    #avaliarEvolucaoPatrimonial(demonstracoes) {
+        const pontosPossiveis = this.pontuacao.categorias.financeiro.evolucaoPatrimonial;
+        const thresholds = this.thresholds.financeiro.evolucaoPatrimonial;
+
+        // Validação: necessário múltiplos anos
+        if (!demonstracoes || !Array.isArray(demonstracoes) || demonstracoes.length < 2) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.evolucaoPatrimonial ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de múltiplos anos não disponíveis'
+            };
+        }
+
+        // Obter PL do ano mais recente e anterior
+        const balancoAtual = demonstracoes[0]?.balanco;
+        const balancoAnterior = demonstracoes[1]?.balanco;
+
+        if (!balancoAtual || !balancoAnterior) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.evolucaoPatrimonial ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Balanço patrimonial incompleto'
+            };
+        }
+
+        const plAtual = parseFloat(balancoAtual.patrimonioLiquido);
+        const plAnterior = parseFloat(balancoAnterior.patrimonioLiquido);
+
+        // Validação rigorosa
+        if (isNaN(plAtual) || isNaN(plAnterior) || plAnterior === 0) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.evolucaoPatrimonial ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Patrimônio Líquido ausente ou inválido'
+            };
+        }
+
+        // Calcular evolução percentual
+        const evolucao = ((plAtual - plAnterior) / plAnterior);
+
+        // Classificar baseado em thresholds
+        let nivel, pontos;
+        if (evolucao >= thresholds.excelente) {
+            nivel = 'excelente';
+            pontos = pontosPossiveis * this.pontuacao.niveis.excelente;
+        } else if (evolucao >= thresholds.bom) {
+            nivel = 'bom';
+            pontos = pontosPossiveis * this.pontuacao.niveis.bom;
+        } else if (evolucao >= thresholds.adequado) {
+            nivel = 'adequado';
+            pontos = pontosPossiveis * this.pontuacao.niveis.adequado;
+        } else if (evolucao > thresholds.critico) {
+            nivel = 'baixo';
+            pontos = pontosPossiveis * this.pontuacao.niveis.baixo;
+        } else {
+            nivel = 'crítico';
+            pontos = pontosPossiveis * this.pontuacao.niveis.critico;
+        }
+
+        return {
+            pontos,
+            nivel,
+            valor: evolucao,
+            evolucaoPercentual: (evolucao * 100).toFixed(1),
+            plAtual,
+            plAnterior,
+            observacao: evolucao >= 0 
+                ? `Crescimento patrimonial de ${(evolucao * 100).toFixed(1)}%`
+                : `Redução patrimonial de ${Math.abs(evolucao * 100).toFixed(1)}%`
+        };
     }
 
     /**
@@ -1113,6 +1210,316 @@ export class ScoringEngine {
     }
 
     /**
+     * Avalia Inadimplência Histórica (NOVO - Adaptado Sicoob GRC)
+     * Critério: Percentual de contas > 90 dias (fornecedores e clientes)
+     * Pontuação: 5 pontos (integrado à categoria Endividamento)
+     * @private
+     * @param {Object} dadosInadimplencia - Dados de inadimplência
+     * @returns {Object}
+     */
+    #avaliarInadimplenciaHistorica(dadosInadimplencia) {
+        const pontosPossiveis = this.pontuacao.categorias.endividamento.inadimplenciaHistorica;
+        const thresholds = this.thresholds.endividamento.inadimplenciaHistorica;
+
+        // Validação de entrada
+        if (!dadosInadimplencia) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.inadimplenciaHistorica ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de inadimplência não disponíveis'
+            };
+        }
+
+        // Obter dados de fornecedores e clientes
+        const fornecedores = dadosInadimplencia.fornecedores;
+        const clientes = dadosInadimplencia.clientes;
+
+        // Calcular inadimplência de fornecedores
+        let inadimplenciaFornecedores = null;
+        if (fornecedores) {
+            const contasPagarTotal = parseFloat(fornecedores.contasPagarTotal);
+            const contasPagar90Dias = parseFloat(fornecedores.contasPagar90Dias);
+
+            if (!isNaN(contasPagarTotal) && contasPagarTotal > 0 && !isNaN(contasPagar90Dias)) {
+                inadimplenciaFornecedores = contasPagar90Dias / contasPagarTotal;
+            }
+        }
+
+        // Calcular inadimplência de clientes
+        let inadimplenciaClientes = null;
+        if (clientes) {
+            const contasReceberTotal = parseFloat(clientes.contasReceberTotal);
+            const contasReceber90Dias = parseFloat(clientes.contasReceber90Dias);
+
+            if (!isNaN(contasReceberTotal) && contasReceberTotal > 0 && !isNaN(contasReceber90Dias)) {
+                inadimplenciaClientes = contasReceber90Dias / contasReceberTotal;
+            }
+        }
+
+        // Se ambos são null, sem dados
+        if (inadimplenciaFornecedores === null && inadimplenciaClientes === null) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.inadimplenciaHistorica ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de contas a pagar/receber não disponíveis'
+            };
+        }
+
+        // Usar o pior dos dois (maior inadimplência)
+        let inadimplenciaGeral;
+        if (inadimplenciaFornecedores !== null && inadimplenciaClientes !== null) {
+            inadimplenciaGeral = Math.max(inadimplenciaFornecedores, inadimplenciaClientes);
+        } else {
+            inadimplenciaGeral = inadimplenciaFornecedores ?? inadimplenciaClientes;
+        }
+
+        // Classificar baseado em thresholds
+        let nivel, pontos;
+        if (inadimplenciaGeral <= thresholds.excelente) {
+            nivel = 'excelente';
+            pontos = pontosPossiveis * this.pontuacao.niveis.excelente;
+        } else if (inadimplenciaGeral <= thresholds.bom) {
+            nivel = 'bom';
+            pontos = pontosPossiveis * this.pontuacao.niveis.bom;
+        } else if (inadimplenciaGeral <= thresholds.adequado) {
+            nivel = 'adequado';
+            pontos = pontosPossiveis * this.pontuacao.niveis.adequado;
+        } else if (inadimplenciaGeral < thresholds.critico) {
+            nivel = 'baixo';
+            pontos = pontosPossiveis * this.pontuacao.niveis.baixo;
+        } else {
+            nivel = 'crítico';
+            pontos = pontosPossiveis * this.pontuacao.niveis.critico;
+        }
+
+        return {
+            pontos,
+            nivel,
+            valor: inadimplenciaGeral,
+            inadimplenciaPercentual: (inadimplenciaGeral * 100).toFixed(1),
+            inadimplenciaFornecedores: inadimplenciaFornecedores !== null 
+                ? (inadimplenciaFornecedores * 100).toFixed(1) 
+                : null,
+            inadimplenciaClientes: inadimplenciaClientes !== null 
+                ? (inadimplenciaClientes * 100).toFixed(1) 
+                : null,
+            observacao: inadimplenciaGeral === 0 
+                ? 'Sem inadimplência > 90 dias'
+                : `${(inadimplenciaGeral * 100).toFixed(1)}% de contas com mais de 90 dias de atraso`
+        };
+    }
+
+    /**
+     * Avalia Concentração de Risco (NOVO - Adaptado Sicoob GRC)
+     * Critério: Dependência de poucos clientes/fornecedores
+     * Pontuação: 6 pontos (nova categoria Estrutura e Concentração)
+     * @private
+     * @param {Object} dadosConcentracao - Dados de concentração
+     * @returns {Object}
+     */
+    #avaliarConcentracaoRisco(dadosConcentracao) {
+        const pontosPossiveis = this.pontuacao.categorias.estruturaConcentracao.concentracaoRisco;
+        const thresholds = this.thresholds.estruturaConcentracao.concentracaoRisco;
+
+        // Validação de entrada
+        if (!dadosConcentracao) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.concentracaoRisco ?? pontosPossiveis * 0.5,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de concentração não disponíveis'
+            };
+        }
+
+        // Obter concentração de clientes e fornecedores
+        const concentracaoClientes = dadosConcentracao.concentracaoClientes;
+        const concentracaoFornecedores = dadosConcentracao.concentracaoFornecedores;
+
+        // Extrair valores percentuais
+        let percClientes = null;
+        if (concentracaoClientes?.valor !== null && concentracaoClientes?.valor !== undefined) {
+            percClientes = parseFloat(concentracaoClientes.valor) / 100; // Converter de % para decimal
+        }
+
+        let percFornecedores = null;
+        if (concentracaoFornecedores?.valor !== null && concentracaoFornecedores?.valor !== undefined) {
+            percFornecedores = parseFloat(concentracaoFornecedores.valor) / 100;
+        }
+
+        // Se ambos são null, sem dados
+        if (percClientes === null && percFornecedores === null) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.concentracaoRisco ?? pontosPossiveis * 0.5,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de clientes/fornecedores não disponíveis'
+            };
+        }
+
+        // Usar o pior dos dois (maior concentração = maior risco)
+        let concentracaoGeral;
+        if (percClientes !== null && percFornecedores !== null) {
+            concentracaoGeral = Math.max(percClientes, percFornecedores);
+        } else {
+            concentracaoGeral = percClientes ?? percFornecedores;
+        }
+
+        // Classificar baseado em thresholds (quanto menor, melhor)
+        let nivel, pontos;
+        if (concentracaoGeral <= thresholds.excelente) {
+            nivel = 'excelente';
+            pontos = pontosPossiveis * this.pontuacao.niveis.excelente;
+        } else if (concentracaoGeral <= thresholds.bom) {
+            nivel = 'bom';
+            pontos = pontosPossiveis * this.pontuacao.niveis.bom;
+        } else if (concentracaoGeral <= thresholds.adequado) {
+            nivel = 'adequado';
+            pontos = pontosPossiveis * this.pontuacao.niveis.adequado;
+        } else if (concentracaoGeral < thresholds.critico) {
+            nivel = 'baixo';
+            pontos = pontosPossiveis * this.pontuacao.niveis.baixo;
+        } else {
+            nivel = 'crítico';
+            pontos = pontosPossiveis * this.pontuacao.niveis.critico;
+        }
+
+        return {
+            pontos,
+            nivel,
+            valor: concentracaoGeral,
+            concentracaoPercentual: (concentracaoGeral * 100).toFixed(1),
+            concentracaoClientes: percClientes !== null ? (percClientes * 100).toFixed(1) : null,
+            concentracaoFornecedores: percFornecedores !== null ? (percFornecedores * 100).toFixed(1) : null,
+            observacao: concentracaoGeral <= 0.30 
+                ? 'Boa diversificação de clientes/fornecedores'
+                : `${(concentracaoGeral * 100).toFixed(1)}% de concentração (risco elevado)`
+        };
+    }
+
+    /**
+     * Avalia Ciclo Operacional (NOVO - Adaptado Sicoob GRC)
+     * Critério: Eficiência do ciclo operacional e financeiro
+     * Pontuação: 4 pontos (nova categoria Estrutura e Concentração)
+     * @private
+     * @param {Object} dadosCiclos - Dados de ciclos operacionais
+     * @returns {Object}
+     */
+    #avaliarCicloOperacional(dadosCiclos) {
+        const pontosPossiveis = this.pontuacao.categorias.estruturaConcentracao.cicloOperacional;
+        const thresholds = this.thresholds.estruturaConcentracao.cicloFinanceiro;
+
+        // Validação de entrada
+        if (!dadosCiclos) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.cicloOperacional ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Dados de ciclos operacionais não disponíveis'
+            };
+        }
+
+        // Priorizar Ciclo Financeiro (mais importante)
+        const cicloFinanceiro = dadosCiclos.cicloFinanceiro;
+        const cicloOperacional = dadosCiclos.cicloOperacional;
+
+        let valorCiclo = null;
+        let tipoCiclo = null;
+
+        // Usar Ciclo Financeiro se disponível, senão Ciclo Operacional
+        if (cicloFinanceiro?.valor !== null && cicloFinanceiro?.valor !== undefined) {
+            valorCiclo = parseFloat(cicloFinanceiro.valor);
+            tipoCiclo = 'financeiro';
+        } else if (cicloOperacional?.valor !== null && cicloOperacional?.valor !== undefined) {
+            valorCiclo = parseFloat(cicloOperacional.valor);
+            tipoCiclo = 'operacional';
+        }
+
+        if (valorCiclo === null || isNaN(valorCiclo)) {
+            return {
+                pontos: this.defaults.pontuacaoSemDados.cicloOperacional ?? pontosPossiveis * 0.6,
+                nivel: 'adequado',
+                valor: null,
+                observacao: 'Ciclos operacionais não calculados'
+            };
+        }
+
+        // Classificar baseado em thresholds (quanto menor, melhor)
+        let nivel, pontos;
+        if (valorCiclo <= thresholds.excelente) {
+            nivel = 'excelente';
+            pontos = pontosPossiveis * this.pontuacao.niveis.excelente;
+        } else if (valorCiclo <= thresholds.bom) {
+            nivel = 'bom';
+            pontos = pontosPossiveis * this.pontuacao.niveis.bom;
+        } else if (valorCiclo <= thresholds.adequado) {
+            nivel = 'adequado';
+            pontos = pontosPossiveis * this.pontuacao.niveis.adequado;
+        } else if (valorCiclo < thresholds.critico) {
+            nivel = 'baixo';
+            pontos = pontosPossiveis * this.pontuacao.niveis.baixo;
+        } else {
+            nivel = 'crítico';
+            pontos = pontosPossiveis * this.pontuacao.niveis.critico;
+        }
+
+        return {
+            pontos,
+            nivel,
+            valor: valorCiclo,
+            tipoCiclo,
+            dias: valorCiclo.toFixed(0),
+            observacao: valorCiclo <= 0 
+                ? 'Empresa financia operação com fornecedores (excelente)'
+                : `Ciclo ${tipoCiclo} de ${valorCiclo.toFixed(0)} dias`
+        };
+    }
+
+    /**
+     * Avalia Estrutura e Concentração (NOVA CATEGORIA - Adaptado Sicoob GRC)
+     * Combina: concentração de risco, ciclos operacionais, garantias e relacionamento
+     * Pontuação total: 15 pontos
+     * @private
+     * @param {Object} dados - Dados de concentração, ciclos, garantias e relacionamento
+     * @returns {Object}
+     */
+    #avaliarEstrutura(dados) {
+        const peso = 15; // Total da nova categoria
+        const msgCategoria = this.msg.categorias?.estruturaConcentracao ?? { nome: 'Estrutura e Concentração' };
+
+        let pontos = 0;
+        const criterios = {};
+
+        // Critério 1: Concentração de Risco (6 pts)
+        const concentracaoRisco = this.#avaliarConcentracaoRisco(dados.concentracao);
+        criterios.concentracaoRisco = concentracaoRisco;
+        pontos += concentracaoRisco.pontos;
+
+        // Critério 2: Ciclo Operacional/Financeiro (4 pts)
+        const cicloOperacional = this.#avaliarCicloOperacional(dados.ciclos);
+        criterios.cicloOperacional = cicloOperacional;
+        pontos += cicloOperacional.pontos;
+
+        // Critério 3: Garantias Disponíveis (3 pts) - movido da categoria antiga
+        const garantiasDisponiveis = this.#avaliarGarantiasDisponiveis(dados.garantias);
+        criterios.garantiasDisponiveis = garantiasDisponiveis;
+        pontos += garantiasDisponiveis.pontos;
+
+        // Critério 4: Tempo de Relacionamento (2 pts) - movido da categoria antiga
+        const tempoRelacionamento = this.#avaliarTempoRelacionamento(dados.relacionamento);
+        criterios.tempoRelacionamento = tempoRelacionamento;
+        pontos += tempoRelacionamento.pontos;
+
+        return {
+            nome: msgCategoria.nome,
+            peso,
+            pontuacao: Math.min(pontos, peso),
+            criterios
+        };
+    }
+
+    /**
      * Avalia Garantias Disponíveis
      * @private
      */
@@ -1238,6 +1645,185 @@ export class ScoringEngine {
      * Determina classificação de risco baseada na pontuação total
      * @private
      */
+
+    /**
+     * SCORING DINÂMICO - Recalcula score e detecta variações significativas
+     * Método público para recálculo em tempo real
+     * @param {Object} data - Dados completos para cálculo
+     * @param {Object} opcoes - Opções de recálculo
+     * @param {boolean} opcoes.salvarHistorico - Se deve salvar no histórico (padrão: true)
+     * @param {boolean} opcoes.gerarAlertas - Se deve gerar alertas de variação (padrão: true)
+     * @returns {Promise<Object>} Resultado com score atual e alertas de variação
+     */
+    async recalcularScoreDinamico(data, opcoes = {}) {
+        const { salvarHistorico = true, gerarAlertas = true } = opcoes;
+
+        // Obter score anterior do localStorage
+        const scoreAnterior = this.#obterScoreAnterior();
+
+        // Calcular novo score
+        const novoScore = await this.calcularScoring(data);
+
+        // Detectar mudanças significativas
+        let alertasVariacao = [];
+        if (gerarAlertas && scoreAnterior) {
+            alertasVariacao = this.#detectarMudancasSignificativas(
+                scoreAnterior.pontuacaoTotal,
+                novoScore.pontuacaoTotal
+            );
+        }
+
+        // Salvar histórico
+        if (salvarHistorico) {
+            this.#salvarHistoricoScore(novoScore);
+        }
+
+        return {
+            ...novoScore,
+            scoreAnterior: scoreAnterior?.pontuacaoTotal ?? null,
+            variacao: scoreAnterior 
+                ? novoScore.pontuacaoTotal - scoreAnterior.pontuacaoTotal 
+                : null,
+            alertasVariacao,
+            historico: this.#obterHistoricoScore()
+        };
+    }
+
+    /**
+     * Detecta mudanças significativas no score
+     * Baseado em thresholds do scoring-criteria.json
+     * @private
+     * @param {number} scoreAnterior - Pontuação anterior
+     * @param {number} scoreNovo - Pontuação nova
+     * @returns {Array} Lista de alertas de variação
+     */
+    #detectarMudancasSignificativas(scoreAnterior, scoreNovo) {
+        const alertas = [];
+        const variacao = scoreNovo - scoreAnterior;
+        const variacaoAbsoluta = Math.abs(variacao);
+
+        // Obter thresholds de scoring dinâmico
+        const thresholds = this.criteria.alertas?.scoringDinamico ?? {
+            variacaoCritica: 15,
+            variacaoAtencao: 10,
+            variacaoInformativa: 5
+        };
+
+        // Alerta Crítico (variação >= 15 pontos)
+        if (variacaoAbsoluta >= thresholds.variacaoCritica) {
+            alertas.push({
+                tipo: variacao > 0 ? 'informativo' : 'critico',
+                mensagem: variacao > 0 
+                    ? `Score aumentou ${variacao} pontos (de ${scoreAnterior} para ${scoreNovo})`
+                    : `Score caiu ${Math.abs(variacao)} pontos (de ${scoreAnterior} para ${scoreNovo})`,
+                recomendacao: variacao > 0
+                    ? 'Melhoria significativa identificada - manter tendência positiva'
+                    : 'Queda crítica no score - revisão urgente dos indicadores necessária',
+                variacao,
+                timestamp: new Date().toISOString()
+            });
+        }
+        // Alerta de Atenção (variação >= 10 pontos)
+        else if (variacaoAbsoluta >= thresholds.variacaoAtencao) {
+            alertas.push({
+                tipo: 'atencao',
+                mensagem: variacao > 0 
+                    ? `Score melhorou ${variacao} pontos (de ${scoreAnterior} para ${scoreNovo})`
+                    : `Score reduziu ${Math.abs(variacao)} pontos (de ${scoreAnterior} para ${scoreNovo})`,
+                recomendacao: variacao > 0
+                    ? 'Evolução positiva detectada'
+                    : 'Monitorar indicadores que causaram a queda',
+                variacao,
+                timestamp: new Date().toISOString()
+            });
+        }
+        // Alerta Informativo (variação >= 5 pontos)
+        else if (variacaoAbsoluta >= thresholds.variacaoInformativa) {
+            alertas.push({
+                tipo: 'informativo',
+                mensagem: variacao > 0 
+                    ? `Score subiu ${variacao} pontos`
+                    : `Score desceu ${Math.abs(variacao)} pontos`,
+                variacao,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        return alertas;
+    }
+
+    /**
+     * Salva score no histórico (localStorage)
+     * @private
+     * @param {Object} score - Resultado do scoring
+     */
+    #salvarHistoricoScore(score) {
+        try {
+            const historicoKey = 'creditscore_historico_scores';
+            let historico = JSON.parse(localStorage.getItem(historicoKey) ?? '[]');
+
+            // Limitar a 50 entradas (últimas 50 análises)
+            if (historico.length >= 50) {
+                historico = historico.slice(-49);
+            }
+
+            // Adicionar novo score ao histórico
+            historico.push({
+                pontuacaoTotal: score.pontuacaoTotal,
+                classificacao: score.classificacao.rating,
+                timestamp: new Date().toISOString(),
+                categorias: {
+                    cadastral: score.categorias.cadastral.pontuacao,
+                    financeiro: score.categorias.financeiro.pontuacao,
+                    capacidadePagamento: score.categorias.capacidadePagamento.pontuacao,
+                    endividamento: score.categorias.endividamento.pontuacao,
+                    estruturaConcentracao: score.categorias.estruturaConcentracao.pontuacao
+                }
+            });
+
+            localStorage.setItem(historicoKey, JSON.stringify(historico));
+        } catch (error) {
+            console.warn('Erro ao salvar histórico de score:', error);
+        }
+    }
+
+    /**
+     * Obtém score anterior do localStorage
+     * @private
+     * @returns {Object|null}
+     */
+    #obterScoreAnterior() {
+        try {
+            const historicoKey = 'creditscore_historico_scores';
+            const historico = JSON.parse(localStorage.getItem(historicoKey) ?? '[]');
+            
+            if (historico.length === 0) {
+                return null;
+            }
+
+            // Retornar último score
+            return historico[historico.length - 1];
+        } catch (error) {
+            console.warn('Erro ao obter score anterior:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Obtém histórico completo de scores
+     * @private
+     * @returns {Array}
+     */
+    #obterHistoricoScore() {
+        try {
+            const historicoKey = 'creditscore_historico_scores';
+            return JSON.parse(localStorage.getItem(historicoKey) ?? '[]');
+        } catch (error) {
+            console.warn('Erro ao obter histórico de scores:', error);
+            return [];
+        }
+    }
+
     #determinarClassificacao(pontuacao) {
         for (const classificacao of this.config.classificacoes) {
             if (pontuacao >= classificacao.min && pontuacao <= classificacao.max) {
