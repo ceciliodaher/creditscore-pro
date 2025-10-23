@@ -1,0 +1,266 @@
+{
+  "versao": "1.0.0",
+  "descricao": "Configuração de parâmetros e thresholds para análise de balanços históricos",
+  "comentarios": {
+    "parametros": "Define faixas de classificação para cada indicador financeiro (bom/atenção/crítico)",
+    "thresholds": "Define valores mínimos de variação para identificar tendências (↗ melhora | → estável | ↘ piora)"
+  },
+  "parametros": {
+    "liquidezCorrente": {
+      "bom": {
+        "min": 1.5,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Liquidez corrente >= 1.5 indica boa capacidade de pagamento no curto prazo"
+      },
+      "atencao": {
+        "min": 1.0,
+        "max": 1.5,
+        "emoji": "🟡",
+        "label": "Atenção",
+        "descricao": "Liquidez entre 1.0 e 1.5 requer monitoramento"
+      },
+      "critico": {
+        "max": 1.0,
+        "emoji": "🔴",
+        "label": "Crítico",
+        "descricao": "Liquidez < 1.0 indica risco de insolvência no curto prazo"
+      }
+    },
+    "liquidezSeca": {
+      "bom": {
+        "min": 1.0,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Liquidez seca >= 1.0 (sem considerar estoques)"
+      },
+      "atencao": {
+        "min": 0.7,
+        "max": 1.0,
+        "emoji": "🟡",
+        "label": "Atenção",
+        "descricao": "Liquidez seca entre 0.7 e 1.0"
+      },
+      "critico": {
+        "max": 0.7,
+        "emoji": "🔴",
+        "label": "Crítico",
+        "descricao": "Liquidez seca < 0.7 indica alta dependência de estoques"
+      }
+    },
+    "liquidezImediata": {
+      "bom": {
+        "min": 0.3,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Liquidez imediata >= 0.3 (30% de disponibilidades)"
+      },
+      "atencao": {
+        "min": 0.15,
+        "max": 0.3,
+        "emoji": "🟡",
+        "label": "Atenção",
+        "descricao": "Liquidez imediata entre 15% e 30%"
+      },
+      "critico": {
+        "max": 0.15,
+        "emoji": "🔴",
+        "label": "Crítico",
+        "descricao": "Liquidez imediata < 15% indica insuficiência de caixa"
+      }
+    },
+    "liquidezGeral": {
+      "bom": {
+        "min": 1.2,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Liquidez geral >= 1.2 indica boa saúde financeira global"
+      },
+      "atencao": {
+        "min": 1.0,
+        "max": 1.2,
+        "emoji": "🟡",
+        "label": "Atenção",
+        "descricao": "Liquidez geral entre 1.0 e 1.2"
+      },
+      "critico": {
+        "max": 1.0,
+        "emoji": "🔴",
+        "label": "Crítico",
+        "descricao": "Liquidez geral < 1.0 indica insolvência potencial no médio/longo prazo"
+      }
+    },
+    "endividamentoGeral": {
+      "bom": {
+        "max": 50,
+        "emoji": "🟢",
+        "label": "Saudável",
+        "descricao": "Endividamento <= 50% do ativo total"
+      },
+      "atencao": {
+        "min": 50,
+        "max": 70,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Endividamento entre 50% e 70%"
+      },
+      "critico": {
+        "min": 70,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "Endividamento > 70% indica alta dependência de capital de terceiros"
+      }
+    },
+    "endividamentoLP": {
+      "bom": {
+        "max": 30,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Endividamento de longo prazo <= 30%"
+      },
+      "atencao": {
+        "min": 30,
+        "max": 40,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Endividamento LP entre 30% e 40%"
+      },
+      "critico": {
+        "min": 40,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "Endividamento LP > 40% indica alto comprometimento futuro"
+      }
+    },
+    "composicaoEndiv": {
+      "bom": {
+        "max": 50,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Passivo circulante <= 50% do total de passivos (boa distribuição)"
+      },
+      "atencao": {
+        "min": 50,
+        "max": 60,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "PC entre 50% e 60% do total de passivos"
+      },
+      "critico": {
+        "min": 60,
+        "emoji": "🔴",
+        "label": "Concentrado CP",
+        "descricao": "PC > 60% indica concentração excessiva de dívidas de curto prazo"
+      }
+    },
+    "garantiaCapitalProprio": {
+      "bom": {
+        "min": 40,
+        "emoji": "🟢",
+        "label": "Sólido",
+        "descricao": "Patrimônio líquido >= 40% do ativo total"
+      },
+      "atencao": {
+        "min": 30,
+        "max": 40,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "PL entre 30% e 40% do ativo"
+      },
+      "critico": {
+        "max": 30,
+        "emoji": "🔴",
+        "label": "Frágil",
+        "descricao": "PL < 30% indica fragilidade patrimonial"
+      }
+    },
+    "participacaoCapitalTerceiros": {
+      "bom": {
+        "max": 100,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Capital de terceiros <= 100% do PL (relação 1:1)"
+      },
+      "atencao": {
+        "min": 100,
+        "max": 150,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Capital de terceiros entre 100% e 150% do PL"
+      },
+      "critico": {
+        "min": 150,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "Capital de terceiros > 150% do PL indica alta alavancagem"
+      }
+    },
+    "imobilizacaoPatrimonio": {
+      "bom": {
+        "max": 100,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "Ativo não circulante <= 100% do PL (relação 1:1)"
+      },
+      "atencao": {
+        "min": 100,
+        "max": 150,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "ANC entre 100% e 150% do PL"
+      },
+      "critico": {
+        "min": 150,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "ANC > 150% do PL indica imobilização excessiva de recursos próprios"
+      }
+    },
+    "imobilizacaoRecursos": {
+      "bom": {
+        "max": 70,
+        "emoji": "🟢",
+        "label": "Adequado",
+        "descricao": "ANC <= 70% dos recursos não correntes (PL + PNC)"
+      },
+      "atencao": {
+        "min": 70,
+        "max": 85,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "ANC entre 70% e 85% dos recursos não correntes"
+      },
+      "critico": {
+        "min": 85,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "ANC > 85% indica imobilização excessiva de recursos de longo prazo"
+      }
+    }
+  },
+  "thresholds": {
+    "comentario": "Variação mínima para considerar tendência (valores absolutos)",
+    "liquidezCorrente": 0.05,
+    "liquidezSeca": 0.05,
+    "liquidezImediata": 0.02,
+    "liquidezGeral": 0.05,
+    "endividamentoGeral": 2.0,
+    "endividamentoLP": 2.0,
+    "composicaoEndiv": 3.0,
+    "garantiaCapitalProprio": 2.0,
+    "participacaoCapitalTerceiros": 5.0,
+    "imobilizacaoPatrimonio": 5.0,
+    "imobilizacaoRecursos": 3.0
+  },
+  "metadados": {
+    "autor": "Sistema de Viabilidade Financeira - Expertzy",
+    "dataUltimaAtualizacao": "2025-10-20",
+    "fonte": "Análise de Demonstrações Financeiras - Matarazzo (2010)",
+    "observacoes": [
+      "Parâmetros baseados em boas práticas contábeis brasileiras",
+      "Thresholds podem ser ajustados conforme setor da empresa",
+      "Para empresas capital-intensivas, considerar ajustar imobilizacaoPatrimonio.bom.max para 120%",
+      "Para empresas comerciais, considerar ajustar liquidezCorrente.bom.min para 1.8"
+    ]
+  }
+}

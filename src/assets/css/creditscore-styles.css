@@ -1,0 +1,3147 @@
+/* ====================================================================
+   FINANCIAMENTO STYLES - Sistema de Análise de Viabilidade Financeira
+   ==================================================================== */
+
+/* Import base styles */
+@import url('./styles-base.css');
+
+/* ====================================================================
+   SECTION: FORM SECTIONS - DISPLAY RULES
+   Critical: Required for TabNavigation system to work properly
+   ==================================================================== */
+
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+}
+
+/* ====================================================================
+   SECTION: PROGRESS NAVIGATION
+   Tabs horizontais para navegação entre seções
+   ==================================================================== */
+
+.progress-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    margin-top: 1rem;
+}
+
+/* Estilos individuais dos tab-item definidos em tabs.css */
+
+/* ====================================================================
+   SECTION: HIERARCHICAL NAVIGATION (Sprint 0)
+   Navegação em 2 níveis: Seções (1-9) → Subseções/Tabs (1-18)
+   ==================================================================== */
+
+/* NÍVEL 1: Navbar Principal (Seções) */
+.section-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--navy);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.section-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.section-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.section-btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 4px 12px rgba(255, 0, 45, 0.4);
+}
+
+.section-btn .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.section-btn.active .section-number {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.section-btn .section-label {
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.section-btn .section-icon {
+    margin-left: 4px;
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.section-btn.active .section-icon {
+    transform: rotate(180deg);
+}
+
+/* NÍVEL 2: Subnavbars (Tabs Internas) */
+.subsection-navbar {
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 2px solid var(--gray-200);
+}
+
+.subsection-navbar.active {
+    display: flex;
+}
+
+.subsection-navbar .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--gray-300);
+}
+
+.subsection-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Tab Items (dentro de subsection-navbar) */
+.subsection-tabs .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid var(--gray-300);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.subsection-tabs .tab-item:hover:not(.active) {
+    background: rgba(255, 0, 45, 0.05);
+    border-color: var(--gray-400);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.subsection-tabs .tab-item.active {
+    background: linear-gradient(135deg, var(--red) 0%, #c51162 100%);
+    border-color: var(--red);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 0, 45, 0.3);
+}
+
+.subsection-tabs .tab-item .tab-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gray-600);
+}
+
+.subsection-tabs .tab-item.active .tab-number {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.subsection-tabs .tab-item .tab-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--navy);
+}
+
+.subsection-tabs .tab-item.active .tab-label {
+    color: white;
+}
+
+/* Protected Tabs - Modo Analista */
+.subsection-tabs .tab-item[data-protected="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+    position: relative;
+}
+
+.subsection-tabs .tab-item[data-protected="true"]::after {
+    content: '🔒';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 14px;
+}
+
+.analyst-mode .subsection-tabs .tab-item[data-protected="true"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.analyst-mode .subsection-tabs .tab-item[data-protected="true"]::after {
+    content: '🔓';
+}
+
+/* Responsive - Hierarchical Navigation */
+@media (max-width: 1024px) {
+    .section-navbar {
+        gap: 0.4rem;
+        padding: 0.75rem;
+    }
+
+    .section-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .section-btn .section-number {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+    }
+
+    .subsection-tabs .tab-item {
+        min-width: 100px;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-navbar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .section-btn {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .subsection-navbar {
+        padding: 0.75rem;
+    }
+
+    .subsection-tabs {
+        flex-direction: column;
+    }
+
+    .subsection-tabs .tab-item {
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-btn .section-label {
+        font-size: 0.75rem;
+    }
+
+    .section-btn .section-icon {
+        display: none;
+    }
+
+    .subsection-navbar .breadcrumb {
+        font-size: 0.8rem;
+    }
+
+    .subsection-tabs .tab-item .tab-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* ====================================================================
+   SECTION: PROGRESS TRACKER
+   ==================================================================== */
+
+.progress-steps .tab-item[data-protected="true"] .step-label {
+    font-size: 0.85rem;
+}
+
+.progress-steps .tab-item[data-protected="true"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -15px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: var(--red);
+    border-radius: 50%;
+    font-size: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====================================================================
+   SECTION: MODE TOGGLE (Usuário vs Analista)
+   ==================================================================== */
+
+.mode-toggle {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.mode-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.mode-btn {
+    padding: 6px 14px;
+    border: 2px solid var(--gray-300);
+    background: white;
+    color: var(--gray-700);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mode-btn:hover {
+    border-color: var(--red);
+    background: #fff5f5;
+}
+
+.mode-btn.active {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+    box-shadow: 0 2px 8px rgba(255, 0, 45, 0.3);
+}
+
+/* Protected Tabs Behavior */
+.tab-item[data-protected="true"] {
+    opacity: 0.4;
+    pointer-events: none;
+    position: relative;
+}
+
+.analyst-mode .tab-item[data-protected="true"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Clickable Tabs */
+.tab-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-item:hover:not(.active) {
+    background: rgba(255, 0, 45, 0.05);
+    transform: translateY(-2px);
+}
+
+.tab-item:focus {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+}
+
+/* ====================================================================
+   SECTION: ALERTS AND CALLOUTS
+   ==================================================================== */
+
+.alert {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    border-left-color: #2196f3;
+    color: #0d47a1;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-left-color: #ff9800;
+    color: #795548;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    border-left-color: #4caf50;
+    color: #1b5e20;
+}
+
+.alert strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.alert ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.alert p {
+    margin: 0.5rem 0;
+}
+
+/* ====================================================================
+   SECTION: SUMMARY CARDS
+   ==================================================================== */
+
+.historico-summary,
+.split-payment-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.summary-card,
+.split-card {
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover,
+.split-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.summary-label,
+.split-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.summary-value,
+.split-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.split-card.highlight {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.split-card.highlight .split-label,
+.split-card.highlight .split-value {
+    color: white;
+}
+
+/* ====================================================================
+   SECTION: TABLES - DRE, FLUXO DE CAIXA, IMPOSTOS
+   ==================================================================== */
+
+.dre-table-wrapper,
+.fluxo-caixa-table-wrapper,
+.impostos-table-wrapper,
+.comparativo-table-wrapper,
+.sensibilidade-table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dre-table,
+.fluxo-caixa-table,
+.impostos-table,
+.comparativo-table,
+.sensibilidade-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.dre-table thead,
+.fluxo-caixa-table thead,
+.impostos-table thead,
+.comparativo-table thead,
+.sensibilidade-table thead {
+    background: var(--navy);
+    color: white;
+}
+
+.dre-table th,
+.fluxo-caixa-table th,
+.impostos-table th,
+.comparativo-table th,
+.sensibilidade-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dre-table td,
+.fluxo-caixa-table td,
+.impostos-table td,
+.comparativo-table td,
+.sensibilidade-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.dre-table tbody tr:hover,
+.fluxo-caixa-table tbody tr:hover,
+.impostos-table tbody tr:hover,
+.comparativo-table tbody tr:hover,
+.sensibilidade-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.dre-table tbody tr.total-row,
+.fluxo-caixa-table tbody tr.total-row {
+    background-color: #e8f5e9;
+    font-weight: 700;
+}
+
+.dre-table tbody tr.subtotal-row {
+    background-color: #fff9c4;
+    font-weight: 600;
+}
+
+.dre-table tbody tr.negative-value {
+    color: var(--red);
+}
+
+.dre-table tbody tr.positive-value {
+    color: #4caf50;
+}
+
+/* ====================================================================
+   SECTION: INDICADORES FINANCEIROS
+   ==================================================================== */
+
+.indicadores-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.indicadores-principais {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.indicador-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.indicador-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+}
+
+.indicador-icon {
+    font-size: 3rem;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--red) 0%, #c51162 100%);
+    border-radius: 50%;
+    color: white;
+    flex-shrink: 0;
+}
+
+.indicador-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.indicador-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.indicador-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.indicador-status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.indicador-status.positivo {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.indicador-status.negativo {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.indicador-status.neutro {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+/* Indicadores Secundários */
+.indicadores-secundarios {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.indicadores-secundarios h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.25rem;
+}
+
+.indicador-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.indicador-row:last-child {
+    border-bottom: none;
+}
+
+.indicador-row .indicador-label {
+    font-size: 1rem;
+    text-transform: none;
+}
+
+.indicador-row .indicador-value {
+    font-size: 1.5rem;
+}
+
+/* Ponto de Equilíbrio */
+.ponto-equilibrio {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ponto-equilibrio h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.25rem;
+}
+
+.equilibrio-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.equilibrio-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.equilibrio-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.equilibrio-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+/* ====================================================================
+   SECTION: SISTEMA TOGGLE (Atual vs Reforma)
+   ==================================================================== */
+
+.sistema-toggle {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    justify-content: center;
+}
+
+.btn-toggle {
+    padding: 1rem 2rem;
+    border: 2px solid var(--gray-300);
+    background: white;
+    color: var(--gray-700);
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-toggle:hover {
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.btn-toggle.active {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+}
+
+.sistema-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sistema-container h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+    border-bottom: 3px solid var(--red);
+    padding-bottom: 0.5rem;
+}
+
+/* ====================================================================
+   SECTION: REFORMA TRIBUTÁRIA - TIMELINE
+   ==================================================================== */
+
+.reforma-timeline {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.reforma-timeline::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 5%;
+    right: 5%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red) 0%, #764ba2 100%);
+}
+
+.timeline-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    max-width: 180px;
+}
+
+.timeline-year {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--red);
+}
+
+.timeline-desc {
+    font-size: 0.75rem;
+    color: var(--gray-700);
+    text-align: center;
+}
+
+/* ====================================================================
+   SECTION: ANÁLISE DE CENÁRIOS
+   ==================================================================== */
+
+.cenarios-container {
+    margin: 2rem 0;
+}
+
+.cenarios-container h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+.cenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.cenario-card {
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cenario-card h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.cenario-card.otimista {
+    background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+    color: white;
+}
+
+.cenario-card.realista {
+    background: linear-gradient(135deg, #2196f3 0%, #64b5f6 100%);
+    color: white;
+}
+
+.cenario-card.pessimista {
+    background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+    color: white;
+}
+
+.cenario-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+}
+
+.result-item span:first-child {
+    font-weight: 500;
+}
+
+.result-item span:last-child {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+/* ====================================================================
+   SECTION: ANÁLISE DE SENSIBILIDADE
+   ==================================================================== */
+
+.sensibilidade-container {
+    margin: 2rem 0;
+}
+
+.sensibilidade-container h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+.sensibilidade-table tbody tr td {
+    text-align: center;
+}
+
+.sensibilidade-table tbody tr td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
+.sensibilidade-table tbody tr td.positive {
+    color: #4caf50;
+}
+
+.sensibilidade-table tbody tr td.negative {
+    color: var(--red);
+}
+
+/* ====================================================================
+   SECTION: RECOMENDAÇÕES
+   ==================================================================== */
+
+.recomendacoes-container {
+    margin: 2rem 0;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.recomendacoes-container h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+.recomendacao-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+    border-radius: 6px;
+}
+
+.recomendacao-item.sucesso {
+    background-color: #e8f5e9;
+    border-left-color: #4caf50;
+}
+
+.recomendacao-item.alerta {
+    background-color: #fff3e0;
+    border-left-color: #ff9800;
+}
+
+.recomendacao-item.critico {
+    background-color: #ffebee;
+    border-left-color: var(--red);
+}
+
+.recomendacao-icon {
+    font-size: 1.5rem;
+}
+
+.recomendacao-text {
+    flex: 1;
+}
+
+.recomendacao-text strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--navy);
+}
+
+/* ====================================================================
+   SECTION: EXPORTAÇÃO
+   ==================================================================== */
+
+.export-section {
+    margin: 2rem 0;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.export-section h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+.export-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ====================================================================
+   SECTION: GRÁFICOS
+   ==================================================================== */
+
+.dre-charts,
+.grafico-evolucao {
+    margin: 2rem 0;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dre-charts h3,
+.grafico-evolucao h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+#dreCharts,
+#graficoEvolucaoTributaria {
+    min-height: 400px;
+}
+
+/* ====================================================================
+   SECTION: COMPARATIVO SISTEMAS
+   ==================================================================== */
+
+.comparativo-sistemas {
+    margin: 2rem 0;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.comparativo-sistemas h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+.comparativo-table tbody tr td:nth-child(4) {
+    font-weight: 700;
+}
+
+.comparativo-table tbody tr td:nth-child(4).positivo {
+    color: #4caf50;
+}
+
+.comparativo-table tbody tr td:nth-child(4).negativo {
+    color: var(--red);
+}
+
+/* ====================================================================
+   SECTION: SPLIT PAYMENT ANALYSIS
+   ==================================================================== */
+
+.split-payment-analysis {
+    margin: 2rem 0;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.split-payment-analysis h3 {
+    margin-bottom: 1.5rem;
+    color: var(--navy);
+    font-size: 1.5rem;
+}
+
+/* ====================================================================
+   SECTION: CRONOGRAMA DESEMBOLSOS
+   ==================================================================== */
+
+.cronograma-desembolsos {
+    margin: 1.5rem 0;
+}
+
+.cronograma-desembolsos table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cronograma-desembolsos thead {
+    background: var(--navy);
+    color: white;
+}
+
+.cronograma-desembolsos th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.cronograma-desembolsos td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cronograma-desembolsos tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* ====================================================================
+   SECTION: RESPONSIVE DESIGN
+   ==================================================================== */
+
+@media (max-width: 768px) {
+    .indicadores-principais {
+        grid-template-columns: 1fr;
+    }
+
+    .indicador-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cenarios-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .historico-summary,
+    .split-payment-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .sistema-toggle {
+        flex-direction: column;
+    }
+
+    .reforma-timeline {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .reforma-timeline::before {
+        display: none;
+    }
+
+    .timeline-item {
+        max-width: 100%;
+    }
+
+    .dre-table-wrapper,
+    .fluxo-caixa-table-wrapper,
+    .impostos-table-wrapper,
+    .comparativo-table-wrapper,
+    .sensibilidade-table-wrapper {
+        overflow-x: scroll;
+    }
+
+    .export-buttons {
+        flex-direction: column;
+    }
+}
+
+/* ====================================================================
+   SECTION: PRINT STYLES
+   ==================================================================== */
+
+@media print {
+    .header-actions,
+    .form-navigation,
+    .export-buttons,
+    .btn-toggle {
+        display: none !important;
+    }
+
+    .form-section {
+        page-break-inside: avoid;
+    }
+
+    .indicador-card,
+    .cenario-card,
+    .sistema-container {
+        box-shadow: none;
+        border: 1px solid var(--gray-300);
+    }
+}
+
+/* ====================================================================
+   SECTION: FORM GRID SYSTEM - PRINCIPAL PARA LAYOUT PROFISSIONAL
+   Copiado de progoias-styles.css e adaptado para 15 seções
+   ==================================================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 15px;
+    letter-spacing: 0.025em;
+    margin-bottom: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label::after {
+    content: '*';
+    color: var(--red);
+    margin-left: 4px;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.form-group:has(input[required]) label::after,
+.form-group:has(textarea[required]) label::after,
+.form-group:has(select[required]) label::after {
+    opacity: 1;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 16px 20px;
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    font-weight: 400;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--gray-500);
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    border-color: var(--gray-400);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(255, 0, 45, 0.1), 0 4px 16px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+.form-group input:focus::placeholder,
+.form-group textarea:focus::placeholder {
+    color: var(--gray-400);
+    transform: scale(0.95);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.form-group select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    padding-right: 48px;
+}
+
+.form-group small {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-top: 4px;
+}
+
+/* Field Validation States */
+.form-group.error input,
+.form-group.error textarea,
+.form-group.error select {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+}
+
+.form-group.success input,
+.form-group.success textarea,
+.form-group.success select {
+    border-color: var(--success);
+    box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
+}
+
+/* ====================================================================
+   SECTION: TABELAS DE ALÍQUOTAS DINÂMICAS (Seções 4 e 5)
+   ==================================================================== */
+
+.aliquotas-table {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: white;
+}
+
+.aliquotas-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.aliquotas-table thead {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--red) 100%);
+    color: white;
+}
+
+.aliquotas-table th {
+    padding: 16px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+    letter-spacing: 0.025em;
+}
+
+.aliquotas-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: middle;
+}
+
+.aliquotas-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.aliquotas-table tbody tr:hover {
+    background: rgba(255, 0, 45, 0.02);
+    transition: background 0.2s ease;
+}
+
+.aliquotas-table td:first-child {
+    font-weight: 600;
+    color: var(--navy);
+    min-width: 120px;
+    font-size: 14px;
+}
+
+.aliquotas-table input[type="number"],
+.aliquotas-table input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: inherit;
+}
+
+.aliquotas-table input[type="number"]:hover,
+.aliquotas-table input[type="text"]:hover {
+    border-color: var(--gray-400);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.aliquotas-table input[type="number"]:focus,
+.aliquotas-table input[type="text"]:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.1);
+}
+
+.aliquotas-table input[readonly] {
+    background: var(--gray-100);
+    cursor: not-allowed;
+    color: var(--gray-600);
+    border-color: var(--gray-200);
+}
+
+.aliquotas-table input::placeholder {
+    color: var(--gray-500);
+    font-size: 13px;
+}
+
+/* Validação Total */
+.validation-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--gray-50);
+    border-top: 2px solid var(--gray-200);
+    font-size: 15px;
+    gap: 16px;
+}
+
+.calc-total {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 18px;
+    margin: 0 12px;
+}
+
+.validation-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.validation-status.valid {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success);
+}
+
+.validation-status.invalid {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--danger);
+}
+
+/* ====================================================================
+   SECTION: ESCALONAMENTO GRID (5 ANOS) - Seções 4, 5, 6
+   Adaptado de ProGoiás (4 anos) para Financiamento (5 anos)
+   ==================================================================== */
+
+.escalonamento-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* MUDANÇA: 5 anos ao invés de 4 */
+    gap: 16px;
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--gray-50);
+    border-radius: 12px;
+    border: 2px dashed var(--gray-300);
+}
+
+.escalonamento-grid .form-group {
+    margin: 0;
+}
+
+.escalonamento-grid .form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+
+.escalonamento-grid input {
+    padding: 12px 14px;
+    border: 2px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.escalonamento-grid input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.1);
+}
+
+/* ====================================================================
+   SECTION: RECURSOS HUMANOS (Seção 6)
+   ==================================================================== */
+
+.rh-category {
+    background: var(--gray-50);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--gray-200);
+}
+
+.encargos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.totais-rh {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 anos */
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.totais-rh > div {
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.rh-summary {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+    border-radius: 12px;
+    border: 2px solid #0288d1;
+}
+
+/* ====================================================================
+   SECTION: TOTAL CALCULATION (Seções 3, 8, 6)
+   ==================================================================== */
+
+.total-calculation {
+    padding: 25px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 12px;
+    border: 2px solid #10b981;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.total-calculation h3 {
+    font-size: 20px;
+    color: var(--navy);
+    margin: 0;
+}
+
+.total-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--red);
+    display: inline-block;
+    margin-left: 12px;
+}
+
+/* ====================================================================
+   SECTION: RESPONSIVE - GRID ADAPTATIONS
+   ==================================================================== */
+
+@media (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .aliquotas-table {
+        overflow-x: auto;
+        display: block;
+    }
+
+    .aliquotas-table table {
+        min-width: 600px;
+    }
+
+    .escalonamento-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 colunas em tablet */
+    }
+
+    .totais-rh {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .escalonamento-grid {
+        grid-template-columns: 1fr; /* 1 coluna em mobile */
+    }
+
+    .encargos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .totais-rh {
+        grid-template-columns: 1fr;
+    }
+
+    .validation-total {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .aliquotas-table th,
+    .aliquotas-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .aliquotas-table th:last-child,
+    .aliquotas-table td:last-child {
+        display: none; /* Oculta coluna Observações em telas muito pequenas */
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+}
+
+/* ====================================================================
+   SECTION: TABELAS RH TABULARES (Seção 6 - Mão-de-Obra)
+   Excel-like tables com cálculos automáticos
+   ==================================================================== */
+
+/* Container principal da tabela */
+.rh-table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--gray-200);
+}
+
+.rh-table-container h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--red);
+}
+
+/* Wrapper responsivo com scroll horizontal */
+.table-responsive {
+    overflow-x: auto;
+    margin: 0 -20px;
+    padding: 0 20px;
+}
+
+/* Base da tabela RH */
+.rh-table {
+    width: 100%;
+    min-width: 1400px; /* Garante que a tabela não colapsa */
+    border-collapse: collapse;
+    background: white;
+    font-size: 14px;
+}
+
+/* Cabeçalho da tabela - Estilo Excel */
+.rh-table thead {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--red) 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.rh-table thead th {
+    padding: 14px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    vertical-align: middle;
+}
+
+.rh-table thead th:first-child {
+    text-align: left;
+    padding-left: 16px;
+}
+
+/* Células do corpo */
+.rh-table tbody td {
+    padding: 8px 10px;
+    border: 1px solid var(--gray-300);
+    vertical-align: middle;
+    background: white;
+}
+
+.rh-table tbody td:first-child {
+    padding-left: 16px;
+}
+
+.rh-table tbody tr:hover {
+    background: rgba(255, 0, 45, 0.03);
+    transition: background 0.2s ease;
+}
+
+/* Inputs dentro das células - Estilo integrado */
+.rh-table input[type="text"],
+.rh-table input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: transparent;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.rh-table input[type="text"].input-categoria {
+    text-align: left;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.rh-table input[type="number"].input-quant,
+.rh-table input[type="number"].input-total {
+    text-align: center;
+    font-weight: 600;
+}
+
+.rh-table input:hover {
+    background: rgba(255, 0, 45, 0.04);
+    border-color: var(--gray-300);
+}
+
+.rh-table input:focus {
+    outline: none;
+    background: white;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.1);
+}
+
+/* Inputs readonly (campos calculados) */
+.rh-table input[readonly],
+.rh-table input.calc-readonly {
+    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+    border-color: transparent;
+    color: var(--gray-700);
+    font-weight: 700;
+    cursor: not-allowed;
+    user-select: none;
+}
+
+.rh-table input[readonly]:hover,
+.rh-table input.calc-readonly:hover {
+    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+    border-color: transparent;
+}
+
+/* Footer (totais) */
+.rh-table tfoot {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    font-weight: 700;
+    position: sticky;
+    bottom: 0;
+    z-index: 9;
+}
+
+.rh-table tfoot td {
+    padding: 14px 10px;
+    border: 1px solid #81c784;
+    text-align: center;
+    font-size: 15px;
+    color: #1b5e20;
+}
+
+.rh-table tfoot td:first-child {
+    text-align: left;
+    padding-left: 16px;
+    font-size: 16px;
+}
+
+.rh-table tfoot .total-quant {
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.rh-table tfoot .total-custo {
+    font-weight: 700;
+    color: var(--red);
+    font-size: 16px;
+}
+
+/* Botão remover linha */
+.btn-remove-row {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-remove-row:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-remove-row:active {
+    transform: scale(0.98);
+}
+
+/* Botão adicionar categoria */
+.btn-add-category {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-add-category:hover {
+    background: linear-gradient(135deg, #1e3a5f 0%, var(--navy) 100%);
+    box-shadow: 0 6px 16px rgba(9, 26, 48, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-add-category:active {
+    transform: translateY(0);
+}
+
+/* Seção de Encargos Sociais */
+.encargos-container {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 30px 0;
+    border: 2px solid #fbc02d;
+    box-shadow: 0 4px 12px rgba(251, 192, 45, 0.15);
+}
+
+.encargos-container h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #f57f17;
+}
+
+.encargos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.encargos-grid .form-group label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.encargos-grid input {
+    background: white;
+    border: 2px solid #f57f17;
+    font-weight: 600;
+    text-align: center;
+}
+
+.encargos-grid input:focus {
+    border-color: #e65100;
+    box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
+}
+
+/* Tabela de cálculo de encargos */
+.encargos-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.encargos-table thead {
+    background: linear-gradient(135deg, #f57f17 0%, #e65100 100%);
+    color: white;
+}
+
+.encargos-table th {
+    padding: 12px 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.encargos-table th:first-child {
+    text-align: left;
+}
+
+.encargos-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: center;
+    font-weight: 600;
+}
+
+.encargos-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.encargos-table tbody tr:hover {
+    background: rgba(245, 127, 23, 0.05);
+}
+
+.encargos-table tfoot {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    font-weight: 700;
+}
+
+.encargos-table tfoot td {
+    padding: 14px 16px;
+    border-top: 2px solid #f57f17;
+    font-size: 15px;
+    color: #e65100;
+}
+
+.encargos-table .total-encargos {
+    color: var(--red);
+    font-size: 16px;
+}
+
+/* Resumo Final (Totalizador Geral) */
+.resumo-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 10px;
+}
+
+.resumo-table thead {
+    background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+    color: white;
+}
+
+.resumo-table th {
+    padding: 16px 20px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.resumo-table th:first-child {
+    text-align: left;
+}
+
+.resumo-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.resumo-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.resumo-table tbody tr:hover {
+    background: rgba(46, 125, 50, 0.05);
+}
+
+.resumo-table tfoot {
+    background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+    color: white;
+}
+
+.resumo-table tfoot td {
+    padding: 18px 20px;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.resumo-table .resumo-total-geral {
+    color: white;
+    font-size: 22px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ====================================================================
+   SECTION: RESPONSIVE - TABELAS RH
+   ==================================================================== */
+
+@media (max-width: 1200px) {
+    .rh-table {
+        min-width: 1200px;
+    }
+
+    .encargos-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .rh-table-container {
+        padding: 15px;
+        margin: 0 -15px;
+        border-radius: 0;
+    }
+
+    .table-responsive {
+        margin: 0;
+        padding: 0;
+    }
+
+    .rh-table {
+        font-size: 12px;
+        min-width: 1000px;
+    }
+
+    .rh-table thead th,
+    .rh-table tbody td,
+    .rh-table tfoot td {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .rh-table input {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .encargos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-add-category {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rh-table thead th:last-child,
+    .rh-table tbody td:last-child {
+        display: none; /* Oculta coluna Ações em mobile */
+    }
+
+    .encargos-table th:nth-child(n+4),
+    .encargos-table td:nth-child(n+4),
+    .resumo-table th:nth-child(n+4),
+    .resumo-table td:nth-child(n+4) {
+        display: none; /* Oculta anos 3-5 em mobile ultra pequeno */
+    }
+}
+
+/* ====================================================================
+   SECTION: TABELA DE INVESTIMENTOS (Seção 8)
+   Excel-like tabular structure com 11 categorias pré-definidas
+   Cálculos automáticos e validação de recursos
+   ==================================================================== */
+
+/* Container principal */
+.investimentos-table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--gray-200);
+}
+
+/* Wrapper responsivo com scroll horizontal */
+.investimentos-table-container .table-responsive {
+    overflow-x: auto;
+    margin: 0 -20px;
+    padding: 0 20px;
+}
+
+/* Base da tabela de investimentos */
+.investimentos-table {
+    width: 100%;
+    min-width: 2400px; /* Garante largura mínima para 21 colunas */
+    border-collapse: collapse;
+    background: white;
+    font-size: 12px;
+}
+
+/* ====================================================================
+   CABEÇALHO DA TABELA - Estilo Excel com gradiente Navy/Red
+   ==================================================================== */
+
+.investimentos-table thead {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--red) 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.investimentos-table thead th {
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    vertical-align: middle;
+    line-height: 1.3;
+}
+
+/* Larguras específicas por coluna (21 colunas) */
+.investimentos-table thead th:nth-child(1) { min-width: 140px; text-align: left; padding-left: 14px; } /* Categoria */
+.investimentos-table thead th:nth-child(2) { min-width: 180px; } /* Item */
+.investimentos-table thead th:nth-child(3) { min-width: 200px; } /* Especificação */
+.investimentos-table thead th:nth-child(4) { min-width: 70px; } /* Quantidade */
+.investimentos-table thead th:nth-child(5) { min-width: 80px; } /* Unidade */
+.investimentos-table thead th:nth-child(6) { min-width: 110px; } /* Valor Unitário */
+.investimentos-table thead th:nth-child(7) { min-width: 120px; } /* Valor Total */
+.investimentos-table thead th:nth-child(8) { min-width: 90px; } /* Ano Desembolso */
+.investimentos-table thead th:nth-child(9) { min-width: 70px; } /* Depreciação */
+.investimentos-table thead th:nth-child(10) { min-width: 110px; } /* Realizado */
+.investimentos-table thead th:nth-child(11) { min-width: 130px; } /* Cobertura Terceiros */
+.investimentos-table thead th:nth-child(12) { min-width: 110px; } /* Valor Terceiros */
+.investimentos-table thead th:nth-child(13) { min-width: 80px; } /* % Terceiros */
+.investimentos-table thead th:nth-child(14) { min-width: 130px; } /* Cobertura Próprios */
+.investimentos-table thead th:nth-child(15) { min-width: 110px; } /* Valor Próprios */
+.investimentos-table thead th:nth-child(16) { min-width: 80px; } /* % Próprios */
+.investimentos-table thead th:nth-child(17) { min-width: 110px; } /* A Realizar */
+.investimentos-table thead th:nth-child(18) { min-width: 150px; } /* Fornecedor */
+.investimentos-table thead th:nth-child(19) { min-width: 140px; } /* CNPJ */
+.investimentos-table thead th:nth-child(20) { min-width: 90px; } /* Tem Orçamento */
+.investimentos-table thead th:nth-child(21) { min-width: 70px; } /* Ações */
+
+/* ====================================================================
+   CORPO DA TABELA - Células e Linhas
+   ==================================================================== */
+
+.investimentos-table tbody td {
+    padding: 6px 8px;
+    border: 1px solid var(--gray-300);
+    vertical-align: middle;
+    background: white;
+}
+
+.investimentos-table tbody td:first-child {
+    padding-left: 14px;
+}
+
+/* Hover effect nas linhas */
+.investimentos-table tbody tr:hover {
+    background: rgba(255, 0, 45, 0.03);
+    transition: background 0.2s ease;
+}
+
+/* Linhas de categorias específicas com cores alternadas */
+.investimentos-table tbody tr:nth-child(odd) {
+    background: #fafafa;
+}
+
+.investimentos-table tbody tr:nth-child(odd):hover {
+    background: rgba(255, 0, 45, 0.05);
+}
+
+/* ====================================================================
+   INPUTS INLINE - Estilo integrado às células
+   ==================================================================== */
+
+.investimentos-table input,
+.investimentos-table select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Input de discriminação (texto) */
+.investimentos-table .input-discriminacao {
+    text-align: left;
+    font-weight: 600;
+    color: var(--navy);
+    padding-left: 10px;
+}
+
+/* Inputs de valores monetários */
+.investimentos-table input[data-mask="currency"] {
+    text-align: right;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Inputs de depreciação (número) */
+.investimentos-table .input-depreciacao {
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Selects de cobertura */
+.investimentos-table select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 6px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 28px;
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Estados de hover e focus */
+.investimentos-table input:hover,
+.investimentos-table select:hover {
+    background: rgba(255, 0, 45, 0.04);
+    border-color: var(--gray-300);
+}
+
+.investimentos-table input:focus,
+.investimentos-table select:focus {
+    outline: none;
+    background: white;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255, 0, 45, 0.1);
+}
+
+/* ====================================================================
+   CAMPOS CALCULADOS (Readonly) - Gradiente cinza
+   ==================================================================== */
+
+.investimentos-table input[readonly],
+.investimentos-table .calc-readonly {
+    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+    border-color: transparent;
+    color: var(--gray-700);
+    font-weight: 700;
+    cursor: not-allowed;
+    user-select: none;
+}
+
+.investimentos-table input[readonly]:hover,
+.investimentos-table .calc-readonly:hover {
+    background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.investimentos-table .calc-readonly::placeholder {
+    color: var(--gray-500);
+    font-weight: 600;
+}
+
+/* ====================================================================
+   FOOTER (Totalizadores) - Sistema de 3 níveis
+   ==================================================================== */
+
+/* Nível 1: TOTAL DOS INVESTIMENTOS FIXOS - Verde Claro */
+.investimentos-table tfoot .total-row {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    font-weight: 700;
+}
+
+.investimentos-table tfoot .total-row td {
+    padding: 12px 8px;
+    border: 1px solid #81c784;
+    text-align: center;
+    font-size: 14px;
+    color: #1b5e20;
+}
+
+.investimentos-table tfoot .total-row td:first-child {
+    text-align: left;
+    padding-left: 14px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Células com valores totais */
+.investimentos-table tfoot .total-orcamento,
+.investimentos-table tfoot .total-realizado,
+.investimentos-table tfoot .total-terceiros,
+.investimentos-table tfoot .total-proprios,
+.investimentos-table tfoot .total-a-realizar {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 15px;
+}
+
+.investimentos-table tfoot .total-depreciacao-media,
+.investimentos-table tfoot .total-perc-terceiros,
+.investimentos-table tfoot .total-perc-proprios {
+    font-weight: 700;
+    color: #2e7d32;
+    font-style: italic;
+}
+
+/* Nível 2: Subtotais (Capital de Giro e Juros) - Amarelo Claro */
+.investimentos-table tfoot .subtotal-row {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+    font-weight: 600;
+}
+
+.investimentos-table tfoot .subtotal-row td {
+    padding: 10px 8px;
+    border: 1px solid #fbc02d;
+    text-align: left;
+    font-size: 14px;
+    color: #f57f17;
+}
+
+.investimentos-table tfoot .subtotal-row td:first-child {
+    padding-left: 14px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.investimentos-table tfoot .subtotal-row input {
+    background: white;
+    border: 2px solid #f57f17;
+    font-weight: 600;
+    text-align: right;
+}
+
+.investimentos-table tfoot .subtotal-row input:focus {
+    border-color: #e65100;
+    box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
+}
+
+/* Nível 3: TOTAL DO PROJETO - Verde Escuro */
+.investimentos-table tfoot .grand-total-row {
+    background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+    color: white;
+}
+
+.investimentos-table tfoot .grand-total-row td {
+    padding: 14px 8px;
+    border: 1px solid #1b5e20;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.investimentos-table tfoot .grand-total-row td:first-child {
+    text-align: left;
+    padding-left: 14px;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.investimentos-table tfoot .grand-total-valor {
+    color: white;
+    font-size: 18px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ====================================================================
+   BOTÕES DE AÇÃO
+   ==================================================================== */
+
+/* Botão remover linha */
+.investimentos-table .btn-remove-row {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.investimentos-table .btn-remove-row:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.investimentos-table .btn-remove-row:active {
+    transform: scale(0.98);
+}
+
+/* Botão adicionar investimento */
+.btn-add-investimento {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-add-investimento:hover {
+    background: linear-gradient(135deg, #1e3a5f 0%, var(--navy) 100%);
+    box-shadow: 0 6px 16px rgba(9, 26, 48, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-add-investimento:active {
+    transform: translateY(0);
+}
+
+/* ====================================================================
+   NOTAS E OBSERVAÇÕES
+   ==================================================================== */
+
+.investimentos-notas {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.15);
+}
+
+.investimentos-notas h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f59e0b;
+}
+
+.investimentos-notas textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 14px;
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.investimentos-notas textarea:focus {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.investimentos-notas textarea::placeholder {
+    color: var(--gray-500);
+    font-style: italic;
+}
+
+/* ====================================================================
+   CHECKBOX - Investimentos Contratados
+   ==================================================================== */
+
+.investimentos-table-container .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.investimentos-table-container .checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--red);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.investimentos-table-container .checkbox-label span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.4;
+}
+
+.investimentos-table-container .checkbox-label small {
+    display: block;
+    margin-left: 30px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--gray-600);
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.investimentos-table-container .checkbox-label:hover span {
+    color: var(--red);
+}
+
+/* ====================================================================
+   VALIDAÇÃO VISUAL - Estados de erro/sucesso
+   ==================================================================== */
+
+/* Linha com erro de validação (Terceiros + Próprios ≠ Orçamento) */
+.investimentos-table tbody tr.validation-error {
+    background: rgba(220, 53, 69, 0.08);
+    border-left: 4px solid var(--danger);
+}
+
+.investimentos-table tbody tr.validation-error td {
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+/* Linha com validação OK */
+.investimentos-table tbody tr.validation-success {
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.investimentos-table tbody tr.validation-success td:nth-child(6),
+.investimentos-table tbody tr.validation-success td:nth-child(9) {
+    color: #2e7d32;
+    font-weight: 700;
+}
+
+/* ====================================================================
+   RESPONSIVE - INVESTIMENTOS TABLE
+   ==================================================================== */
+
+@media (max-width: 1600px) {
+    .investimentos-table {
+        min-width: 2200px; /* Mantém 21 colunas visíveis */
+    }
+}
+
+@media (max-width: 1200px) {
+    .investimentos-table {
+        min-width: 2000px;
+        font-size: 11px;
+    }
+
+    .investimentos-table thead th {
+        padding: 10px 5px;
+        font-size: 10px;
+    }
+
+    .investimentos-table tbody td {
+        padding: 5px;
+    }
+
+    .investimentos-table input,
+    .investimentos-table select,
+    .investimentos-table textarea {
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 768px) {
+    .investimentos-table-container {
+        padding: 15px;
+        margin: 0 -15px;
+        border-radius: 0;
+    }
+
+    .investimentos-table-container .table-responsive {
+        margin: 0;
+        padding: 0;
+    }
+
+    .investimentos-table {
+        font-size: 10px;
+        min-width: 1800px; /* Scroll horizontal obrigatório */
+    }
+
+    .investimentos-table thead th,
+    .investimentos-table tbody td,
+    .investimentos-table tfoot td {
+        padding: 5px 3px;
+        font-size: 9px;
+    }
+
+    .investimentos-table input,
+    .investimentos-table select,
+    .investimentos-table textarea {
+        padding: 3px 5px;
+        font-size: 10px;
+    }
+
+    .btn-add-investimento {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .investimentos-notas {
+        padding: 15px;
+    }
+
+    .investimentos-notas h3 {
+        font-size: 14px;
+    }
+
+    .investimentos-notas textarea {
+        min-height: 80px;
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Oculta colunas menos essenciais em mobile ultra pequeno */
+    .investimentos-table thead th:nth-child(18), /* Fornecedor */
+    .investimentos-table tbody td:nth-child(18),
+    .investimentos-table thead th:nth-child(19), /* CNPJ */
+    .investimentos-table tbody td:nth-child(19),
+    .investimentos-table thead th:nth-child(20), /* Tem Orçamento */
+    .investimentos-table tbody td:nth-child(20),
+    .investimentos-table thead th:nth-child(21), /* Ações */
+    .investimentos-table tbody td:nth-child(21) {
+        display: none;
+    }
+
+    .investimentos-table {
+        min-width: 1400px;
+    }
+
+    .investimentos-table thead th,
+    .investimentos-table tbody td,
+    .investimentos-table tfoot td {
+        padding: 4px 2px;
+    }
+}
+
+/* ====================================================================
+   SECTION: QUADRO SOCIETÁRIO (Seção 1 - A Empresa)
+   Dynamic entries for company partners with validation
+   ==================================================================== */
+
+/* Container de sócios */
+#socios-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Entry individual de sócio */
+.socio-entry {
+    padding: 20px;
+    background: white;
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.socio-entry:hover {
+    border-color: var(--gray-400);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Primeira entry (template) - destaque visual */
+.socio-entry.first {
+    border-color: var(--red);
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+}
+
+/* Botão remover sócio */
+.socio-entry .btn-remove-socio {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.socio-entry .btn-remove-socio:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.socio-entry .btn-remove-socio:active {
+    transform: scale(0.98);
+}
+
+/* Esconde botão remover da primeira entry */
+.socio-entry.first .btn-remove-socio {
+    display: none;
+}
+
+/* Validation message box */
+.validation-message {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid;
+}
+
+.validation-message.valid {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+    color: #1b5e20;
+}
+
+.validation-message.invalid {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #c62828;
+}
+
+.validation-message.warning-high {
+    background: rgba(255, 152, 0, 0.1);
+    border-color: #ff9800;
+    color: #e65100;
+}
+
+.validation-message.neutral {
+    background: rgba(158, 158, 158, 0.1);
+    border-color: #9e9e9e;
+    color: #616161;
+}
+
+.validation-message strong {
+    margin-right: 4px;
+}
+
+#totalParticipacao {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 4px;
+}
+
+#validationStatus {
+    margin-left: 8px;
+}
+
+/* Botão adicionar sócio */
+#addSocio {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#addSocio:hover {
+    background: linear-gradient(135deg, #1e3a5f 0%, var(--navy) 100%);
+    box-shadow: 0 6px 16px rgba(9, 26, 48, 0.3);
+    transform: translateY(-2px);
+}
+
+#addSocio:active {
+    transform: translateY(0);
+}
+
+/* Campos de erro/validação */
+.socio-entry input.error,
+.socio-entry select.error {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.socio-entry input.warning-high {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+}
+
+/* Form row dentro de sócio entry */
+.socio-entry .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.socio-entry .form-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Ajustes para campos específicos */
+.socio-entry .form-group {
+    flex: 1;
+    min-width: 0; /* Permite flex shrink */
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .socio-entry .form-row {
+        flex-wrap: wrap;
+    }
+
+    .socio-entry .form-group {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    #socios-container {
+        gap: 15px;
+    }
+
+    .socio-entry {
+        padding: 15px;
+    }
+
+    .socio-entry .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .socio-entry .form-group {
+        min-width: 100%;
+    }
+
+    .socio-entry .btn-remove-socio {
+        position: static;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .validation-message {
+        flex-direction: column;
+        text-align: center;
+        padding: 12px;
+    }
+
+    #addSocio {
+        width: 100%;
+    }
+}
+
+/* ====================================================================
+   SPRINT 8: TOTALIZADORES POR CATEGORIA E GRÁFICO PIZZA
+   ==================================================================== */
+
+/* Seção de Totalizadores por Categoria */
+.categoria-totals-section {
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.categoria-totals-section h3 {
+    color: var(--navy);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.categoria-totals-section .section-description {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Grid de Cards de Categoria */
+.categoria-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Card Individual de Categoria */
+.categoria-card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--navy);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.categoria-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.categoria-card-header {
+    margin-bottom: 0.75rem;
+}
+
+.categoria-nome {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--navy);
+    display: block;
+}
+
+.categoria-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.categoria-valor {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--red);
+    font-family: 'Inter', sans-serif;
+}
+
+.categoria-percentual {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+/* Empty State */
+.categoria-cards-grid .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray-500);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* Seção do Gráfico */
+.chart-section {
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chart-section h3 {
+    color: var(--navy);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.chart-section .section-description {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Container do Canvas */
+.chart-container {
+    max-width: 550px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.chart-container canvas {
+    display: block;
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* Responsividade para Cards de Categoria */
+@media (max-width: 768px) {
+    .categoria-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .categoria-totals-section,
+    .chart-section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .chart-container {
+        padding: 1rem;
+        max-width: 100%;
+    }
+
+    .categoria-valor {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .categoria-card {
+        padding: 1rem;
+    }
+
+    .categoria-valor {
+        font-size: 1.1rem;
+    }
+
+    .categoria-percentual {
+        font-size: 0.8rem;
+    }
+}
+
+/* ====================================================================
+   SECTION: EMPRESA CONTEXT BREADCRUMB (V3)
+   Breadcrumb fixo exibindo empresa ativa + botão "Trocar Empresa"
+   ==================================================================== */
+
+.empresa-context-header {
+    background: linear-gradient(135deg, #091A30 0%, #0d2240 100%);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 0, 45, 0.3);
+    box-shadow: 0 2px 8px rgba(9, 26, 48, 0.1);
+}
+
+.empresa-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.empresa-info i {
+    font-size: 1.25rem;
+    color: #FF002D;
+}
+
+#empresaAtivaDisplay {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn-trocar-empresa {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background: rgba(255, 0, 45, 0.15);
+    border: 2px solid #FF002D;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-trocar-empresa:hover {
+    background: #FF002D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 45, 0.3);
+}
+
+.btn-trocar-empresa:active {
+    transform: translateY(0);
+}
+
+.btn-trocar-empresa i {
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .empresa-context-header {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .empresa-info {
+        font-size: 0.9rem;
+    }
+
+    .btn-trocar-empresa {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,272 @@
+{
+  "versao": "1.0.0",
+  "descricao": "Parâmetros para análise de DRE histórica - 10 indicadores de performance",
+  "autor": "Expertzy - Sistema de Viabilidade de Projetos",
+  "dataAtualizacao": "2025-10-20",
+
+  "parametros": {
+    "margemBruta": {
+      "label": "Margem Bruta",
+      "unidade": "%",
+      "descricaoGeral": "Percentual de lucro após dedução dos custos diretos de produção",
+      "bom": {
+        "min": 30,
+        "emoji": "🟢",
+        "label": "Saudável",
+        "descricao": "Margem bruta acima de 30% indica boa precificação e eficiência produtiva"
+      },
+      "atencao": {
+        "min": 20,
+        "max": 30,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Margem entre 20-30% requer atenção na gestão de custos diretos"
+      },
+      "critico": {
+        "max": 20,
+        "emoji": "🔴",
+        "label": "Baixo",
+        "descricao": "Margem abaixo de 20% indica necessidade urgente de revisão de preços ou custos"
+      }
+    },
+
+    "margemEBITDA": {
+      "label": "Margem EBITDA",
+      "unidade": "%",
+      "descricaoGeral": "Geração de caixa operacional antes de juros, impostos, depreciação e amortização",
+      "bom": {
+        "min": 15,
+        "emoji": "🟢",
+        "label": "Excelente",
+        "descricao": "EBITDA acima de 15% demonstra forte geração de caixa operacional"
+      },
+      "atencao": {
+        "min": 10,
+        "max": 15,
+        "emoji": "🟡",
+        "label": "Adequado",
+        "descricao": "EBITDA entre 10-15% é aceitável mas pode ser otimizado"
+      },
+      "critico": {
+        "max": 10,
+        "emoji": "🔴",
+        "label": "Baixo",
+        "descricao": "EBITDA abaixo de 10% indica pressão nas despesas operacionais"
+      }
+    },
+
+    "margemOperacional": {
+      "label": "Margem Operacional (EBIT)",
+      "unidade": "%",
+      "descricaoGeral": "Rentabilidade das operações antes de juros e impostos",
+      "bom": {
+        "min": 12,
+        "emoji": "🟢",
+        "label": "Excelente",
+        "descricao": "Margem operacional acima de 12% indica eficiência operacional consistente"
+      },
+      "atencao": {
+        "min": 8,
+        "max": 12,
+        "emoji": "🟡",
+        "label": "Adequado",
+        "descricao": "Margem entre 8-12% é razoável mas pode ser aprimorada"
+      },
+      "critico": {
+        "max": 8,
+        "emoji": "🔴",
+        "label": "Baixo",
+        "descricao": "Margem abaixo de 8% exige revisão da estrutura operacional"
+      }
+    },
+
+    "margemLiquida": {
+      "label": "Margem Líquida",
+      "unidade": "%",
+      "descricaoGeral": "Percentual de lucro final após todas as deduções",
+      "bom": {
+        "min": 8,
+        "emoji": "🟢",
+        "label": "Excelente",
+        "descricao": "Margem líquida acima de 8% indica rentabilidade sólida e sustentável"
+      },
+      "atencao": {
+        "min": 5,
+        "max": 8,
+        "emoji": "🟡",
+        "label": "Adequado",
+        "descricao": "Margem entre 5-8% é aceitável mas vulnerável a variações"
+      },
+      "critico": {
+        "max": 5,
+        "emoji": "🔴",
+        "label": "Baixo",
+        "descricao": "Margem abaixo de 5% sinaliza necessidade de ajustes estruturais"
+      }
+    },
+
+    "custosVariaveis": {
+      "label": "Custos Variáveis / Receita",
+      "unidade": "%",
+      "descricaoGeral": "Proporção dos custos diretos em relação à receita líquida",
+      "bom": {
+        "max": 50,
+        "emoji": "🟢",
+        "label": "Controlado",
+        "descricao": "Custos variáveis abaixo de 50% da receita indicam boa gestão produtiva"
+      },
+      "atencao": {
+        "min": 50,
+        "max": 65,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Custos entre 50-65% requerem atenção na eficiência operacional"
+      },
+      "critico": {
+        "min": 65,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "Custos acima de 65% comprometem margem e flexibilidade"
+      }
+    },
+
+    "custosFixos": {
+      "label": "Custos Fixos / Receita",
+      "unidade": "%",
+      "descricaoGeral": "Proporção das despesas operacionais em relação à receita líquida",
+      "bom": {
+        "max": 30,
+        "emoji": "🟢",
+        "label": "Controlado",
+        "descricao": "Despesas fixas abaixo de 30% da receita indicam estrutura enxuta"
+      },
+      "atencao": {
+        "min": 30,
+        "max": 45,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "Despesas entre 30-45% são aceitáveis mas limitam escalabilidade"
+      },
+      "critico": {
+        "min": 45,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "Despesas acima de 45% indicam estrutura pesada e baixa eficiência"
+      }
+    },
+
+    "margemContribuicao": {
+      "label": "Margem de Contribuição",
+      "unidade": "%",
+      "descricaoGeral": "Percentual disponível para cobrir custos fixos e gerar lucro",
+      "bom": {
+        "min": 50,
+        "emoji": "🟢",
+        "label": "Forte",
+        "descricao": "Margem acima de 50% oferece boa capacidade de absorver custos fixos"
+      },
+      "atencao": {
+        "min": 35,
+        "max": 50,
+        "emoji": "🟡",
+        "label": "Moderada",
+        "descricao": "Margem entre 35-50% é funcional mas com flexibilidade limitada"
+      },
+      "critico": {
+        "max": 35,
+        "emoji": "🔴",
+        "label": "Frágil",
+        "descricao": "Margem abaixo de 35% oferece pouca margem de segurança operacional"
+      }
+    },
+
+    "pontoEquilibrio": {
+      "label": "Distância do Ponto de Equilíbrio",
+      "unidade": "R$",
+      "descricaoGeral": "Diferença entre receita atual e ponto de equilíbrio (quanto maior, melhor)",
+      "bom": {
+        "min": 0,
+        "emoji": "🟢",
+        "label": "Acima do Break-even",
+        "descricao": "Receita superior ao ponto de equilíbrio - operação lucrativa"
+      },
+      "atencao": {
+        "min": -100000,
+        "max": 0,
+        "emoji": "🟡",
+        "label": "Próximo ao Break-even",
+        "descricao": "Receita próxima ou ligeiramente abaixo do ponto de equilíbrio"
+      },
+      "critico": {
+        "max": -100000,
+        "emoji": "🔴",
+        "label": "Muito abaixo",
+        "descricao": "Receita significativamente abaixo do ponto de equilíbrio"
+      }
+    },
+
+    "margemSeguranca": {
+      "label": "Margem de Segurança",
+      "unidade": "%",
+      "descricaoGeral": "Percentual que a receita pode cair antes de atingir o ponto de equilíbrio",
+      "bom": {
+        "min": 30,
+        "emoji": "🟢",
+        "label": "Sólida",
+        "descricao": "Margem acima de 30% oferece boa proteção contra variações de receita"
+      },
+      "atencao": {
+        "min": 15,
+        "max": 30,
+        "emoji": "🟡",
+        "label": "Moderada",
+        "descricao": "Margem entre 15-30% oferece proteção limitada"
+      },
+      "critico": {
+        "max": 15,
+        "emoji": "🔴",
+        "label": "Frágil",
+        "descricao": "Margem abaixo de 15% indica vulnerabilidade a quedas de receita"
+      }
+    },
+
+    "grauAlavancagem": {
+      "label": "Grau de Alavancagem Operacional",
+      "unidade": "x",
+      "descricaoGeral": "Sensibilidade do lucro operacional às variações de receita",
+      "bom": {
+        "min": 1,
+        "max": 3,
+        "emoji": "🟢",
+        "label": "Equilibrado",
+        "descricao": "GAO entre 1-3x indica alavancagem saudável e controlada"
+      },
+      "atencao": {
+        "min": 3,
+        "max": 5,
+        "emoji": "🟡",
+        "label": "Moderado",
+        "descricao": "GAO entre 3-5x indica maior sensibilidade a variações de receita"
+      },
+      "critico": {
+        "min": 5,
+        "emoji": "🔴",
+        "label": "Elevado",
+        "descricao": "GAO acima de 5x indica alta sensibilidade e risco operacional"
+      }
+    }
+  },
+
+  "thresholds": {
+    "minimaVariacaoTendencia": 5,
+    "minimaVariacaoAH": 0.5,
+    "toleranciaCalculos": 0.01
+  },
+
+  "notas": [
+    "Parâmetros baseados em benchmarks de mercado para empresas brasileiras",
+    "Faixas podem variar conforme setor de atuação",
+    "Margens devem ser analisadas em conjunto com tendências históricas",
+    "Período parcial deve ser anualizado antes de comparação"
+  ]
+}

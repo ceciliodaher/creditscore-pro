@@ -1,190 +1,182 @@
 /* =====================================
-   TABS.JS - HIERARCHICAL NAVIGATION (Sprint 0)
-   Sistema de navegação hierárquica em 2 níveis:
-   - Nível 1: Seções principais (1-7)
-   - Nível 2: Tabs/Subseções (1-23)
+   TABS.JS - SIMPLE TAB NAVIGATION
+   Sistema de navegação sequencial de 8 módulos:
+   1. Cadastro e Identificação
+   2. Demonstrações Financeiras
+   3. Análise de Endividamento
+   4. Compliance e Verificações
+   5. Recursos Humanos
+   6. Índices Financeiros (Computado)
+   7. Scoring de Crédito (Computado)
+   8. Relatórios e Análises (Computado)
 
-   Baseado na estrutura existente do script.js
-   Refatorado para suportar navegação hierárquica
+   Abordagem híbrida: HTML hardcoded + JavaScript para módulos computados
    ===================================== */
 
-class HierarchicalNavigation {
+class SimpleTabNavigation {
     constructor() {
         // Tab state
         this.currentTab = 1;
-        this.currentSection = 1;
+        this.totalTabs = 8;
 
-        // Section-to-Tab mapping (defines hierarchical structure)
-        this.sectionMap = {
-            1: [1, 2],           // Identificação (2 tabs)
-            2: [3, 4, 5, 6, 7],  // Situação Atual (5 tabs)
-            3: [8, 9, 10, 11],   // Operações Projetadas (4 tabs)
-            4: [12, 13, 14, 15], // Investimentos e Funding (4 tabs)
-            5: [16, 17],         // Integrações (2 tabs)
-            6: [18, 19, 20],     // Demonstrativos Projetados (3 tabs)
-            7: [21, 22, 23]      // Análises e Decisão (3 tabs)
-        };
-
-        // Protected tabs (Analyst mode only)
-        this.protectedTabs = [6, 7, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        // Module names (matches data-module attributes)
+        this.modules = [
+            'cadastro',
+            'demonstracoes',
+            'endividamento',
+            'compliance',
+            'recursos-humanos',
+            'indices',
+            'scoring',
+            'relatorios'
+        ];
 
         // Tab states
         this.completedTabs = new Set();
         this.tabsWithErrors = new Set();
         this.tabsWithWarnings = new Set();
 
-        // Detectar tabs no DOM - não lançar erro se não existirem ainda
-        const tabItems = document.querySelectorAll('.tab-item');
-        this.totalTabs = tabItems.length;
-
-        if (this.totalTabs === 0) {
-            console.warn('⚠️ HierarchicalNavigation: Nenhuma aba encontrada ainda');
-            console.warn('👉 AÇÃO REQUERIDA: Main app DEVE chamar .initAfterDOM() após generateInterface()');
-            console.warn('📋 ORDEM CORRETA: generateInterface() → HierarchicalNavigation() → initAfterDOM()');
-            // NÃO chamar init() - será chamado em initAfterDOM()
-        } else {
-            console.log(`[HierarchicalNavigation] Inicializado com ${this.totalTabs} abas em 7 seções`);
-            this.init();
-        }
+        console.log(`[SimpleTabNavigation] Inicializado com ${this.totalTabs} tabs sequenciais`);
     }
 
     /**
-     * Inicialização tardia após generateInterface() criar as .tab-item no DOM
-     * DEVE ser chamado pelo main app após generateInterface()
+     * Gera estrutura HTML completa de tabs
+     * Cria: .tab-list com 8 .tab-item (um para cada módulo)
      */
-    initAfterDOM() {
-        const tabItems = document.querySelectorAll('.tab-item');
-        this.totalTabs = tabItems.length;
-
-        if (this.totalTabs === 0) {
-            throw new Error('HierarchicalNavigation.initAfterDOM: Nenhuma aba encontrada (.tab-item). DOM não foi gerado corretamente.');
+    generateTabsHTML() {
+        const navContainer = document.getElementById('tabNavigation');
+        if (!navContainer) {
+            throw new Error('SimpleTabNavigation: #tabNavigation não encontrado');
         }
 
-        console.log(`[HierarchicalNavigation] initAfterDOM: Detectadas ${this.totalTabs} abas em 7 seções`);
-        this.init();
+        // Criar tab-list
+        const tabList = document.createElement('div');
+        tabList.className = 'tab-list';
+        tabList.setAttribute('role', 'tablist');
+
+        // Criar tab-item para cada módulo
+        this.modules.forEach((moduleName, index) => {
+            const tabNumber = index + 1;
+            
+            // Mapear ícones e labels dos módulos
+            const moduleInfo = {
+                'cadastro': { icon: '🏢', label: 'Cadastro' },
+                'demonstracoes': { icon: '📊', label: 'Demonstrações' },
+                'endividamento': { icon: '💳', label: 'Endividamento' },
+                'compliance': { icon: '✅', label: 'Compliance' },
+                'recursos-humanos': { icon: '👥', label: 'Recursos Humanos' },
+                'indices': { icon: '📈', label: 'Índices' },
+                'scoring': { icon: '⭐', label: 'Scoring' },
+                'relatorios': { icon: '📄', label: 'Relatórios' }
+            };
+
+            const info = moduleInfo[moduleName] || { icon: '📄', label: moduleName };
+
+            const tabItem = document.createElement('button');
+            tabItem.className = 'tab-item';
+            tabItem.setAttribute('role', 'tab');
+            tabItem.setAttribute('data-tab', tabNumber);
+            tabItem.setAttribute('aria-label', `Módulo ${tabNumber}: ${info.label}`);
+            
+            tabItem.innerHTML = `
+                <span class="tab-number">${tabNumber}</span>
+                <span class="tab-label">${info.icon} ${info.label}</span>
+                <span class="tab-status"></span>
+            `;
+
+            // Click handler
+            tabItem.addEventListener('click', () => this.switchTab(tabNumber));
+
+            tabList.appendChild(tabItem);
+        });
+
+        // Limpar e adicionar ao container
+        navContainer.innerHTML = '';
+        navContainer.appendChild(tabList);
+
+        console.log(`[SimpleTabNavigation] ${this.totalTabs} tabs geradas no HTML`);
     }
 
-    init() {
+    /**
+     * Inicialização após DOM estar pronto
+     * DEVE ser chamado pelo main app após generateInterface()
+     */
+    async init() {
+        this.generateTabsHTML();
         this.setupEventListeners();
-        this.initializeTabStates();
+        this.loadTabState();
         this.updateAllStates();
+        this.showTab(this.currentTab);
+        console.log(`[SimpleTabNavigation] init() completo - tab ${this.currentTab} ativa`);
     }
 
     setupEventListeners() {
-        // Section button click events
-        const sectionButtons = document.querySelectorAll('.section-btn');
-        sectionButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const sectionNumber = parseInt(btn.getAttribute('data-section'));
-                this.switchToSection(sectionNumber);
-            });
-        });
+        // Navegação entre tabs
+        const prevBtn = document.getElementById('prevTab');
+        const nextBtn = document.getElementById('nextTab');
 
-        // Tab click events
-        const tabItems = document.querySelectorAll('.tab-item');
-        tabItems.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const tabNumber = parseInt(tab.getAttribute('data-tab'));
-                this.switchToTab(tabNumber);
-            });
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.previousTab());
+        }
 
-            // Keyboard navigation
-            tab.addEventListener('keydown', (e) => {
-                this.handleKeyboardNavigation(e);
-            });
-        });
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.nextTab());
+        }
 
-        // Form field change events for auto-validation
+        // Form field change events for auto-save
         const form = document.getElementById('projectForm');
         if (form) {
-            form.addEventListener('input', (e) => {
+            form.addEventListener('input', () => {
                 this.validateCurrentTabFields();
             });
 
-            form.addEventListener('change', (e) => {
+            form.addEventListener('change', () => {
                 this.validateCurrentTabFields();
                 this.autoSaveData();
             });
         }
 
-        // Window resize event for mobile responsiveness
-        window.addEventListener('resize', () => {
-            this.updateScrollButtonsVisibility();
+        // Keyboard shortcuts (Ctrl+Arrow)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    this.previousTab();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    this.nextTab();
+                }
+            }
         });
     }
 
-    initializeTabStates() {
-        // Load any previously saved state
-        const savedState = this.loadTabState();
-        if (savedState) {
-            this.currentTab = savedState.currentTab || 1;
-            this.currentSection = this.getSectionForTab(this.currentTab);
-            this.completedTabs = new Set(savedState.completedTabs || []);
-            this.tabsWithErrors = new Set(savedState.tabsWithErrors || []);
-            this.tabsWithWarnings = new Set(savedState.tabsWithWarnings || []);
+    /**
+     * Navegar para a próxima tab
+     */
+    nextTab() {
+        if (this.currentTab < this.totalTabs) {
+            this.switchTab(this.currentTab + 1);
         }
-
-        this.showTab(this.currentTab);
-        this.showSection(this.currentSection);
     }
 
     /**
-     * Switch to a specific section (shows section button and subsection navbar)
+     * Navegar para a tab anterior
      */
-    switchToSection(sectionNumber) {
-        // ✅ FIX BUG #3: Sistema tem 7 seções, não 9
-        if (sectionNumber < 1 || sectionNumber > 7) return;
-
-        this.currentSection = sectionNumber;
-        this.showSection(sectionNumber);
-
-        // Switch to first tab of this section
-        const firstTab = this.sectionMap[sectionNumber][0];
-        this.switchToTab(firstTab);
+    previousTab() {
+        if (this.currentTab > 1) {
+            this.switchTab(this.currentTab - 1);
+        }
     }
 
     /**
-     * Show a specific section navbar
+     * Trocar para uma tab específica
      */
-    showSection(sectionNumber) {
-        // Update section buttons
-        const sectionButtons = document.querySelectorAll('.section-btn');
-        sectionButtons.forEach(btn => {
-            const btnSection = parseInt(btn.getAttribute('data-section'));
-            btn.classList.toggle('active', btnSection === sectionNumber);
-        });
-
-        // Show/hide subsection navbars
-        const subnavbars = document.querySelectorAll('.subsection-navbar');
-        subnavbars.forEach(navbar => {
-            const parentSection = parseInt(navbar.getAttribute('data-parent-section'));
-            navbar.classList.toggle('active', parentSection === sectionNumber);
-        });
-    }
-
-    /**
-     * Switch to a specific tab (with section detection)
-     */
-    switchToTab(tabNumber) {
+    switchTab(tabNumber) {
         if (tabNumber < 1 || tabNumber > this.totalTabs) return;
 
-        // Proteção para abas protegidas (Analyst mode)
-        const targetTab = document.querySelector(`[data-tab="${tabNumber}"]`);
-        if (targetTab && this.protectedTabs.includes(tabNumber) && !this.isAnalystMode()) {
-            this.showProtectedTabMessage();
-            return;
-        }
-
-        // Validação opcional - apenas marca se há erros, mas permite navegação
+        // Validar tab atual antes de sair (apenas marca se há erros, mas permite navegação)
         if (this.currentTab !== tabNumber) {
             this.validateCurrentTabFields();
-        }
-
-        // Detect which section this tab belongs to
-        const newSection = this.getSectionForTab(tabNumber);
-        if (newSection !== this.currentSection) {
-            this.currentSection = newSection;
-            this.showSection(newSection);
         }
 
         this.currentTab = tabNumber;
@@ -196,60 +188,89 @@ class HierarchicalNavigation {
         if (this.isIndexedDBReady()) {
             this.autoSaveData();
         }
-
-        // Scroll tab into view if needed
-        this.scrollTabIntoView(tabNumber);
     }
 
     /**
-     * Get section number for a given tab
+     * Alias para switchTab - compatibilidade com NavigationController
+     * @param {number} tabNumber - Número da tab (1-8)
      */
-    getSectionForTab(tabNumber) {
-        for (const [section, tabs] of Object.entries(this.sectionMap)) {
-            if (tabs.includes(tabNumber)) {
-                return parseInt(section);
-            }
-        }
-        return 1; // Default to section 1 if not found
+    switchToTab(tabNumber) {
+        return this.switchTab(tabNumber);
     }
 
     /**
-     * Show a specific tab (form section)
+     * Mostrar uma tab específica (form section)
      */
     showTab(tabNumber) {
-        // Hide all sections (forçar display:none para evitar múltiplas visíveis)
+        // Ocultar todas as seções
         const sections = document.querySelectorAll('.form-section');
         sections.forEach(section => {
             section.classList.remove('active');
-            section.style.display = 'none'; // ✅ CRITICAL: forçar via CSS inline
+            section.style.display = 'none';
         });
 
-        // Show target section (forçar display:block)
-        // ✅ FIX BUG #1: Seletor específico para evitar conflito com section-buttons
-        const targetSection = document.querySelector(`.form-section[data-section="${tabNumber}"]`);
+        // Mostrar a seção target
+        const moduleName = this.modules[tabNumber - 1];
+        const targetSection = document.querySelector(`[data-module="${moduleName}"]`);
+
         if (targetSection) {
             targetSection.classList.add('active');
-            targetSection.style.display = 'block'; // ✅ CRITICAL: forçar via CSS inline
+            targetSection.style.display = 'block';
             targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            console.error(`[SimpleTabNavigation] Seção não encontrada: data-module="${moduleName}"`);
         }
 
-        // Update tab active states
-        const tabs = document.querySelectorAll('.tab-item');
-        tabs.forEach(tab => {
-            const t = parseInt(tab.getAttribute('data-tab'));
-            tab.classList.toggle('active', t === tabNumber);
-            tab.setAttribute('aria-selected', t === tabNumber ? 'true' : 'false');
-        });
+        // Atualizar botões de navegação
+        this.updateNavigationButtons();
 
-        // Update progress text
-        this.updateProgressText();
+        // Atualizar barra de progresso
+        this.updateProgressBar();
+
+        console.log(`[SimpleTabNavigation] Tab ${tabNumber} (${moduleName}) ativa`);
     }
 
     /**
-     * Validate current tab fields (visual markers only)
+     * Atualizar estados dos botões de navegação
+     */
+    updateNavigationButtons() {
+        const prevBtn = document.getElementById('prevTab');
+        const nextBtn = document.getElementById('nextTab');
+
+        if (prevBtn) {
+            prevBtn.disabled = this.currentTab === 1;
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = this.currentTab === this.totalTabs;
+            nextBtn.textContent = this.currentTab === this.totalTabs ? 'Finalizar' : 'Próximo';
+        }
+    }
+
+    /**
+     * Atualizar barra de progresso
+     */
+    updateProgressBar() {
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        if (progressBar) {
+            const percentage = (this.currentTab / this.totalTabs) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        if (progressText) {
+            progressText.textContent = `${this.currentTab}/${this.totalTabs} - ${this.modules[this.currentTab - 1]}`;
+        }
+    }
+
+    /**
+     * Validar campos da tab atual (marcadores visuais apenas)
      */
     validateCurrentTabFields() {
-        const currentSection = document.querySelector(`[data-section="${this.currentTab}"]`);
+        const moduleName = this.modules[this.currentTab - 1];
+        const currentSection = document.querySelector(`[data-module="${moduleName}"]`);
+
         if (!currentSection) return;
 
         const requiredFields = currentSection.querySelectorAll('[required]');
@@ -262,7 +283,7 @@ class HierarchicalNavigation {
             if (!isValid) hasErrors = true;
         });
 
-        // Update tab state
+        // Atualizar estado da tab
         if (hasErrors) {
             this.tabsWithErrors.add(this.currentTab);
             this.completedTabs.delete(this.currentTab);
@@ -276,236 +297,64 @@ class HierarchicalNavigation {
             this.tabsWithWarnings.delete(this.currentTab);
         }
 
-        this.updateTabStates();
-        this.updateSectionStates();
+        this.updateAllStates();
     }
 
     /**
-     * Update visual states of all tabs (completed, error, warning)
-     */
-    updateTabStates() {
-        const tabs = document.querySelectorAll('.tab-item');
-
-        tabs.forEach(tab => {
-            const tabNumber = parseInt(tab.getAttribute('data-tab'));
-
-            // Remove all state classes
-            tab.classList.remove('completed', 'error', 'warning');
-
-            // Apply appropriate state class
-            if (this.tabsWithErrors.has(tabNumber)) {
-                tab.classList.add('error');
-            } else if (this.tabsWithWarnings.has(tabNumber)) {
-                tab.classList.add('warning');
-            } else if (this.completedTabs.has(tabNumber)) {
-                tab.classList.add('completed');
-            }
-        });
-    }
-
-    /**
-     * Update section button states based on child tabs
-     */
-    updateSectionStates() {
-        const sectionButtons = document.querySelectorAll('.section-btn');
-
-        sectionButtons.forEach(btn => {
-            const sectionNumber = parseInt(btn.getAttribute('data-section'));
-            const tabsInSection = this.sectionMap[sectionNumber] || [];
-
-            // Check if all tabs in section are completed
-            const allCompleted = tabsInSection.every(tab => this.completedTabs.has(tab));
-            const hasErrors = tabsInSection.some(tab => this.tabsWithErrors.has(tab));
-            const hasWarnings = tabsInSection.some(tab => this.tabsWithWarnings.has(tab));
-
-            // Remove all state classes
-            btn.classList.remove('completed', 'error', 'warning');
-
-            // Apply appropriate state class
-            if (hasErrors) {
-                btn.classList.add('error');
-            } else if (hasWarnings) {
-                btn.classList.add('warning');
-            } else if (allCompleted) {
-                btn.classList.add('completed');
-            }
-        });
-    }
-
-    /**
-     * Update all states (tabs, sections, progress)
+     * Atualizar todos os estados (tabs, progresso)
      */
     updateAllStates() {
-        this.updateTabStates();
-        this.updateSectionStates();
+        this.updateProgressBar();
+        this.updateNavigationButtons();
         this.updateProgressText();
+        
+        // Atualizar visual de todas as tabs
+        for (let i = 1; i <= this.totalTabs; i++) {
+            this.updateTabVisualState(i);
+        }
     }
 
     /**
-     * Update progress text display
+     * Atualizar texto de progresso
      */
     updateProgressText() {
         const progressText = document.getElementById('progressText');
-        const completedSections = document.getElementById('completedSections');
-
         if (progressText) {
-            progressText.innerHTML = `${this.totalTabs} seções • <span id="completedSections">${this.completedTabs.size}</span> concluídas`;
-        }
-
-        if (completedSections) {
-            completedSections.textContent = this.completedTabs.size;
-        }
-
-        // Show preview button if all sections are completed
-        const previewBtn = document.getElementById('previewBtn');
-        if (previewBtn) {
-            previewBtn.style.display = this.completedTabs.size === this.totalTabs ? 'inline-flex' : 'none';
+            const completed = this.completedTabs.size;
+            progressText.textContent = `${this.currentTab}/${this.totalTabs} - ${completed} concluídas`;
         }
     }
 
     /**
-     * Handle keyboard navigation (arrows, home, end)
+     * Atualiza estado visual de uma tab específica
+     * @param {number} tabNumber - Número da tab (1-8)
      */
-    handleKeyboardNavigation(e) {
-        const currentTabElement = e.target;
-        const currentTabNumber = parseInt(currentTabElement.getAttribute('data-tab'));
+    updateTabVisualState(tabNumber) {
+        const tabItem = document.querySelector(`.tab-item[data-tab="${tabNumber}"]`);
+        if (!tabItem) return;
 
-        switch (e.key) {
-            case 'ArrowLeft':
-                e.preventDefault();
-                if (currentTabNumber > 1) {
-                    this.switchToTab(currentTabNumber - 1);
-                }
-                break;
+        // Remover todas as classes de estado
+        tabItem.classList.remove('active', 'completed', 'error', 'warning');
 
-            case 'ArrowRight':
-                e.preventDefault();
-                if (currentTabNumber < this.totalTabs) {
-                    this.switchToTab(currentTabNumber + 1);
-                }
-                break;
-
-            case 'Home':
-                e.preventDefault();
-                this.switchToTab(1);
-                break;
-
-            case 'End':
-                e.preventDefault();
-                this.switchToTab(this.totalTabs);
-                break;
-
-            case 'Enter':
-            case ' ':
-                e.preventDefault();
-                this.switchToTab(currentTabNumber);
-                break;
+        // Aplicar nova classe baseada no estado
+        if (this.currentTab === tabNumber) {
+            tabItem.classList.add('active');
+        } else if (this.tabsWithErrors.has(tabNumber)) {
+            tabItem.classList.add('error');
+        } else if (this.tabsWithWarnings.has(tabNumber)) {
+            tabItem.classList.add('warning');
+        } else if (this.completedTabs.has(tabNumber)) {
+            tabItem.classList.add('completed');
         }
-    }
-
-    /**
-     * Scroll tab into view (for horizontal overflow)
-     */
-    scrollTabIntoView(tabNumber) {
-        const tab = document.querySelector(`[data-tab="${tabNumber}"]`);
-        if (!tab) return;
-
-        tab.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        });
-    }
-
-    /**
-     * Setup scroll buttons (if present in UI)
-     */
-    setupScrollButtons() {
-        const scrollLeft = document.querySelector('.tab-scroll-left');
-        const scrollRight = document.querySelector('.tab-scroll-right');
-        const scrollContainer = document.querySelector('.tab-scroll-container');
-
-        if (scrollLeft && scrollRight && scrollContainer) {
-            scrollLeft.addEventListener('click', () => {
-                scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
-            });
-
-            scrollRight.addEventListener('click', () => {
-                scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-
-            scrollContainer.addEventListener('scroll', () => {
-                this.updateScrollButtonsState();
-            });
-
-            this.updateScrollButtonsState();
-        }
-    }
-
-    updateScrollButtonsState() {
-        const scrollContainer = document.querySelector('.tab-scroll-container');
-        const scrollLeft = document.querySelector('.tab-scroll-left');
-        const scrollRight = document.querySelector('.tab-scroll-right');
-
-        if (!scrollContainer || !scrollLeft || !scrollRight) return;
-
-        const canScrollLeft = scrollContainer.scrollLeft > 0;
-        const canScrollRight = scrollContainer.scrollLeft <
-            (scrollContainer.scrollWidth - scrollContainer.clientWidth);
-
-        scrollLeft.disabled = !canScrollLeft;
-        scrollRight.disabled = !canScrollRight;
-    }
-
-    updateScrollButtonsVisibility() {
-        const scrollContainer = document.querySelector('.tab-scroll-container');
-        const scrollButtons = document.querySelector('.tab-scroll-buttons');
-
-        if (!scrollContainer || !scrollButtons) return;
-
-        const needsScrolling = scrollContainer.scrollWidth > scrollContainer.clientWidth;
-        scrollButtons.style.display = needsScrolling ? 'flex' : 'none';
-    }
-
-    /**
-     * Check if Analyst mode is active
-     */
-    isAnalystMode() {
-        // Check if mode toggle exists and is set to "analista"
-        const modeToggle = document.querySelector('.mode-btn.active');
-        if (modeToggle && modeToggle.textContent.includes('Analista')) {
-            return true;
-        }
-
-        // Check session storage (legacy)
-        if (sessionStorage.getItem('analyst_authenticated') === 'true') {
-            return true;
-        }
-
-        // Check if body has analyst-mode class
-        if (document.body.classList.contains('analyst-mode')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Show message for protected tabs
-     */
-    showProtectedTabMessage() {
-        alert('⚠️ Esta seção é restrita ao modo Analista.\n\nPara acessar, ative o modo Analista no canto superior direito.');
     }
 
     /**
      * Check if IndexedDB is ready
      */
     isIndexedDBReady() {
-        // Verificar se o IndexedDB do módulo está pronto
-        if (window.financiamentoModule && typeof window.financiamentoModule.isReady === 'function') {
-            return window.financiamentoModule.isReady();
+        if (window.creditScoreModule && typeof window.creditScoreModule.isReady === 'function') {
+            return window.creditScoreModule.isReady();
         }
-        // Se não há módulo, assume que pode salvar
         return true;
     }
 
@@ -513,11 +362,10 @@ class HierarchicalNavigation {
      * Auto-save data (delegates to external function)
      */
     autoSaveData() {
-        // Use existing auto-save function if available
         if (typeof autoSaveData === 'function') {
             autoSaveData();
-        } else if (window.financiamentoModule && typeof window.financiamentoModule.autoSave === 'function') {
-            window.financiamentoModule.autoSave();
+        } else if (window.creditScoreModule && typeof window.creditScoreModule.autoSave === 'function') {
+            window.creditScoreModule.autoSave();
         }
     }
 
@@ -527,7 +375,6 @@ class HierarchicalNavigation {
     saveTabState() {
         const state = {
             currentTab: this.currentTab,
-            currentSection: this.currentSection,
             completedTabs: Array.from(this.completedTabs),
             tabsWithErrors: Array.from(this.tabsWithErrors),
             tabsWithWarnings: Array.from(this.tabsWithWarnings),
@@ -535,7 +382,7 @@ class HierarchicalNavigation {
         };
 
         try {
-            localStorage.setItem('financiamento_tab_state', JSON.stringify(state));
+            localStorage.setItem('creditscore_tab_state', JSON.stringify(state));
         } catch (e) {
             console.warn('Could not save tab state to localStorage:', e);
         }
@@ -546,11 +393,16 @@ class HierarchicalNavigation {
      */
     loadTabState() {
         try {
-            const saved = localStorage.getItem('financiamento_tab_state');
-            return saved ? JSON.parse(saved) : null;
+            const saved = localStorage.getItem('creditscore_tab_state');
+            if (saved) {
+                const state = JSON.parse(saved);
+                this.currentTab = state.currentTab || 1;
+                this.completedTabs = new Set(state.completedTabs || []);
+                this.tabsWithErrors = new Set(state.tabsWithErrors || []);
+                this.tabsWithWarnings = new Set(state.tabsWithWarnings || []);
+            }
         } catch (e) {
             console.warn('Could not load tab state from localStorage:', e);
-            return null;
         }
     }
 
@@ -560,10 +412,6 @@ class HierarchicalNavigation {
 
     getCurrentTab() {
         return this.currentTab;
-    }
-
-    getCurrentSection() {
-        return this.currentSection;
     }
 
     getCompletedTabs() {
@@ -600,7 +448,9 @@ class HierarchicalNavigation {
             const originalTab = this.currentTab;
             this.currentTab = i;
 
-            const currentSection = document.querySelector(`[data-section="${i}"]`);
+            const moduleName = this.modules[i - 1];
+            const currentSection = document.querySelector(`[data-module="${moduleName}"]`);
+
             if (!currentSection) continue;
 
             const requiredFields = currentSection.querySelectorAll('[required]');
@@ -628,14 +478,13 @@ class HierarchicalNavigation {
 
 // Export class to window (available immediately for dependency checks)
 if (typeof window !== 'undefined') {
-    window.HierarchicalNavigation = HierarchicalNavigation;
+    window.SimpleTabNavigation = SimpleTabNavigation;
 }
 
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HierarchicalNavigation;
+    module.exports = SimpleTabNavigation;
 }
 
 // NOTE: Initialization is managed by CreditScoreProApp.initNavigationAndDB()
-// REMOVED auto-initialization DOMContentLoaded listener to prevent race condition
-// HierarchicalNavigation is now created AFTER generateInterface() creates .tab-item elements
+// SimpleTabNavigation is created AFTER form generation in analise-credito.html

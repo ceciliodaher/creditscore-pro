@@ -825,9 +825,65 @@ export class FormGenerator {
      * @private
      */
     #getModuleFields(module) {
-        // Por enquanto retorna array vazio
-        // Em produção, isso viria de uma configuração de fields específica
-        // ou de um schema externo
+        // REMOVED: Fields are now hardcoded in HTML (hybrid approach)
+        // This method is kept for backward compatibility but returns empty array
+        console.warn(`[FormGenerator] #getModuleFields deprecated - fields hardcoded in HTML`);
+        return [];
+    }
+
+    /**
+     * Campos do módulo Cadastro e Identificação
+     * @private
+     */
+    #getCadastroFields() {
+        // REMOVED: Cadastro fields are now hardcoded in analise-credito.html
+        // See section with data-module="cadastro"
+        console.warn('[FormGenerator] #getCadastroFields deprecated - fields hardcoded in HTML');
+        return [];
+    }
+
+    /**
+     * Campos do módulo Demonstrações Financeiras
+     * @private
+     */
+    #getDemonstracoesFields() {
+        // REMOVED: Demonstrações fields (Balanço + DRE) are now hardcoded in analise-credito.html
+        // See section with data-module="demonstracoes"
+        // 50 contas × 4 períodos (Balanço) + 35 contas × 4 períodos (DRE)
+        console.warn('[FormGenerator] #getDemonstracoesFields deprecated - fields hardcoded in HTML');
+        return [];
+    }
+
+    /**
+     * Campos do módulo Endividamento
+     * @private
+     */
+    #getEndividamentoFields() {
+        // REMOVED: Endividamento fields are now hardcoded in analise-credito.html
+        // See section with data-module="endividamento"
+        console.warn('[FormGenerator] #getEndividamentoFields deprecated - fields hardcoded in HTML');
+        return [];
+    }
+
+    /**
+     * Campos do módulo Compliance
+     * @private
+     */
+    #getComplianceFields() {
+        // REMOVED: Compliance fields are now hardcoded in analise-credito.html
+        // See section with data-module="compliance"
+        console.warn('[FormGenerator] #getComplianceFields deprecated - fields hardcoded in HTML');
+        return [];
+    }
+
+    /**
+     * Campos do módulo Recursos Humanos
+     * @private
+     */
+    #getRecursosHumanosFields() {
+        // REMOVED: Recursos Humanos fields are now hardcoded in analise-credito.html
+        // See section with data-module="recursos-humanos"
+        console.warn('[FormGenerator] #getRecursosHumanosFields deprecated - fields hardcoded in HTML');
         return [];
     }
 

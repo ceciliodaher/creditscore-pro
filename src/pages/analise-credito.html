@@ -13,7 +13,8 @@
     <!-- Estilos Base -->
     <link rel="stylesheet" href="../assets/css/styles-base.css">
     <link rel="stylesheet" href="../assets/css/tabs.css">
-    
+    <link rel="stylesheet" href="../assets/css/creditscore-styles.css">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../assets/images/expertzy_logo.png">
     
@@ -84,9 +85,1538 @@
                     <p>Carregando configurações do sistema...</p>
                 </div>
 
-                <!-- Form Content será gerado dinamicamente -->
-                <div class="form-content" id="formContent" style="display: none;">
-                    <!-- Tab Contents serão injetados aqui -->
+                <!-- Form Content -->
+                <div class="form-content" id="formContent">
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 1: CADASTRO E IDENTIFICAÇÃO -->
+                    <!-- ========================================= -->
+                    <div class="form-section active" data-module="cadastro" id="section-1" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">🏢 Cadastro e Identificação</h2>
+                            <p class="section-description">Dados cadastrais da empresa para análise de crédito</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="razaoSocial">Razão Social *</label>
+                                <input type="text" id="razaoSocial" name="razaoSocial" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nomeFantasia">Nome Fantasia</label>
+                                <input type="text" id="nomeFantasia" name="nomeFantasia">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cnpj">CNPJ *</label>
+                                <input type="text" id="cnpj" name="cnpj" data-mask="cnpj" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inscricaoEstadual">Inscrição Estadual</label>
+                                <input type="text" id="inscricaoEstadual" name="inscricaoEstadual">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dataConstituicao">Data de Constituição *</label>
+                                <input type="date" id="dataConstituicao" name="dataConstituicao" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="uf">Estado (UF) *</label>
+                                <select id="uf" name="uf" required>
+                                    <option value="">Selecione</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="municipio">Município *</label>
+                                <input type="text" id="municipio" name="municipio" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endereco">Endereço Completo *</label>
+                                <textarea id="endereco" name="endereco" rows="2" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="atividadePrincipal">Atividade Principal *</label>
+                                <select id="atividadePrincipal" name="atividadePrincipal" required>
+                                    <option value="">Selecione</option>
+                                    <option value="comercio">Comércio</option>
+                                    <option value="industria">Indústria</option>
+                                    <option value="servicos">Serviços</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="capitalSocial">Capital Social (R$) *</label>
+                                <input type="text" id="capitalSocial" name="capitalSocial" data-mask="currency" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regimeTributario">Regime Tributário *</label>
+                                <select id="regimeTributario" name="regimeTributario" required>
+                                    <option value="">Selecione</option>
+                                    <option value="lucro_real">Lucro Real</option>
+                                    <option value="lucro_presumido">Lucro Presumido</option>
+                                    <option value="simples_nacional">Simples Nacional</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 2: DEMONSTRAÇÕES FINANCEIRAS -->
+                    <!-- Balanço Patrimonial + DRE -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="demonstracoes" id="section-2" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">📊 Demonstrações Financeiras</h2>
+                            <p class="section-description">Balanço Patrimonial e DRE dos últimos 3 anos + 1 balancete</p>
+                        </div>
+
+                        <!-- Configuração de Períodos -->
+                    <div class="periodos-config" style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                        <h3 style="color: #091A30; margin-bottom: 1rem;">📅 Configurar Períodos</h3>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                            <div class="form-group">
+                                <label for="periodo1Data"><strong>Período 1:</strong> Ano N-2</label>
+                                <input type="date" id="periodo1Data" name="periodo1Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <small style="color: #666;">Ex: 31/12/2022</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="periodo2Data"><strong>Período 2:</strong> Ano N-1</label>
+                                <input type="date" id="periodo2Data" name="periodo2Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <small style="color: #666;">Ex: 31/12/2023</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="periodo3Data"><strong>Período 3:</strong> Ano N</label>
+                                <input type="date" id="periodo3Data" name="periodo3Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <small style="color: #666;">Ex: 31/12/2024</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="periodo4Data"><strong>Período 4:</strong> Balancete Atual</label>
+                                <input type="date" id="periodo4Data" name="periodo4Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <small style="color: #666;">Ex: 30/09/2025</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela Matricial Cronológica COMPLETA (50 contas × 4 períodos = 200 inputs) -->
+                    <div class="balanco-container">
+                        <table class="balanco-cronologico" >
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">CONTA</th>
+                                    <th colspan="4">PERÍODOS (R$)</th>
+                                </tr>
+                                <tr>
+                                    <th>Período 1<br>(Ano N-2)</th>
+                                    <th>Período 2<br>(Ano N-1)</th>
+                                    <th>Período 3<br>(Ano N)</th>
+                                    <th>Período 4<br>(Balancete)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="ativo-body">
+                                <!-- ============================================ -->
+                                <!-- GRUPO: ATIVO -->
+                                <!-- ============================================ -->
+                                <tr class="grupo-header">
+                                    <td colspan="5">
+                                        <strong>▼ ATIVO</strong>
+                                    </td>
+                                </tr>
+
+                                <!-- ========== 1. ATIVO CIRCULANTE (12 contas) ========== -->
+                                <tr class="subcategoria-level1">
+                                    <td>1. ATIVO CIRCULANTE</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 1.1 Caixa e Equivalentes -->
+                                <tr class="conta-row">
+                                    <td>1.1 Caixa e Equivalentes de Caixa</td>
+                                    <td><input type="text" id="caixa_p1" class="input-valor"></td>
+                                    <td><input type="text" id="caixa_p2" class="input-valor"></td>
+                                    <td><input type="text" id="caixa_p3" class="input-valor"></td>
+                                    <td><input type="text" id="caixa_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.2 Bancos -->
+                                <tr class="conta-row">
+                                    <td>1.2 Bancos</td>
+                                    <td><input type="text" id="bancos_p1" class="input-valor"></td>
+                                    <td><input type="text" id="bancos_p2" class="input-valor"></td>
+                                    <td><input type="text" id="bancos_p3" class="input-valor"></td>
+                                    <td><input type="text" id="bancos_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.3 Aplicações Financeiras -->
+                                <tr class="conta-row">
+                                    <td>1.3 Aplicações Financeiras</td>
+                                    <td><input type="text" id="aplicacoes_p1" class="input-valor"></td>
+                                    <td><input type="text" id="aplicacoes_p2" class="input-valor"></td>
+                                    <td><input type="text" id="aplicacoes_p3" class="input-valor"></td>
+                                    <td><input type="text" id="aplicacoes_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.4 Contas a Receber -->
+                                <tr class="conta-row">
+                                    <td>1.4 Contas a Receber</td>
+                                    <td><input type="text" id="contasReceber_p1" class="input-valor"></td>
+                                    <td><input type="text" id="contasReceber_p2" class="input-valor"></td>
+                                    <td><input type="text" id="contasReceber_p3" class="input-valor"></td>
+                                    <td><input type="text" id="contasReceber_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.5 (-) PDD - Provisão Devedores Duvidosos -->
+                                <tr class="conta-row negative-account">
+                                    <td>1.5 (-) PDD - Provisão Devedores Duvidosos</td>
+                                    <td><input type="text" id="pdd_p1" class="input-valor"></td>
+                                    <td><input type="text" id="pdd_p2" class="input-valor"></td>
+                                    <td><input type="text" id="pdd_p3" class="input-valor"></td>
+                                    <td><input type="text" id="pdd_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.6 Estoques - Matéria-Prima -->
+                                <tr class="conta-row">
+                                    <td>1.6 Estoques - Matéria-Prima</td>
+                                    <td><input type="text" id="estoqueMP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueMP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueMP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueMP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.7 Estoques - Produtos em Processo -->
+                                <tr class="conta-row">
+                                    <td>1.7 Estoques - Produtos em Processo (WIP)</td>
+                                    <td><input type="text" id="estoqueWIP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueWIP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueWIP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueWIP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.8 Estoques - Produtos Acabados -->
+                                <tr class="conta-row">
+                                    <td>1.8 Estoques - Produtos Acabados</td>
+                                    <td><input type="text" id="estoqueProdAcabados_p1" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p2" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p3" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.9 Estoques - Peças de Reposição -->
+                                <tr class="conta-row">
+                                    <td>1.9 Estoques - Peças de Reposição</td>
+                                    <td><input type="text" id="estoquePecasReposicao_p1" class="input-valor"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p2" class="input-valor"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p3" class="input-valor"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.10 Impostos a Recuperar -->
+                                <tr class="conta-row">
+                                    <td>1.10 Impostos a Recuperar</td>
+                                    <td><input type="text" id="impostosRecuperar_p1" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecuperar_p2" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecuperar_p3" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecuperar_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.11 Adiantamentos a Fornecedores -->
+                                <tr class="conta-row">
+                                    <td>1.11 Adiantamentos a Fornecedores</td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p1" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p2" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p3" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 1.12 Outros Ativos Circulantes -->
+                                <tr class="conta-row">
+                                    <td>1.12 Outros Ativos Circulantes</td>
+                                    <td><input type="text" id="outrosAC_p1" class="input-valor"></td>
+                                    <td><input type="text" id="outrosAC_p2" class="input-valor"></td>
+                                    <td><input type="text" id="outrosAC_p3" class="input-valor"></td>
+                                    <td><input type="text" id="outrosAC_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL ATIVO CIRCULANTE -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL ATIVO CIRCULANTE</td>
+                                    <td class="subtotal-valor" id="ativoCirculanteTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="ativoCirculanteTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="ativoCirculanteTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="ativoCirculanteTotal_p4">-</td>
+                                </tr>
+
+                                <!-- ========== 2. ATIVO NÃO CIRCULANTE (17 contas) ========== -->
+                                <tr class="subcategoria-level1 section-divider">
+                                    <td>2. ATIVO NÃO CIRCULANTE</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- Realizável a Longo Prazo -->
+                                <tr class="subcategoria-level2">
+                                    <td>2.1 Realizável a Longo Prazo</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 2.1.1 Títulos a Receber LP -->
+                                <tr class="conta-row">
+                                    <td>2.1.1 Títulos a Receber LP</td>
+                                    <td><input type="text" id="titulosReceberLP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="titulosReceberLP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="titulosReceberLP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="titulosReceberLP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.1.2 Depósitos Judiciais -->
+                                <tr class="conta-row">
+                                    <td>2.1.2 Depósitos Judiciais</td>
+                                    <td><input type="text" id="depositosJudiciais_p1" class="input-valor"></td>
+                                    <td><input type="text" id="depositosJudiciais_p2" class="input-valor"></td>
+                                    <td><input type="text" id="depositosJudiciais_p3" class="input-valor"></td>
+                                    <td><input type="text" id="depositosJudiciais_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.1.3 Outros Créditos LP -->
+                                <tr class="conta-row">
+                                    <td>2.1.3 Outros Créditos LP</td>
+                                    <td><input type="text" id="outrosCreditosLP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- Investimentos -->
+                                <tr class="subcategoria-level2">
+                                    <td>2.2 Investimentos</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 2.2.1 Participações Societárias -->
+                                <tr class="conta-row">
+                                    <td>2.2.1 Participações Societárias</td>
+                                    <td><input type="text" id="participacoesSocietarias_p1" class="input-valor"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p2" class="input-valor"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p3" class="input-valor"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.2.2 Outros Investimentos -->
+                                <tr class="conta-row">
+                                    <td>2.2.2 Outros Investimentos</td>
+                                    <td><input type="text" id="outrosInvestimentos_p1" class="input-valor"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p2" class="input-valor"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p3" class="input-valor"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- Imobilizado -->
+                                <tr class="subcategoria-level2">
+                                    <td>2.3 Imobilizado</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 2.3.1 Terrenos -->
+                                <tr class="conta-row">
+                                    <td>2.3.1 Terrenos</td>
+                                    <td><input type="text" id="terrenos_p1" class="input-valor"></td>
+                                    <td><input type="text" id="terrenos_p2" class="input-valor"></td>
+                                    <td><input type="text" id="terrenos_p3" class="input-valor"></td>
+                                    <td><input type="text" id="terrenos_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.2 Edificações -->
+                                <tr class="conta-row">
+                                    <td>2.3.2 Edificações</td>
+                                    <td><input type="text" id="edificacoes_p1" class="input-valor"></td>
+                                    <td><input type="text" id="edificacoes_p2" class="input-valor"></td>
+                                    <td><input type="text" id="edificacoes_p3" class="input-valor"></td>
+                                    <td><input type="text" id="edificacoes_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.3 Máquinas e Equipamentos -->
+                                <tr class="conta-row">
+                                    <td>2.3.3 Máquinas e Equipamentos</td>
+                                    <td><input type="text" id="maquinasEquipamentos_p1" class="input-valor"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p2" class="input-valor"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p3" class="input-valor"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.4 Veículos -->
+                                <tr class="conta-row">
+                                    <td>2.3.4 Veículos</td>
+                                    <td><input type="text" id="veiculos_p1" class="input-valor"></td>
+                                    <td><input type="text" id="veiculos_p2" class="input-valor"></td>
+                                    <td><input type="text" id="veiculos_p3" class="input-valor"></td>
+                                    <td><input type="text" id="veiculos_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.5 Móveis e Utensílios -->
+                                <tr class="conta-row">
+                                    <td>2.3.5 Móveis e Utensílios</td>
+                                    <td><input type="text" id="moveisUtensilios_p1" class="input-valor"></td>
+                                    <td><input type="text" id="moveisUtensilios_p2" class="input-valor"></td>
+                                    <td><input type="text" id="moveisUtensilios_p3" class="input-valor"></td>
+                                    <td><input type="text" id="moveisUtensilios_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.6 Equipamentos de Informática -->
+                                <tr class="conta-row">
+                                    <td>2.3.6 Equipamentos de Informática</td>
+                                    <td><input type="text" id="equipamentosInformatica_p1" class="input-valor"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p2" class="input-valor"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p3" class="input-valor"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.7 Imobilizado em Andamento -->
+                                <tr class="conta-row">
+                                    <td>2.3.7 Imobilizado em Andamento</td>
+                                    <td><input type="text" id="imobilizadoAndamento_p1" class="input-valor"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p2" class="input-valor"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p3" class="input-valor"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.3.8 (-) Depreciação Acumulada -->
+                                <tr class="conta-row negative-account">
+                                    <td>2.3.8 (-) Depreciação Acumulada</td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p1" class="input-valor"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p2" class="input-valor"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p3" class="input-valor"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- Intangível -->
+                                <tr class="subcategoria-level2">
+                                    <td>2.4 Intangível</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 2.4.1 Software -->
+                                <tr class="conta-row">
+                                    <td>2.4.1 Software</td>
+                                    <td><input type="text" id="software_p1" class="input-valor"></td>
+                                    <td><input type="text" id="software_p2" class="input-valor"></td>
+                                    <td><input type="text" id="software_p3" class="input-valor"></td>
+                                    <td><input type="text" id="software_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.4.2 Marcas e Patentes -->
+                                <tr class="conta-row">
+                                    <td>2.4.2 Marcas e Patentes</td>
+                                    <td><input type="text" id="marcasPatentes_p1" class="input-valor"></td>
+                                    <td><input type="text" id="marcasPatentes_p2" class="input-valor"></td>
+                                    <td><input type="text" id="marcasPatentes_p3" class="input-valor"></td>
+                                    <td><input type="text" id="marcasPatentes_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.4.3 Fundo de Comércio (Goodwill) -->
+                                <tr class="conta-row">
+                                    <td>2.4.3 Fundo de Comércio (Goodwill)</td>
+                                    <td><input type="text" id="goodwill_p1" class="input-valor"></td>
+                                    <td><input type="text" id="goodwill_p2" class="input-valor"></td>
+                                    <td><input type="text" id="goodwill_p3" class="input-valor"></td>
+                                    <td><input type="text" id="goodwill_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 2.4.4 (-) Amortização Acumulada -->
+                                <tr class="conta-row last-in-group negative-account">
+                                    <td>2.4.4 (-) Amortização Acumulada</td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p1" class="input-valor"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p2" class="input-valor"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p3" class="input-valor"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL ATIVO NÃO CIRCULANTE -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL ATIVO NÃO CIRCULANTE</td>
+                                    <td class="subtotal-valor" id="ativoNaoCirculanteTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="ativoNaoCirculanteTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="ativoNaoCirculanteTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="ativoNaoCirculanteTotal_p4">-</td>
+                                </tr>
+
+                                <!-- TOTAL ATIVO -->
+                                <tr class="total-row">
+                                    <td>TOTAL ATIVO</td>
+                                    <td class="total-valor" id="ativoTotal_p1">
+                                        <span class="valor">-</span>
+                                        <span class="validacao-icon" id="validacao-p1">⚪</span>
+                                    </td>
+                                    <td class="total-valor" id="ativoTotal_p2">
+                                        <span class="valor">-</span>
+                                        <span class="validacao-icon" id="validacao-p2">⚪</span>
+                                    </td>
+                                    <td class="total-valor" id="ativoTotal_p3">
+                                        <span class="valor">-</span>
+                                        <span class="validacao-icon" id="validacao-p3">⚪</span>
+                                    </td>
+                                    <td class="total-valor" id="ativoTotal_p4">
+                                        <span class="valor">-</span>
+                                        <span class="validacao-icon" id="validacao-p4">⚪</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tbody id="passivo-body" >
+                                <!-- ============================================ -->
+                                <!-- GRUPO: PASSIVO E PATRIMÔNIO LÍQUIDO -->
+                                <!-- ============================================ -->
+                                <tr class="grupo-header">
+                                    <td colspan="5">
+                                        <strong>▼ PASSIVO E PATRIMÔNIO LÍQUIDO</strong>
+                                    </td>
+                                </tr>
+
+                                <!-- ========== 3. PASSIVO CIRCULANTE (9 contas) ========== -->
+                                <tr class="subcategoria-level1 passivo">
+                                    <td>3. PASSIVO CIRCULANTE</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 3.1 Fornecedores -->
+                                <tr class="conta-row">
+                                    <td>3.1 Fornecedores</td>
+                                    <td><input type="text" id="fornecedores_p1" class="input-valor"></td>
+                                    <td><input type="text" id="fornecedores_p2" class="input-valor"></td>
+                                    <td><input type="text" id="fornecedores_p3" class="input-valor"></td>
+                                    <td><input type="text" id="fornecedores_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.2 Empréstimos e Financiamentos CP -->
+                                <tr class="conta-row">
+                                    <td>3.2 Empréstimos e Financiamentos CP</td>
+                                    <td><input type="text" id="emprestimosCP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosCP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosCP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosCP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.3 Salários a Pagar -->
+                                <tr class="conta-row">
+                                    <td>3.3 Salários a Pagar</td>
+                                    <td><input type="text" id="salariosPagar_p1" class="input-valor"></td>
+                                    <td><input type="text" id="salariosPagar_p2" class="input-valor"></td>
+                                    <td><input type="text" id="salariosPagar_p3" class="input-valor"></td>
+                                    <td><input type="text" id="salariosPagar_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.4 Encargos Sociais a Pagar -->
+                                <tr class="conta-row">
+                                    <td>3.4 Encargos Sociais a Pagar</td>
+                                    <td><input type="text" id="encargosSociaisPagar_p1" class="input-valor"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p2" class="input-valor"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p3" class="input-valor"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.5 Impostos a Recolher -->
+                                <tr class="conta-row">
+                                    <td>3.5 Impostos a Recolher</td>
+                                    <td><input type="text" id="impostosRecolher_p1" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecolher_p2" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecolher_p3" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecolher_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.6 Dividendos a Pagar -->
+                                <tr class="conta-row">
+                                    <td>3.6 Dividendos a Pagar</td>
+                                    <td><input type="text" id="dividendosPagar_p1" class="input-valor"></td>
+                                    <td><input type="text" id="dividendosPagar_p2" class="input-valor"></td>
+                                    <td><input type="text" id="dividendosPagar_p3" class="input-valor"></td>
+                                    <td><input type="text" id="dividendosPagar_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.7 Adiantamentos de Clientes -->
+                                <tr class="conta-row">
+                                    <td>3.7 Adiantamentos de Clientes</td>
+                                    <td><input type="text" id="adiantamentosClientes_p1" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p2" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p3" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.8 Obrigações Fiscais -->
+                                <tr class="conta-row">
+                                    <td>3.8 Obrigações Fiscais</td>
+                                    <td><input type="text" id="obrigacoesFiscais_p1" class="input-valor"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p2" class="input-valor"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p3" class="input-valor"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 3.9 Outros Passivos Circulantes -->
+                                <tr class="conta-row">
+                                    <td>3.9 Outros Passivos Circulantes</td>
+                                    <td><input type="text" id="outrosPC_p1" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPC_p2" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPC_p3" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPC_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL PASSIVO CIRCULANTE -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL PASSIVO CIRCULANTE</td>
+                                    <td class="subtotal-valor" id="passivoCirculanteTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="passivoCirculanteTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="passivoCirculanteTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="passivoCirculanteTotal_p4">-</td>
+                                </tr>
+
+                                <!-- ========== 4. PASSIVO NÃO CIRCULANTE (6 contas) ========== -->
+                                <tr class="subcategoria-level1 section-divider passivo">
+                                    <td>4. PASSIVO NÃO CIRCULANTE</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 4.1 Empréstimos e Financiamentos LP -->
+                                <tr class="conta-row">
+                                    <td>4.1 Empréstimos e Financiamentos LP</td>
+                                    <td><input type="text" id="emprestimosLP_p1" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosLP_p2" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosLP_p3" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosLP_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 4.2 Financiamentos Imobiliários -->
+                                <tr class="conta-row">
+                                    <td>4.2 Financiamentos Imobiliários</td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p1" class="input-valor"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p2" class="input-valor"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p3" class="input-valor"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 4.3 Debêntures -->
+                                <tr class="conta-row">
+                                    <td>4.3 Debêntures</td>
+                                    <td><input type="text" id="debentures_p1" class="input-valor"></td>
+                                    <td><input type="text" id="debentures_p2" class="input-valor"></td>
+                                    <td><input type="text" id="debentures_p3" class="input-valor"></td>
+                                    <td><input type="text" id="debentures_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 4.4 Provisões Trabalhistas -->
+                                <tr class="conta-row">
+                                    <td>4.4 Provisões Trabalhistas</td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p1" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p2" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p3" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 4.5 Provisões Fiscais -->
+                                <tr class="conta-row">
+                                    <td>4.5 Provisões Fiscais</td>
+                                    <td><input type="text" id="provisoesFiscais_p1" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesFiscais_p2" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesFiscais_p3" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesFiscais_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 4.6 Outros Passivos Não Circulantes -->
+                                <tr class="conta-row">
+                                    <td>4.6 Outros Passivos Não Circulantes</td>
+                                    <td><input type="text" id="outrosPNC_p1" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPNC_p2" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPNC_p3" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPNC_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL PASSIVO NÃO CIRCULANTE -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL PASSIVO NÃO CIRCULANTE</td>
+                                    <td class="subtotal-valor" id="passivoNaoCirculanteTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="passivoNaoCirculanteTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="passivoNaoCirculanteTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="passivoNaoCirculanteTotal_p4">-</td>
+                                </tr>
+
+                                <!-- ========== 5. PATRIMÔNIO LÍQUIDO (6 contas) ========== -->
+                                <tr class="subcategoria-level1 patrimonio">
+                                    <td>5. PATRIMÔNIO LÍQUIDO</td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <!-- 5.1 Capital Social -->
+                                <tr class="conta-row">
+                                    <td>5.1 Capital Social</td>
+                                    <td><input type="text" id="capitalSocial_p1" class="input-valor"></td>
+                                    <td><input type="text" id="capitalSocial_p2" class="input-valor"></td>
+                                    <td><input type="text" id="capitalSocial_p3" class="input-valor"></td>
+                                    <td><input type="text" id="capitalSocial_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.2 Reserva de Capital -->
+                                <tr class="conta-row">
+                                    <td>5.2 Reserva de Capital</td>
+                                    <td><input type="text" id="reservaCapital_p1" class="input-valor"></td>
+                                    <td><input type="text" id="reservaCapital_p2" class="input-valor"></td>
+                                    <td><input type="text" id="reservaCapital_p3" class="input-valor"></td>
+                                    <td><input type="text" id="reservaCapital_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.3 Reserva de Lucros -->
+                                <tr class="conta-row">
+                                    <td>5.3 Reserva de Lucros</td>
+                                    <td><input type="text" id="reservaLucros_p1" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLucros_p2" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLucros_p3" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLucros_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.4 Reserva Legal -->
+                                <tr class="conta-row">
+                                    <td>5.4 Reserva Legal</td>
+                                    <td><input type="text" id="reservaLegal_p1" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLegal_p2" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLegal_p3" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLegal_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.5 Lucros/Prejuízos Acumulados -->
+                                <tr class="conta-row">
+                                    <td>5.5 Lucros/Prejuízos Acumulados</td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p1" class="input-valor"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p2" class="input-valor"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p3" class="input-valor"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.6 Ajustes de Avaliação Patrimonial -->
+                                <tr class="conta-row">
+                                    <td>5.6 Ajustes de Avaliação Patrimonial</td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p1" class="input-valor"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p2" class="input-valor"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p3" class="input-valor"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- 5.7 (-) Ações em Tesouraria -->
+                                <tr class="conta-row last-in-group negative-account">
+                                    <td>5.7 (-) Ações em Tesouraria</td>
+                                    <td><input type="text" id="acoesTesouraria_p1" class="input-valor"></td>
+                                    <td><input type="text" id="acoesTesouraria_p2" class="input-valor"></td>
+                                    <td><input type="text" id="acoesTesouraria_p3" class="input-valor"></td>
+                                    <td><input type="text" id="acoesTesouraria_p4" class="input-valor"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL PATRIMÔNIO LÍQUIDO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL PATRIMÔNIO LÍQUIDO</td>
+                                    <td class="subtotal-valor" id="patrimonioLiquidoTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="patrimonioLiquidoTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="patrimonioLiquidoTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="patrimonioLiquidoTotal_p4">-</td>
+                                </tr>
+
+                                <!-- TOTAL PASSIVO + PL -->
+                                <tr class="total-row">
+                                    <td>TOTAL PASSIVO + PATRIMÔNIO LÍQUIDO</td>
+                                    <td class="total-valor" id="totalPassivoPL_p1">-</td>
+                                    <td class="total-valor" id="totalPassivoPL_p2">-</td>
+                                    <td class="total-valor" id="totalPassivoPL_p3">-</td>
+                                    <td class="total-valor" id="totalPassivoPL_p4">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Legenda de Validação -->
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
+                        <p style="margin: 0; color: #666; font-size: 0.875rem;">
+                            <strong>Legenda de Validação:</strong>
+                            ✅ Equilibrado (Ativo = Passivo + PL) |
+                            ❌ Desbalanceado |
+                            ⚪ Dados Insuficientes
+                        </p>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="acoes-balanco">
+                        <button id="btnGerarAnalises" class="btn btn-primary">📊 Gerar Análises Completas</button>
+                        <button id="btnImportarExcel" class="btn btn-secondary">📥 Importar Excel/JSON</button>
+                        <button id="btnExportar" class="btn btn-secondary">📤 Exportar JSON</button>
+                    </div>
+
+                    <!-- Tabs de Análises -->
+                    <div class="analises-container">
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="analise-horizontal">Análise Horizontal</button>
+                            <button class="tab-btn" data-tab="analise-vertical">Análise Vertical</button>
+                            <button class="tab-btn" data-tab="indicadores">Indicadores</button>
+                            <button class="tab-btn" data-tab="graficos">Gráficos</button>
+                        </div>
+
+                        <!-- Tab: Análise Horizontal -->
+                        <div id="analise-horizontal" class="tab-content active">
+                            <div id="tabelaAnaliseHorizontal" class="empty-state">
+                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Análise Vertical -->
+                        <div id="analise-vertical" class="tab-content">
+                            <div id="tabelaAnaliseVertical" class="empty-state">
+                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Indicadores -->
+                        <div id="indicadores" class="tab-content">
+                            <div id="tabelaIndicadores" class="empty-state">
+                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Gráficos -->
+                        <div id="graficos" class="tab-content">
+                            <div id="containerGraficos" class="empty-state">
+                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 3rem 0; border: 0; border-top: 2px solid #e0e0e0;">
+
+                    <!-- =========================================== -->
+                    <!-- DRE - DEMONSTRAÇÃO DO RESULTADO             -->
+                    <!-- =========================================== -->
+                    <h3 style="color: #091A30; margin-bottom: 1.5rem;">📈 Demonstração do Resultado do Exercício (DRE)</h3>
+
+                    <!-- INSTRUÇÕES -->
+                    <div class="alert alert-info" style="margin-bottom: 2rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                        <strong>📋 Instruções:</strong> Preencha as DREs históricas de 3 anos completos + 1 período parcial (se aplicável).
+                        Todos os valores monetários devem ser em <strong>R$ (Reais)</strong>.
+                        Marque o checkbox "Período Parcial" e informe os meses decorridos (1-11) caso aplicável.
+                    </div>
+
+                    <!-- CONFIGURAÇÃO DOS PERÍODOS -->
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="form-group">
+                            <label for="dre-periodo1-data">Período 1 - Data (AAAA-MM-DD)</label>
+                            <input type="date" id="dre-periodo1-data" class="form-control" value="2022-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="dre-periodo2-data">Período 2 - Data (AAAA-MM-DD)</label>
+                            <input type="date" id="dre-periodo2-data" class="form-control" value="2023-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="dre-periodo3-data">Período 3 - Data (AAAA-MM-DD)</label>
+                            <input type="date" id="dre-periodo3-data" class="form-control" value="2024-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="dre-periodo4-data">Período 4 - Data (AAAA-MM-DD)</label>
+                            <input type="date" id="dre-periodo4-data" class="form-control" value="2025-09-30" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="form-group"></div>
+                        <div class="form-group"></div>
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="dre-periodo4-parcial" style="margin-right: 0.5rem;">
+                                <span>Período 4 é parcial</span>
+                            </label>
+                            <label for="dre-periodo4-meses" style="margin-top: 0.5rem;">Meses Decorridos (1-11)</label>
+                            <input type="number" id="dre-periodo4-meses" class="form-control" min="1" max="11" value="9" disabled style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    </div>
+
+                    <!-- TABELA MATRICIAL DRE (30 contas × 4 períodos) -->
+                    <div class="dre-container">
+                        <table class="dre-cronologico">
+                            <thead>
+                                <tr>
+                                    <th>CONTA</th>
+                                    <th>Período 1</th>
+                                    <th>Período 2</th>
+                                    <th>Período 3</th>
+                                    <th>Período 4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- GRUPO: RECEITA BRUTA -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>RECEITA BRUTA</strong></td>
+                                </tr>
+                                <tr class="conta-row">
+                                    <td>Vendas de Produtos</td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasProdutos" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasProdutos" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasProdutos" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasProdutos" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row">
+                                    <td>Vendas de Serviços</td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasServicos" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasServicos" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasServicos" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasServicos" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row last-in-group">
+                                    <td>Outras Receitas Operacionais</td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasReceitas" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasReceitas" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasReceitas" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasReceitas" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>TOTAL RECEITA BRUTA</td>
+                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- GRUPO: DEDUÇÕES DA RECEITA -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>DEDUÇÕES DA RECEITA</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) ICMS sobre Vendas</td>
+                                    <td><input type="text" class="input-valor" data-conta="icms" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="icms" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="icms" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="icms" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) PIS sobre Vendas</td>
+                                    <td><input type="text" class="input-valor" data-conta="pis" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pis" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pis" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pis" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) COFINS sobre Vendas</td>
+                                    <td><input type="text" class="input-valor" data-conta="cofins" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="cofins" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="cofins" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="cofins" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) ISS sobre Serviços</td>
+                                    <td><input type="text" class="input-valor" data-conta="iss" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="iss" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="iss" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="iss" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Devoluções e Cancelamentos</td>
+                                    <td><input type="text" class="input-valor" data-conta="devolucoesVendas" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="devolucoesVendas" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="devolucoesVendas" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="devolucoesVendas" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Abatimentos Concedidos</td>
+                                    <td><input type="text" class="input-valor" data-conta="abatimentos" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="abatimentos" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="abatimentos" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="abatimentos" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>TOTAL DEDUÇÕES</td>
+                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL: RECEITA LÍQUIDA -->
+                                <tr class="total-row">
+                                    <td>RECEITA OPERACIONAL LÍQUIDA</td>
+                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- GRUPO: CUSTOS OPERACIONAIS -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>CUSTOS OPERACIONAIS</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) CMV / CPV</td>
+                                    <td><input type="text" class="input-valor" data-conta="materiaPrima" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="materiaPrima" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="materiaPrima" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="materiaPrima" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Custos dos Serviços Prestados</td>
+                                    <td><input type="text" class="input-valor" data-conta="embalagens" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="embalagens" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="embalagens" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="embalagens" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Mão-de-Obra de Produção</td>
+                                    <td><input type="text" class="input-valor" data-conta="maoObraDireta" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="maoObraDireta" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="maoObraDireta" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="maoObraDireta" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Terceirização de Produção</td>
+                                    <td><input type="text" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Outros Custos Variáveis</td>
+                                    <td><input type="text" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>TOTAL CUSTOS OPERACIONAIS</td>
+                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL: LUCRO BRUTO -->
+                                <tr class="total-row">
+                                    <td>LUCRO BRUTO</td>
+                                    <td class="total-valor" data-total="lucroBruto" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroBruto" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroBruto" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroBruto" data-periodo="4">R$ 0,00</td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Margem Bruta (%)</td>
+                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="4">0,00%</td>
+                                </tr>
+
+                                <!-- GRUPO: DESPESAS DE VENDAS -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>DESPESAS COM VENDAS</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Comissões sobre Vendas</td>
+                                    <td><input type="text" class="input-valor" data-conta="comissoes" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="comissoes" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="comissoes" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="comissoes" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Marketing e Publicidade</td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasMarketing" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasMarketing" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasMarketing" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="vendasMarketing" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Fretes e Entregas</td>
+                                    <td><input type="text" class="input-valor" data-conta="frete" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="frete" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="frete" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="frete" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Outras Despesas de Vendas</td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespVendas" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespVendas" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespVendas" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespVendas" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Subtotal Despesas de Vendas</td>
+                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- GRUPO: DESPESAS ADMINISTRATIVAS -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>DESPESAS ADMINISTRATIVAS</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Salários Administrativos</td>
+                                    <td><input type="text" class="input-valor" data-conta="pessoal" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pessoal" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pessoal" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="pessoal" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Aluguéis e Condomínios</td>
+                                    <td><input type="text" class="input-valor" data-conta="alugueis" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="alugueis" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="alugueis" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="alugueis" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Utilidades (Água, Luz, Telecom)</td>
+                                    <td><input type="text" class="input-valor" data-conta="utilidades" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="utilidades" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="utilidades" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="utilidades" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Seguros</td>
+                                    <td><input type="text" class="input-valor" data-conta="seguros" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="seguros" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="seguros" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="seguros" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Manutenção e Reparos</td>
+                                    <td><input type="text" class="input-valor" data-conta="manutencao" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="manutencao" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="manutencao" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="manutencao" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Tecnologia da Informação</td>
+                                    <td><input type="text" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) Serviços de Terceiros</td>
+                                    <td><input type="text" class="input-valor" data-conta="servicosProfissionais" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="servicosProfissionais" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="servicosProfissionais" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="servicosProfissionais" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Outras Despesas Administrativas</td>
+                                    <td><input type="text" class="input-valor" data-conta="administrativas" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="administrativas" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="administrativas" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="administrativas" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Subtotal Despesas Administrativas</td>
+                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- OUTRAS DESPESAS OPERACIONAIS -->
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Outras Despesas Operacionais</td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespesas" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespesas" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespesas" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="outrasDespesas" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>TOTAL DESPESAS OPERACIONAIS</td>
+                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL: EBITDA -->
+                                <tr class="total-row">
+                                    <td>EBITDA</td>
+                                    <td class="total-valor" data-total="ebitda" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebitda" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebitda" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebitda" data-periodo="4">R$ 0,00</td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Margem EBITDA (%)</td>
+                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="4">0,00%</td>
+                                </tr>
+
+                                <!-- GRUPO: DEPRECIAÇÃO E AMORTIZAÇÃO -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>DEPRECIAÇÃO E AMORTIZAÇÃO</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Depreciação e Amortização</td>
+                                    <td><input type="text" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Total Deprec. e Amortiz.</td>
+                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL: EBIT -->
+                                <tr class="total-row">
+                                    <td>EBIT (Lucro Operacional)</td>
+                                    <td class="total-valor" data-total="ebit" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebit" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebit" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="ebit" data-periodo="4">R$ 0,00</td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Margem Operacional (%)</td>
+                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="4">0,00%</td>
+                                </tr>
+
+                                <!-- GRUPO: RESULTADO FINANCEIRO -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>RESULTADO FINANCEIRO</strong></td>
+                                </tr>
+                                <tr class="conta-row">
+                                    <td>(+) Receitas Financeiras</td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasFinanceiras" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasFinanceiras" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasFinanceiras" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasFinanceiras" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Despesas Financeiras</td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasFinanceiras" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasFinanceiras" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasFinanceiras" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasFinanceiras" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Resultado Financeiro Líquido</td>
+                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- GRUPO: OUTRAS RECEITAS/DESPESAS -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>OUTRAS RECEITAS/DESPESAS</strong></td>
+                                </tr>
+                                <tr class="conta-row">
+                                    <td>(+) Outras Receitas Não-Operacionais</td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) Outras Despesas Não-Operacionais</td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Outras Receitas/Despesas Líquidas</td>
+                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL: LAIR -->
+                                <tr class="total-row">
+                                    <td>LAIR (Lucro Antes do IR)</td>
+                                    <td class="total-valor" data-total="lair" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lair" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lair" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lair" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- GRUPO: IMPOSTOS SOBRE LUCRO -->
+                                <tr class="grupo-header">
+                                    <td colspan="5"><strong>IMPOSTOS SOBRE LUCRO</strong></td>
+                                </tr>
+                                <tr class="conta-row negative-account">
+                                    <td>(-) IRPJ</td>
+                                    <td><input type="text" class="input-valor" data-conta="ir" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="ir" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="ir" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="ir" data-periodo="4"></td>
+                                </tr>
+                                <tr class="conta-row negative-account last-in-group">
+                                    <td>(-) CSLL</td>
+                                    <td><input type="text" class="input-valor" data-conta="csll" data-periodo="1"></td>
+                                    <td><input type="text" class="input-valor" data-conta="csll" data-periodo="2"></td>
+                                    <td><input type="text" class="input-valor" data-conta="csll" data-periodo="3"></td>
+                                    <td><input type="text" class="input-valor" data-conta="csll" data-periodo="4"></td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Total Impostos sobre Lucro</td>
+                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="4">R$ 0,00</td>
+                                </tr>
+
+                                <!-- TOTAL FINAL: LUCRO LÍQUIDO -->
+                                <tr class="total-row">
+                                    <td>LUCRO LÍQUIDO DO EXERCÍCIO</td>
+                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="4">R$ 0,00</td>
+                                </tr>
+                                <tr class="subtotal-row">
+                                    <td>Margem Líquida (%)</td>
+                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="4">0,00%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 3: ANÁLISE DE ENDIVIDAMENTO -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="endividamento" id="section-3" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">💳 Análise de Endividamento</h2>
+                            <p class="section-description">Dívidas bancárias, obrigações e indicadores de endividamento</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="instituicaoFinanceira">Instituição Financeira *</label>
+                                <input type="text" id="instituicaoFinanceira" name="instituicaoFinanceira" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoDivida">Tipo de Dívida *</label>
+                                <select id="tipoDivida" name="tipoDivida" required>
+                                    <option value="">Selecione</option>
+                                    <option value="capital_giro">Capital de Giro</option>
+                                    <option value="investimento">Investimento</option>
+                                    <option value="leasing">Leasing/Arrendamento</option>
+                                    <option value="cheque_especial">Cheque Especial</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="valorOriginal">Valor Original (R$) *</label>
+                                <input type="text" id="valorOriginal" name="valorOriginal" data-mask="currency" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="saldoDevedor">Saldo Devedor Atual (R$) *</label>
+                                <input type="text" id="saldoDevedor" name="saldoDevedor" data-mask="currency" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="taxaJuros">Taxa de Juros (% a.a.) *</label>
+                                <input type="text" id="taxaJuros" name="taxaJuros" data-mask="percentage" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vencimento">Data de Vencimento *</label>
+                                <input type="date" id="vencimento" name="vencimento" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="statusDivida">Status *</label>
+                                <select id="statusDivida" name="statusDivida" required>
+                                    <option value="">Selecione</option>
+                                    <option value="adimplente">Adimplente</option>
+                                    <option value="inadimplente">Inadimplente</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="garantias">Garantias Oferecidas</label>
+                                <textarea id="garantias" name="garantias" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 4: COMPLIANCE E VERIFICAÇÕES -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="compliance" id="section-4" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">✅ Compliance e Verificações</h2>
+                            <p class="section-description">Certidões negativas, regularidade fiscal e situação jurídica</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Certidão Negativa Federal *</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="certidaoNegativaFederal" value="sim" required> Sim</label>
+                                    <label><input type="radio" name="certidaoNegativaFederal" value="nao" required> Não</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Certidão Negativa Estadual *</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="certidaoNegativaEstadual" value="sim" required> Sim</label>
+                                    <label><input type="radio" name="certidaoNegativaEstadual" value="nao" required> Não</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Certidão Negativa Municipal *</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="certidaoNegativaMunicipal" value="sim" required> Sim</label>
+                                    <label><input type="radio" name="certidaoNegativaMunicipal" value="nao" required> Não</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>FGTS Regular *</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="fgtsRegular" value="sim" required> Sim</label>
+                                    <label><input type="radio" name="fgtsRegular" value="nao" required> Não</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Protestos *</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="protestos" value="sim" required> Sim</label>
+                                    <label><input type="radio" name="protestos" value="nao" required> Não</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="processosJudiciais">Número de Processos Judiciais</label>
+                                <input type="number" id="processosJudiciais" name="processosJudiciais" min="0" value="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="observacoesCompliance">Observações</label>
+                                <textarea id="observacoesCompliance" name="observacoesCompliance" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 5: RECURSOS HUMANOS -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="recursos-humanos" id="section-5" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">👥 Recursos Humanos</h2>
+                            <p class="section-description">Estrutura de pessoal e folha de pagamento</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="totalFuncionarios">Total de Funcionários *</label>
+                                <input type="number" id="totalFuncionarios" name="totalFuncionarios" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="folhaPagamentoMensal">Folha de Pagamento Mensal (R$) *</label>
+                                <input type="text" id="folhaPagamentoMensal" name="folhaPagamentoMensal" data-mask="currency" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="encargosSociais">Encargos Sociais Mensais (R$) *</label>
+                                <input type="text" id="encargosSociais" name="encargosSociais" data-mask="currency" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rotatividade">Taxa de Rotatividade (%)</label>
+                                <input type="text" id="rotatividade" name="rotatividade" data-mask="percentage">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="observacoesRH">Observações</label>
+                                <textarea id="observacoesRH" name="observacoesRH" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 6: ÍNDICES FINANCEIROS (Computado) -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="indices" id="section-6" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">📈 Índices Financeiros</h2>
+                            <p class="section-description">Cálculo automático de índices de liquidez, rentabilidade e estrutura</p>
+                        </div>
+                        <div id="indicesContainer" class="results-container">
+                            <p class="text-muted">Calculando índices financeiros...</p>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 7: SCORING DE CRÉDITO (Computado) -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="scoring" id="section-7" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">⭐ Scoring de Crédito</h2>
+                            <p class="section-description">Classificação de risco baseada em análise multifatorial</p>
+                        </div>
+                        <div id="scoringContainer" class="results-container">
+                            <p class="text-muted">Calculando scoring de crédito...</p>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- SEÇÃO 8: RELATÓRIOS E ANÁLISES (Computado) -->
+                    <!-- ========================================= -->
+                    <div class="form-section" data-module="relatorios" id="section-8" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">📄 Relatórios e Análises</h2>
+                            <p class="section-description">Geração de relatórios completos e exportação de dados</p>
+                        </div>
+                        <div id="relatoriosContainer" class="results-container">
+                            <p class="text-muted">Carregando módulo de relatórios...</p>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Form Actions -->
@@ -317,17 +1847,17 @@
                     // FASE 3: GERAÇÃO DO DOM
                     // ========================================
                     // AGORA FormGenerator existe em this.modules.get('formGenerator')
-                    await this.generateInterface(); // Cria .tab-item no DOM
+                    // await this.generateInterface(); // ❌ COMENTADO: HTML já hardcoded, tabs geradas por SimpleTabNavigation
 
                     // ========================================
                     // FASE 4: INICIALIZAÇÃO PÓS-DOM
                     // ========================================
 
-                    // 4.1. HierarchicalNavigation (AGORA .tab-item existe)
-                    this.hierarchicalNav = new window.HierarchicalNavigation();
-                    this.hierarchicalNav.initAfterDOM(); // ✅ Inicializa com DOM pronto
+                    // 4.1. SimpleTabNavigation (8 módulos sequenciais)
+                    this.hierarchicalNav = new window.SimpleTabNavigation();
+                    await this.hierarchicalNav.init(); // ✅ Inicializa sistema de navegação
                     window.hierarchicalNavigation = this.hierarchicalNav;
-                    console.log('✅ HierarchicalNavigation inicializado');
+                    console.log('✅ SimpleTabNavigation inicializado');
 
                     // 4.2. NavigationController (precisa de hierarchicalNav)
                     const navigationController = new window.NavigationController(
@@ -384,6 +1914,15 @@
                 } catch (error) {
                     console.error('❌ Erro na inicialização:', error);
                     this.showError('Erro ao inicializar o sistema', error.message);
+                    
+                    // Fallback: mostrar interface mesmo com erro
+                    try {
+                        this.showInterface();
+                    } catch (showError) {
+                        console.error('❌ Falha ao mostrar interface:', showError);
+                        // Último recurso: esconder loading
+                        document.getElementById('loadingOverlay')?.remove();
+                    }
                 }
             }
 
@@ -499,7 +2038,7 @@
                     'NavigationController',
                     'AutoSave',
                     'CreditScoreModule',
-                    'HierarchicalNavigation',
+                    'SimpleTabNavigation',
                     'CreditscoreIndexedDB'
                 ];
 
