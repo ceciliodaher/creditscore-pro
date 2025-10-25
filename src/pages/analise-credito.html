@@ -869,9 +869,26 @@
                         </p>
                     </div>
 
+                    <!-- Mensagem Informativa sobre Cálculos Automáticos -->
+                    <div class="info-box info-box-primary">
+                        <svg class="info-box-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="info-box-content">
+                            <strong class="info-box-title">Cálculos Automáticos Ativados</strong>
+                            <p class="info-box-text">
+                                Os índices financeiros e scoring serão calculados automaticamente ao navegar para as abas
+                                <strong>"Índices Financeiros"</strong> ou <strong>"Scoring"</strong>.
+                                Não é necessário acionar nenhum botão de cálculo nesta aba.
+                            </p>
+                            <p class="info-box-tip">
+                                💡 Dica: Preencha todos os dados necessários e depois navegue para visualizar os resultados atualizados.
+                            </p>
+                        </div>
+                    </div>
+
                     <!-- Botões de Ação -->
                     <div class="acoes-balanco">
-                        <button id="btnGerarAnalises" class="btn btn-primary">📊 Gerar Análises Completas</button>
                         <button id="btnImportarExcel" class="btn btn-secondary">📥 Importar Excel/JSON</button>
                         <button id="btnExportar" class="btn btn-secondary">📤 Exportar JSON</button>
                     </div>
@@ -1982,6 +1999,10 @@
     <script type="module" src="../assets/js/components/endividamento-integration.js"></script>
 
     <!-- Scripts Core CreditScore -->
+    <script type="module" src="../assets/js/core/message-loader.js"></script>
+    <script type="module" src="../assets/js/core/calculation-state.js"></script>
+    <script type="module" src="../assets/js/core/validation-engine.js"></script>
+    <script type="module" src="../assets/js/core/calculation-orchestrator.js"></script>
     <script type="module" src="../assets/js/core/creditscore-module.js"></script>
     <script type="module" src="../assets/js/core/form-generator.js"></script>
     <script type="module" src="../assets/js/core/navigation-controller.js"></script>

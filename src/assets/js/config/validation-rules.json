@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Regras de Validação - CreditScore Pro",
+  "description": "Configuração externa de regras de validação para cálculos financeiros",
+  "version": "1.0.0",
+
+  "schemas": {
+    "balanco": {
+      "description": "Validação para dados de Balanço Patrimonial",
+      "required": [
+        {
+          "path": "balanco.patrimonioLiquido",
+          "message": "Patrimônio Líquido obrigatório para cálculo de índices",
+          "type": "number",
+          "min": null
+        },
+        {
+          "path": "balanco.ativoTotal",
+          "message": "Ativo Total obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.passivoTotal",
+          "message": "Passivo Total obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.ativoCirculante",
+          "message": "Ativo Circulante obrigatório para cálculo de liquidez",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.passivoCirculante",
+          "message": "Passivo Circulante obrigatório para cálculo de liquidez",
+          "type": "number",
+          "min": 0
+        }
+      ],
+      "businessRules": [
+        {
+          "id": "balanco_ativo_positivo",
+          "field": "balanco.ativoTotal",
+          "expression": "data.balanco.ativoTotal > 0",
+          "message": "Ativo Total deve ser maior que zero",
+          "severity": "error"
+        },
+        {
+          "id": "balanco_equacao_patrimonial",
+          "field": "balanco.equation",
+          "expression": "Math.abs(data.balanco.ativoTotal - (data.balanco.passivoTotal + data.balanco.patrimonioLiquido)) < 0.01",
+          "message": "Equação patrimonial não está balanceada (Ativo ≠ Passivo + PL)",
+          "severity": "warning"
+        },
+        {
+          "id": "balanco_passivo_circulante_positivo",
+          "field": "balanco.passivoCirculante",
+          "expression": "data.balanco.passivoCirculante > 0",
+          "message": "Passivo Circulante deve ser maior que zero para cálculo de liquidez",
+          "severity": "error"
+        }
+      ]
+    },
+
+    "dre": {
+      "description": "Validação para dados de DRE",
+      "required": [
+        {
+          "path": "dre.receitaLiquida",
+          "message": "Receita Líquida obrigatória",
+          "type": "number",
+          "min": null
+        },
+        {
+          "path": "dre.lucroLiquido",
+          "message": "Lucro Líquido obrigatório para cálculo de rentabilidade",
+          "type": "number",
+          "min": null
+        }
+      ],
+      "businessRules": [
+        {
+          "id": "dre_receita_liquida_valida",
+          "field": "dre.receitaLiquida",
+          "expression": "data.dre.receitaLiquida !== 0",
+          "message": "Receita Líquida não pode ser zero",
+          "severity": "error"
+        }
+      ]
+    },
+
+    "full": {
+      "description": "Validação completa para todos os cálculos",
+      "required": [
+        {
+          "path": "balanco.patrimonioLiquido",
+          "message": "Patrimônio Líquido obrigatório para cálculo de índices",
+          "type": "number",
+          "min": null
+        },
+        {
+          "path": "balanco.ativoTotal",
+          "message": "Ativo Total obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.passivoTotal",
+          "message": "Passivo Total obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.ativoCirculante",
+          "message": "Ativo Circulante obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "balanco.passivoCirculante",
+          "message": "Passivo Circulante obrigatório",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "path": "dre.receitaLiquida",
+          "message": "Receita Líquida obrigatória",
+          "type": "number",
+          "min": null
+        },
+        {
+          "path": "dre.lucroLiquido",
+          "message": "Lucro Líquido obrigatório",
+          "type": "number",
+          "min": null
+        }
+      ],
+      "businessRules": [
+        {
+          "id": "balanco_ativo_positivo",
+          "field": "balanco.ativoTotal",
+          "expression": "data.balanco.ativoTotal > 0",
+          "message": "Ativo Total deve ser maior que zero",
+          "severity": "error"
+        },
+        {
+          "id": "balanco_equacao_patrimonial",
+          "field": "balanco.equation",
+          "expression": "Math.abs(data.balanco.ativoTotal - (data.balanco.passivoTotal + data.balanco.patrimonioLiquido)) < 0.01",
+          "message": "Equação patrimonial não está balanceada (Ativo ≠ Passivo + PL)",
+          "severity": "warning"
+        },
+        {
+          "id": "balanco_passivo_circulante_positivo",
+          "field": "balanco.passivoCirculante",
+          "expression": "data.balanco.passivoCirculante > 0",
+          "message": "Passivo Circulante deve ser maior que zero para cálculo de liquidez",
+          "severity": "error"
+        },
+        {
+          "id": "dre_receita_liquida_valida",
+          "field": "dre.receitaLiquida",
+          "expression": "data.dre.receitaLiquida !== 0",
+          "message": "Receita Líquida não pode ser zero",
+          "severity": "error"
+        },
+        {
+          "id": "patrimonio_liquido_muito_negativo",
+          "field": "balanco.patrimonioLiquido",
+          "expression": "data.balanco.patrimonioLiquido > -(data.balanco.ativoTotal * 0.5)",
+          "message": "Patrimônio Líquido muito negativo - empresa em situação crítica",
+          "severity": "warning"
+        }
+      ]
+    }
+  }
+}

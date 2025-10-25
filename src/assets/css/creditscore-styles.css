@@ -3581,3 +3581,333 @@
         font-size: 1.5rem;
     }
 }
+
+/* ====================================================================
+   SECTION: INFO BOX - Mensagens Informativas
+   Componente modular para avisos e informações importantes
+   ==================================================================== */
+
+.info-box {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 32px 0;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+}
+
+.info-box-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-box-content {
+    flex: 1;
+}
+
+.info-box-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.info-box-text {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 8px 0;
+}
+
+.info-box-tip {
+    font-size: 13px;
+    margin: 8px 0 0 0;
+    opacity: 0.9;
+}
+
+/* Variante Primary (azul) */
+.info-box-primary {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-left: 4px solid #3b82f6;
+}
+
+.info-box-primary .info-box-icon {
+    color: #3b82f6;
+}
+
+.info-box-primary .info-box-title {
+    color: #1e40af;
+}
+
+.info-box-primary .info-box-text {
+    color: #1e3a8a;
+}
+
+.info-box-primary .info-box-tip {
+    color: #60a5fa;
+}
+
+/* Variante Success (verde) */
+.info-box-success {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-left: 4px solid #10b981;
+}
+
+.info-box-success .info-box-icon {
+    color: #10b981;
+}
+
+.info-box-success .info-box-title {
+    color: #065f46;
+}
+
+.info-box-success .info-box-text {
+    color: #064e3b;
+}
+
+/* Variante Warning (amarelo) */
+.info-box-warning {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-left: 4px solid #f59e0b;
+}
+
+.info-box-warning .info-box-icon {
+    color: #f59e0b;
+}
+
+.info-box-warning .info-box-title {
+    color: #92400e;
+}
+
+.info-box-warning .info-box-text {
+    color: #78350f;
+}
+
+/* ====================================================================
+   SECTION: CALCULATION INDICATORS - Indicadores de Status de Cálculo
+   Feedback visual para estado dos cálculos nas tabs
+   ==================================================================== */
+
+/* Indicadores nas tabs */
+.tab-item[data-status="outdated"]::after {
+    content: "⚡️";
+    margin-left: 8px;
+    color: #f59e0b;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.tab-item[data-status="updated"]::after {
+    content: "✓";
+    margin-left: 8px;
+    color: #10b981;
+}
+
+.tab-item[data-status="calculating"]::after {
+    content: "⏳";
+    margin-left: 8px;
+    animation: spin 1s linear infinite;
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+    z-index: 9999;
+    max-width: 400px;
+    font-size: 14px;
+}
+
+.toast-success {
+    background: #10b981;
+    color: white;
+}
+
+.toast-error {
+    background: #ef4444;
+    color: white;
+}
+
+.toast-info {
+    background: #3b82f6;
+    color: white;
+}
+
+.toast-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+/* Calculation status bar (para usar nas abas de resultado) */
+.calculation-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    border-left: 4px solid var(--status-color, #94a3b8);
+    transition: all 0.3s ease;
+}
+
+.calculation-status-bar[data-status="outdated"] {
+    --status-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.calculation-status-bar[data-status="updated"] {
+    --status-color: #10b981;
+    background: #ecfdf5;
+}
+
+.calculation-status-bar[data-status="calculating"] {
+    --status-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.status-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.status-info small {
+    color: #64748b;
+    margin-left: 8px;
+}
+
+.btn-recalculate {
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-recalculate:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Loading overlay */
+.calculating-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    border-radius: 8px;
+}
+
+.calculating-overlay .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.calculating-overlay p {
+    margin-top: 16px;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.calculating-overlay small {
+    color: #64748b;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* ====================================================================
+   ANIMATIONS
+   ==================================================================== */
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* ====================================================================
+   RESPONSIVE ADJUSTMENTS
+   ==================================================================== */
+
+@media (max-width: 768px) {
+    .info-box {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .info-box-icon {
+        align-self: flex-start;
+    }
+
+    .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        max-width: none;
+    }
+
+    .calculation-status-bar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}

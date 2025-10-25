@@ -1,333 +1,43 @@
 /* =====================================
-   IMPORT.JS
-   Sistema unificado de importação para CEI e ProGoiás
+   IMPORT.JS (Refatorado para CreditScore Pro)
+   Sistema de importação de dados de análise via JSON.
    NO FALLBACKS - NO MOCK DATA
    ===================================== */
 
-class FormImporter {
-    constructor(config) {
-        if (!config) {
-            throw new Error('FormImporter: configuração obrigatória não fornecida');
-        }
-        
-        if (!config.programType) {
-            throw new Error('FormImporter: tipo de programa (programType) é obrigatório');
-        }
-        
-        this.config = config;
-    }
-    
-    importFromJSON(file) {
-        if (!file) {
-            throw new Error('FormImporter: arquivo obrigatório não fornecido');
-        }
-        
-        if (file.type !== 'application/json') {
-            throw new Error('FormImporter: arquivo deve ser do tipo JSON');
-        }
-        
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            
-            reader.onload = (e) => {
-                try {
-                    const jsonData = JSON.parse(e.target.result);
-                    const processedData = this.processJSONData(jsonData);
-                    resolve(processedData);
-                } catch (error) {
-                    reject(new Error(`Erro ao processar JSON: ${error.message}`));
-                }
-            };
-            
-            reader.onerror = () => {
-                reject(new Error('Erro ao ler arquivo'));
-            };
-            
-            reader.readAsText(file);
-        });
-    }
-    
-    processJSONData(jsonData) {
-        if (!jsonData) {
-            throw new Error('Dados JSON vazios');
-        }
-        
-        // Verificar se é um arquivo exportado do sistema
-        if (jsonData.metadata && jsonData.formData) {
-            return this.processExportedData(jsonData);
-        }
-        
-        // Verificar se é dados brutos do formulário
-        if (jsonData.razaoSocial || jsonData.cnpj) {
-            return this.processRawFormData(jsonData);
-        }
-        
-        throw new Error('Formato de JSON não reconhecido');
-    }
-    
-    processExportedData(exportedData) {
-        if (!exportedData.metadata) {
-            throw new Error('Metadados obrigatórios não encontrados');
-        }
-        
-        if (!exportedData.metadata.programType) {
-            throw new Error('Tipo de programa não encontrado nos metadados');
-        }
-        
-        if (exportedData.metadata.programType !== this.config.programType) {
-            throw new Error(`Arquivo é do programa ${exportedData.metadata.programType}, mas sistema está configurado para ${this.config.programType}`);
-        }
-        
-        if (!exportedData.formData) {
-            throw new Error('Dados do formulário não encontrados');
-        }
-        
-        return {
-            formData: exportedData.formData,
-            metadata: exportedData.metadata,
-            isValid: true
-        };
-    }
-    
-    processRawFormData(rawData) {
-        if (!rawData.razaoSocial) {
-            throw new Error('razaoSocial é obrigatória nos dados');
-        }
-        
-        if (!rawData.cnpj) {
-            throw new Error('CNPJ é obrigatório nos dados');
-        }
-        
-        return {
-            formData: rawData,
-            metadata: {
-                programType: this.config.programType,
-                importedAt: new Date().toISOString(),
-                source: 'raw_data'
-            },
-            isValid: true
-        };
-    }
-    
-    populateForm(processedData) {
-        if (!processedData) {
-            throw new Error('Dados processados obrigatórios não fornecidos');
-        }
-        
-        if (!processedData.formData) {
-            throw new Error('formData obrigatório não encontrado');
-        }
-        
-        const form = document.getElementById('projectForm');
-        if (!form) {
-            throw new Error('Formulário não encontrado no DOM');
-        }
-        
-        const populatedFields = [];
-        const failedFields = [];
-        
-        Object.entries(processedData.formData).forEach(([fieldName, value]) => {
-            if (fieldName.startsWith('_')) {
-                return; // Ignorar metadados
-            }
-            
-            const field = this.findFormField(fieldName);
-            if (!field) {
-                failedFields.push(fieldName);
-                return;
-            }
-            
-            try {
-                this.setFieldValue(field, value);
-                populatedFields.push(fieldName);
-            } catch (error) {
-                failedFields.push(`${fieldName}: ${error.message}`);
-            }
-        });
-        
-        if (failedFields.length > 0) {
-            console.warn('Campos que falharam ao popular:', failedFields);
-        }
-
-        // CRITICAL FIX: Normalizar navegação após importação
-        // Extrai currentStep do metadata e normaliza visualização de seções
-        if (processedData.formData._metadata && processedData.formData._metadata.currentStep) {
-            const savedStep = processedData.formData._metadata.currentStep;
-
-            // Atualizar currentStep no módulo ProGoiás
-            if (window.progoiasForm) {
-                window.progoiasForm.currentStep = savedStep;
-                // Normalizar estado (esconder todas exceto savedStep)
-                window.progoiasForm.ensureSingleActiveSection();
-                console.log(`✓ [Import] Navegação restaurada para seção ${savedStep}`);
-            }
-        } else {
-            // Se não há metadata, garantir que apenas seção 1 está visível
-            if (window.progoiasForm) {
-                window.progoiasForm.currentStep = 1;
-                window.progoiasForm.ensureSingleActiveSection();
-                console.log(`✓ [Import] Estado normalizado para seção 1 (padrão)`);
-            }
-        }
-
-        return {
-            populatedCount: populatedFields.length,
-            failedCount: failedFields.length,
-            populatedFields,
-            failedFields
-        };
-    }
-    
-    findFormField(fieldName) {
-        // Tentar por name primeiro
-        let field = document.querySelector(`[name="${fieldName}"]`);
-        if (field) return field;
-        
-        // Tentar por id
-        field = document.getElementById(fieldName);
-        if (field) return field;
-        
-        // Campo não encontrado
-        return null;
-    }
-    
-    setFieldValue(field, value) {
-        if (!field) {
-            throw new Error('Campo não fornecido');
-        }
-        
-        if (value === null || value === undefined) {
-            return; // Não definir valores nulos
-        }
-        
-        switch (field.type) {
-            case 'checkbox':
-                if (Array.isArray(value)) {
-                    field.checked = value.includes(field.value);
-                } else {
-                    field.checked = Boolean(value);
-                }
-                break;
-                
-            case 'radio':
-                field.checked = (field.value === String(value));
-                break;
-                
-            case 'file':
-                // Não é possível definir valor para campos de arquivo
-                console.warn(`Campo de arquivo ${field.name} não pode ser populado automaticamente`);
-                break;
-                
-            default:
-                field.value = String(value);
-                break;
-        }
-        
-        // Disparar evento de mudança para triggers de validação/formatação
-        field.dispatchEvent(new Event('change', { bubbles: true }));
-        field.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    
-    validateImportedData(processedData, mode = 'strict') {
-        if (!processedData) {
-            throw new Error('Dados para validação não fornecidos');
-        }
-
-        if (!processedData.formData) {
-            throw new Error('formData obrigatório para validação');
-        }
-
-        // Validação flexível: apenas campos básicos (para importação parcial/edição)
-        if (mode === 'flexible') {
-            const baseFields = ['razaoSocial', 'cnpj'];
-            const missingFields = baseFields.filter(f => !processedData.formData[f]);
-
-            if (missingFields.length > 0) {
-                throw new Error(`Campos essenciais ausentes: ${missingFields.join(', ')}`);
-            }
-
-            console.warn('[Import] Modo flexível: campos opcionais podem estar ausentes');
-            return true;
-        }
-
-        // Validação estrita: todos campos obrigatórios (para envio final)
-        const requiredFields = this.getRequiredFields();
-        const missingFields = requiredFields.filter(f => !processedData.formData[f]);
-
-        if (missingFields.length > 0) {
-            throw new Error(`Campos obrigatórios ausentes: ${missingFields.join(', ')}`);
-        }
-
-        // Validações específicas por programa
-        this.validateProgramSpecificData(processedData.formData);
-
-        return true;
-    }
-    
-    getRequiredFields() {
-        const baseFields = ['razaoSocial', 'cnpj'];
-        
-        if (this.config.programType === 'CEI') {
-            return [...baseFields, 'valorTotalInvestimento', 'dataInicio'];
-        }
-        
-        if (this.config.programType === 'ProGoiás') {
-            return [...baseFields, 'valorTotalInvestimento', 'empregosDiretos'];
-        }
-        
-        return baseFields;
-    }
-    
-    validateProgramSpecificData(formData) {
-        if (this.config.programType === 'CEI') {
-            this.validateCEIData(formData);
-        } else if (this.config.programType === 'ProGoiás') {
-            this.validateProGoiasData(formData);
-        }
-    }
-    
-    validateCEIData(formData) {
-        if (formData.valorTotalInvestimento) {
-            const valor = parseFloat(formData.valorTotalInvestimento.replace(/[^\d.,]/g, '').replace(',', '.'));
-            if (valor < 500000) {
-                throw new Error('CEI: Valor mínimo de investimento é R$ 500.000,00');
-            }
-        }
-        
-        if (formData.prazoExecucao) {
-            const prazo = parseInt(formData.prazoExecucao);
-            if (prazo > 36) {
-                throw new Error('CEI: Prazo máximo é 36 meses');
-            }
-        }
-    }
-    
-    validateProGoiasData(formData) {
-        if (formData.empregosDiretos) {
-            const empregos = parseInt(formData.empregosDiretos);
-            if (empregos < 10) {
-                throw new Error('ProGoiás: Mínimo de 10 empregos diretos');
-            }
-        }
-    }
-}
-
 class ImportManager {
-    constructor(config) {
+    constructor(config, creditScoreModule) {
         if (!config) {
             throw new Error('ImportManager: configuração obrigatória');
         }
-        
-        this.importer = new FormImporter(config);
+        this.config = config;
+        this.creditScoreModule = creditScoreModule; // Injeta o módulo principal
+
+        if (creditScoreModule) {
+            this.creditScoreModule = creditScoreModule;
+        } else {
+            console.warn('ImportManager: creditScoreModule não injetado. Recálculo automático após importação não funcionará.');
+        }
+
         this.setupFileInput();
     }
     
     setupFileInput() {
-        const fileInput = document.getElementById('importJsonFile') || document.getElementById('importJsonFileHeader');
+        const fileInput = document.getElementById('importJsonFileHeader');
         if (!fileInput) {
-            throw new Error('Input de arquivo para importação não encontrado');
+            console.error('Input de arquivo #importJsonFileHeader não encontrado.');
+            return;
         }
         
+        const importButton = document.getElementById('importBtnHeader');
+        if (!importButton) {
+            console.error('Botão de importação #importBtnHeader não encontrado.');
+            return;
+        }
+
+        // Conecta o clique no botão à abertura do seletor de arquivos
+        importButton.addEventListener('click', () => fileInput.click());
+
+        // Processa o arquivo selecionado
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 this.handleFileSelection(e.target.files[0]);
@@ -336,45 +46,340 @@ class ImportManager {
     }
     
     handleFileSelection(file) {
-        this.importer.importFromJSON(file)
-            .then(processedData => {
-                // Modo flexível para importação/edição (permite dados parciais)
-                this.importer.validateImportedData(processedData, 'flexible');
-                const result = this.importer.populateForm(processedData);
-                this.showImportSuccess(result);
-            })
-            .catch(error => {
-                this.showImportError(error.message);
-            });
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const jsonData = JSON.parse(e.target.result);
+                // Suporta JSON com { formData: {...} } ou apenas {...}
+                const formData = jsonData.formData || jsonData; 
+                this.populateForm(formData);
+            } catch (error) {
+                this.showToast(`Erro ao processar JSON: ${error.message}`, 'error');
+            }
+        };
+        reader.onerror = () => this.showToast('Erro ao ler o arquivo.', 'error');
+        reader.readAsText(file);
     }
-    
-    showImportSuccess(result) {
-        const message = `Importação concluída!\n` +
-                       `Campos populados: ${result.populatedCount}\n` +
-                       `Campos com falha: ${result.failedCount}`;
-        
-        alert(message);
-        
-        if (result.failedCount > 0) {
-            console.warn('Campos que falharam:', result.failedFields);
-        }
-    }
-    
-    showImportError(errorMessage) {
-        alert(`Erro na importação: ${errorMessage}`);
-        console.error('Erro na importação:', errorMessage);
-    }
-    
-    importFromFile(file) {
-        if (!file) {
-            throw new Error('Arquivo obrigatório para importação');
+
+    populateForm(formData) {
+        const form = document.getElementById('creditScoreForm');
+        if (!form) {
+            this.showToast('Erro: Formulário principal #creditScoreForm não encontrado.', 'error');
+            return;
         }
 
-        return this.importer.importFromJSON(file)
-            .then(processedData => {
-                // Modo flexível para importação/edição (permite dados parciais)
-                this.importer.validateImportedData(processedData, 'flexible');
-                return this.importer.populateForm(processedData);
-            });
+        let populatedCount = 0;
+        Object.entries(formData).forEach(([fieldName, value]) => {
+            const field = form.elements[fieldName]; // Use form.elements para acessar campos por name ou id
+            if (field) {
+                // Handle radio buttons (field is a RadioNodeList)
+                if (field instanceof RadioNodeList) {
+                    field.forEach(radio => radio.checked = (radio.value === String(value)));
+                    // RadioNodeList não tem dispatchEvent, mas podemos disparar no elemento selecionado
+                    const checkedRadio = Array.from(field).find(r => r.checked);
+                    if (checkedRadio) {
+                        checkedRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                } else if (field.type === 'checkbox') {
+                    field.checked = Boolean(value);
+                    field.dispatchEvent(new Event('input', { bubbles: true }));
+                    field.dispatchEvent(new Event('change', { bubbles: true }));
+                } else {
+                    field.value = value;
+                    // Dispara evento para que máscaras e outros listeners reajam
+                    field.dispatchEvent(new Event('input', { bubbles: true }));
+                    field.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                populatedCount++;
+            }
+        });
+
+        this.showToast(`Importação concluída! ${populatedCount} campos preenchidos.`, 'success');
+
+        // NOVA LÓGICA: Transforma dados flat para estrutura hierárquica antes do recálculo
+        if (this.creditScoreModule?.recalcularAnaliseCompleta) {
+            console.log('🔄 Transformando dados flat para calculadores...');
+            const dadosHierarquicos = this.transformarParaCalculadores(formData);
+            console.log('🔄 Solicitando recálculo completo da análise...');
+            this.creditScoreModule.recalcularAnaliseCompleta(dadosHierarquicos);
+        }
+
+        // Leva o usuário de volta ao primeiro módulo
+        if (this.creditScoreModule?.navigationController) {
+            this.creditScoreModule.navigationController.navigateToModule(1);
+        }
     }
+
+    /**
+     * DATA TRANSFORMER LAYER
+     * Transforma dados flat (formData) para estrutura hierárquica (calculadores)
+     *
+     * @param {Object} formDataFlat - Dados flat do formulário (caixa_p1, bancos_p2, etc)
+     * @returns {Object} Dados estruturados para calculadores
+     */
+    transformarParaCalculadores(formDataFlat) {
+        console.log('🔧 [Transformer] Iniciando transformação flat → hierárquico');
+
+        // Helper: converte string para número
+        const toNumber = (val) => {
+            if (val === null || val === undefined || val === '') return 0;
+            const num = typeof val === 'string' ? parseFloat(val.replace(/[^0-9.-]/g, '')) : val;
+            return isNaN(num) ? 0 : num;
+        };
+
+        // Extrai dados dos 4 períodos
+        const periodos = ['p1', 'p2', 'p3', 'p4'].map(p => {
+            // ATIVO CIRCULANTE
+            const caixa = toNumber(formDataFlat[`caixa_${p}`]);
+            const bancos = toNumber(formDataFlat[`bancos_${p}`]);
+            const aplicacoes = toNumber(formDataFlat[`aplicacoes_${p}`]);
+            const disponibilidadesTotal = caixa + bancos + aplicacoes;
+
+            const contasReceber = toNumber(formDataFlat[`contasReceber_${p}`]);
+            const pdd = toNumber(formDataFlat[`pdd_${p}`]);
+            const contasReceberLiquido = contasReceber + pdd; // pdd é negativo
+
+            const estoqueMP = toNumber(formDataFlat[`estoqueMP_${p}`]);
+            const estoqueWIP = toNumber(formDataFlat[`estoqueWIP_${p}`]);
+            const estoqueProdAcabados = toNumber(formDataFlat[`estoqueProdAcabados_${p}`]);
+            const estoquePecasReposicao = toNumber(formDataFlat[`estoquePecasReposicao_${p}`]);
+            const estoquesTotal = estoqueMP + estoqueWIP + estoqueProdAcabados + estoquePecasReposicao;
+
+            const impostosRecuperar = toNumber(formDataFlat[`impostosRecuperar_${p}`]);
+            const adiantamentosFornecedores = toNumber(formDataFlat[`adiantamentosFornecedores_${p}`]);
+            const outrosAC = toNumber(formDataFlat[`outrosAC_${p}`]);
+
+            const ativoCirculanteTotal = disponibilidadesTotal + contasReceberLiquido + estoquesTotal +
+                                        impostosRecuperar + adiantamentosFornecedores + outrosAC;
+
+            // ATIVO NÃO CIRCULANTE
+            const titulosReceberLP = toNumber(formDataFlat[`titulosReceberLP_${p}`]);
+            const depositosJudiciais = toNumber(formDataFlat[`depositosJudiciais_${p}`]);
+            const outrosCreditosLP = toNumber(formDataFlat[`outrosCreditosLP_${p}`]);
+            const realizavelLPTotal = titulosReceberLP + depositosJudiciais + outrosCreditosLP;
+
+            const participacoesSocietarias = toNumber(formDataFlat[`participacoesSocietarias_${p}`]);
+            const outrosInvestimentos = toNumber(formDataFlat[`outrosInvestimentos_${p}`]);
+            const investimentosTotal = participacoesSocietarias + outrosInvestimentos;
+
+            const terrenos = toNumber(formDataFlat[`terrenos_${p}`]);
+            const edificacoes = toNumber(formDataFlat[`edificacoes_${p}`]);
+            const maquinasEquipamentos = toNumber(formDataFlat[`maquinasEquipamentos_${p}`]);
+            const veiculos = toNumber(formDataFlat[`veiculos_${p}`]);
+            const moveisUtensilios = toNumber(formDataFlat[`moveisUtensilios_${p}`]);
+            const equipamentosInformatica = toNumber(formDataFlat[`equipamentosInformatica_${p}`]);
+            const imobilizadoAndamento = toNumber(formDataFlat[`imobilizadoAndamento_${p}`]);
+            const imobilizadoBruto = terrenos + edificacoes + maquinasEquipamentos + veiculos +
+                                   moveisUtensilios + equipamentosInformatica + imobilizadoAndamento;
+            const depreciacaoAcumulada = toNumber(formDataFlat[`depreciacaoAcumulada_${p}`]);
+            const imobilizadoLiquido = imobilizadoBruto + depreciacaoAcumulada; // depreciação é negativa
+
+            const software = toNumber(formDataFlat[`software_${p}`]);
+            const marcasPatentes = toNumber(formDataFlat[`marcasPatentes_${p}`]);
+            const goodwill = toNumber(formDataFlat[`goodwill_${p}`]);
+            const intangivelBruto = software + marcasPatentes + goodwill;
+            const amortizacaoAcumulada = toNumber(formDataFlat[`amortizacaoAcumulada_${p}`]);
+            const intangivelLiquido = intangivelBruto + amortizacaoAcumulada; // amortização é negativa
+
+            const ativoNaoCirculanteTotal = realizavelLPTotal + investimentosTotal + imobilizadoLiquido + intangivelLiquido;
+
+            const ativoTotal = ativoCirculanteTotal + ativoNaoCirculanteTotal;
+
+            // PASSIVO CIRCULANTE
+            const fornecedores = toNumber(formDataFlat[`fornecedores_${p}`]);
+            const emprestimosCP = toNumber(formDataFlat[`emprestimosCP_${p}`]);
+            const salariosPagar = toNumber(formDataFlat[`salariosPagar_${p}`]);
+            const encargosSociaisPagar = toNumber(formDataFlat[`encargosSociaisPagar_${p}`]);
+            const impostosRecolher = toNumber(formDataFlat[`impostosRecolher_${p}`]);
+            const dividendosPagar = toNumber(formDataFlat[`dividendosPagar_${p}`]);
+            const adiantamentosClientes = toNumber(formDataFlat[`adiantamentosClientes_${p}`]);
+            const obrigacoesFiscais = toNumber(formDataFlat[`obrigacoesFiscais_${p}`]);
+            const outrosPC = toNumber(formDataFlat[`outrosPC_${p}`]);
+
+            const passivoCirculanteTotal = fornecedores + emprestimosCP + salariosPagar +
+                                          encargosSociaisPagar + impostosRecolher + dividendosPagar +
+                                          adiantamentosClientes + obrigacoesFiscais + outrosPC;
+
+            // PASSIVO NÃO CIRCULANTE
+            const emprestimosLP = toNumber(formDataFlat[`emprestimosLP_${p}`]);
+            const financiamentosImobiliarios = toNumber(formDataFlat[`financiamentosImobiliarios_${p}`]);
+            const debentures = toNumber(formDataFlat[`debentures_${p}`]);
+            const provisoesTrabalhistas = toNumber(formDataFlat[`provisoesTrabalhistas_${p}`]);
+            const provisoesFiscais = toNumber(formDataFlat[`provisoesFiscais_${p}`]);
+            const outrosPNC = toNumber(formDataFlat[`outrosPNC_${p}`]);
+
+            const passivoNaoCirculanteTotal = emprestimosLP + financiamentosImobiliarios + debentures +
+                                             provisoesTrabalhistas + provisoesFiscais + outrosPNC;
+
+            // PATRIMÔNIO LÍQUIDO
+            const capitalSocial = toNumber(formDataFlat[`capitalSocial_${p}`]);
+            const reservaCapital = toNumber(formDataFlat[`reservaCapital_${p}`]);
+            const reservaLucros = toNumber(formDataFlat[`reservaLucros_${p}`]);
+            const reservaLegal = toNumber(formDataFlat[`reservaLegal_${p}`]);
+            const lucrosPrejuizosAcumulados = toNumber(formDataFlat[`lucrosPrejuizosAcumulados_${p}`]);
+            const ajustesAvaliacaoPatrimonial = toNumber(formDataFlat[`ajustesAvaliacaoPatrimonial_${p}`]);
+            const acoesTesouraria = toNumber(formDataFlat[`acoesTesouraria_${p}`]);
+
+            const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros + reservaLegal +
+                                          lucrosPrejuizosAcumulados + ajustesAvaliacaoPatrimonial + acoesTesouraria;
+
+            const passivoTotal = passivoCirculanteTotal + passivoNaoCirculanteTotal;
+            const passivoPLTotal = passivoTotal + patrimonioLiquidoTotal;
+
+            // Retorna estrutura hierárquica do período
+            return {
+                ativoCirculanteTotal,
+                passivoCirculanteTotal,
+                ativoNaoCirculanteTotal,
+                passivoNaoCirculanteTotal,
+                patrimonioLiquidoTotal,
+                ativoTotal,
+                passivoTotal,
+                passivoPLTotal,
+                disponibilidadesTotal,
+                estoquesTotal,
+                ativo: {
+                    circulante: {
+                        disponibilidades: disponibilidadesTotal,
+                        contasReceber: contasReceberLiquido,
+                        estoques: estoquesTotal
+                    }
+                },
+                passivo: {
+                    circulante: {
+                        fornecedores
+                    }
+                }
+            };
+        });
+
+        // DRE (usando período mais recente - p4)
+        const p = 'p4';
+        const vendasProdutos = toNumber(formDataFlat[`vendasProdutos_${p}`]);
+        const vendasServicos = toNumber(formDataFlat[`vendasServicos_${p}`]);
+        const outrasReceitas = toNumber(formDataFlat[`outrasReceitas_${p}`]);
+        const icms = toNumber(formDataFlat[`icms_${p}`]);
+        const pis = toNumber(formDataFlat[`pis_${p}`]);
+        const cofins = toNumber(formDataFlat[`cofins_${p}`]);
+        const iss = toNumber(formDataFlat[`iss_${p}`]);
+        const devolucoesVendas = toNumber(formDataFlat[`devolucoesVendas_${p}`]);
+        const abatimentos = toNumber(formDataFlat[`abatimentos_${p}`]);
+
+        const receitaBruta = vendasProdutos + vendasServicos + outrasReceitas;
+        const deducoesReceita = icms + pis + cofins + iss + devolucoesVendas + abatimentos; // valores negativos
+        const receitaLiquida = receitaBruta + deducoesReceita;
+
+        const materiaPrima = toNumber(formDataFlat[`materiaPrima_${p}`]);
+        const embalagens = toNumber(formDataFlat[`embalagens_${p}`]);
+        const maoObraDireta = toNumber(formDataFlat[`maoObraDireta_${p}`]);
+        const terceirizacaoProducao = toNumber(formDataFlat[`terceirizacaoProducao_${p}`]);
+        const outrosCustosVariaveis = toNumber(formDataFlat[`outrosCustosVariaveis_${p}`]);
+
+        const custosProdutos = materiaPrima + embalagens + maoObraDireta + terceirizacaoProducao + outrosCustosVariaveis;
+        const lucroBruto = receitaLiquida + custosProdutos; // custos são negativos
+
+        const comissoes = toNumber(formDataFlat[`comissoes_${p}`]);
+        const vendasMarketing = toNumber(formDataFlat[`vendasMarketing_${p}`]);
+        const frete = toNumber(formDataFlat[`frete_${p}`]);
+        const outrasDespVendas = toNumber(formDataFlat[`outrasDespVendas_${p}`]);
+
+        const despesasVendas = comissoes + vendasMarketing + frete + outrasDespVendas;
+
+        const pessoal = toNumber(formDataFlat[`pessoal_${p}`]);
+        const alugueis = toNumber(formDataFlat[`alugueis_${p}`]);
+        const utilidades = toNumber(formDataFlat[`utilidades_${p}`]);
+        const seguros = toNumber(formDataFlat[`seguros_${p}`]);
+        const manutencao = toNumber(formDataFlat[`manutencao_${p}`]);
+        const tecnologiaInformacao = toNumber(formDataFlat[`tecnologiaInformacao_${p}`]);
+        const servicosProfissionais = toNumber(formDataFlat[`servicosProfissionais_${p}`]);
+        const administrativas = toNumber(formDataFlat[`administrativas_${p}`]);
+        const outrasDespesas = toNumber(formDataFlat[`outrasDespesas_${p}`]);
+        const depreciacaoAmortizacao = toNumber(formDataFlat[`depreciacaoAmortizacao_${p}`]);
+
+        const despesasAdministrativas = pessoal + alugueis + utilidades + seguros + manutencao +
+                                       tecnologiaInformacao + servicosProfissionais + administrativas +
+                                       outrasDespesas + depreciacaoAmortizacao;
+
+        const lucroOperacional = lucroBruto + despesasVendas + despesasAdministrativas;
+
+        const receitasFinanceiras = toNumber(formDataFlat[`receitasFinanceiras_${p}`]);
+        const despesasFinanceiras = toNumber(formDataFlat[`despesasFinanceiras_${p}`]);
+        const receitasNaoOperacionais = toNumber(formDataFlat[`receitasNaoOperacionais_${p}`]);
+        const despesasNaoOperacionais = toNumber(formDataFlat[`despesasNaoOperacionais_${p}`]);
+
+        const resultadoFinanceiro = receitasFinanceiras + despesasFinanceiras;
+        const resultadoNaoOperacional = receitasNaoOperacionais + despesasNaoOperacionais;
+
+        const lajir = lucroOperacional + resultadoFinanceiro + resultadoNaoOperacional;
+
+        const ir = toNumber(formDataFlat[`ir_${p}`]);
+        const csll = toNumber(formDataFlat[`csll_${p}`]);
+
+        const lucroLiquido = lajir + ir + csll;
+
+        const dre = {
+            receitaLiquida,
+            custosProdutos,
+            lucroBruto,
+            despesasVendas,
+            despesasAdministrativas,
+            lucroOperacional,
+            resultadoFinanceiro,
+            lajir,
+            lucroLiquido
+        };
+
+        console.log('✅ [Transformer] Transformação concluída');
+        console.log('   - Períodos processados: 4');
+        console.log('   - Ativo Total (p4):', periodos[3].ativoTotal);
+        console.log('   - Receita Líquida:', dre.receitaLiquida);
+
+        // Estrutura de balanco semanticamente correta (SOLID/DRY)
+        const balancoTransformado = {
+            // Períodos individuais
+            p1: periodos[0],
+            p2: periodos[1],
+            p3: periodos[2],
+            p4: periodos[3],
+
+            // Valores do último período (p4) para uso direto
+            patrimonioLiquido: periodos[3].patrimonioLiquidoTotal,
+            ativoTotal: periodos[3].ativoTotal,
+            passivoTotal: periodos[3].passivoTotal,
+            ativoCirculante: periodos[3].ativoCirculanteTotal,
+            passivoCirculante: periodos[3].passivoCirculanteTotal,
+            ativoNaoCirculante: periodos[3].ativoNaoCirculanteTotal,
+            passivoNaoCirculante: periodos[3].passivoNaoCirculanteTotal,
+            disponibilidades: periodos[3].disponibilidadesTotal,
+            estoques: periodos[3].estoquesTotal
+        };
+
+        // Retorna estrutura compatível com recalcularAnaliseCompleta
+        return {
+            cadastro: formDataFlat,
+            demonstracoes: {
+                balanco: balancoTransformado,
+                dre: dre
+            },
+            balanco: balancoTransformado,
+            dre: dre,
+            endividamento: formDataFlat,
+            compliance: formDataFlat,
+            clientes: formDataFlat,
+            fornecedores: formDataFlat
+        };
+    }
+
+    showToast(message, type = 'info') {
+        if (window.Toast && typeof window.Toast.show === 'function') {
+            window.Toast.show(message, 'success');
+        } else {
+            alert(message);
+        }
+    }
+}
+
+// Disponibilizar globalmente para que o CreditScoreProApp possa instanciá-lo
+if (typeof window !== 'undefined') {
+    window.ImportManager = ImportManager;
 }

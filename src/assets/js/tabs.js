@@ -19,6 +19,10 @@ class SimpleTabNavigation {
         this.currentTab = 1;
         this.totalTabs = 8;
 
+        // Guards contra loops e re-entrada
+        this._switching = false; // Guard para switchTab()
+        this._updateTimeout = null; // Timeout para debounce de updateAllStates()
+
         // Module names (matches data-module attributes)
         this.modules = [
             'cadastro',
@@ -124,7 +128,7 @@ class SimpleTabNavigation {
         }
 
         // Form field change events for auto-save
-        const form = document.getElementById('projectForm');
+        const form = document.getElementById('creditScoreForm');
         if (form) {
             form.addEventListener('input', () => {
                 this.validateCurrentTabFields();
@@ -172,7 +176,17 @@ class SimpleTabNavigation {
      * Trocar para uma tab específica
      */
     switchTab(tabNumber) {
-        if (tabNumber < 1 || tabNumber > this.totalTabs) return;
+        // ✅ Guard contra re-entrada (evita loop infinito)
+        if (this._switching) {
+            console.warn(`[SimpleTabNavigation] switchTab(${tabNumber}) bloqueado: já em execução`);
+            return;
+        }
+        this._switching = true;
+
+        if (tabNumber < 1 || tabNumber > this.totalTabs) {
+            this._switching = false;
+            return;
+        }
 
         // Validar tab atual antes de sair (apenas marca se há erros, mas permite navegação)
         if (this.currentTab !== tabNumber) {
@@ -180,6 +194,10 @@ class SimpleTabNavigation {
         }
 
         this.currentTab = tabNumber;
+
+        // ✅ CÁLCULO AUTOMÁTICO: Disparar ao navegar para abas de resultado
+        this.handleCalculationTrigger(tabNumber);
+
         this.showTab(tabNumber);
         this.updateAllStates();
         this.saveTabState();
@@ -188,6 +206,9 @@ class SimpleTabNavigation {
         if (this.isIndexedDBReady()) {
             this.autoSaveData();
         }
+
+        // ✅ Release guard
+        this._switching = false;
     }
 
     /**
@@ -304,14 +325,29 @@ class SimpleTabNavigation {
      * Atualizar todos os estados (tabs, progresso)
      */
     updateAllStates() {
-        this.updateProgressBar();
-        this.updateNavigationButtons();
-        this.updateProgressText();
-        
-        // Atualizar visual de todas as tabs
-        for (let i = 1; i <= this.totalTabs; i++) {
-            this.updateTabVisualState(i);
+        // ✅ Debounce para evitar chamadas em rápida sucessão
+        if (this._updateTimeout) {
+            clearTimeout(this._updateTimeout);
         }
+
+        this._updateTimeout = setTimeout(() => {
+            this.updateProgressBar();
+            this.updateNavigationButtons();
+            this.updateProgressText();
+
+            // ✅ Limpar TODAS as classes de estado antes de reaplicar (evita acúmulo)
+            const allTabs = document.querySelectorAll('.tab-item');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active', 'completed', 'error', 'warning');
+            });
+
+            // Atualizar visual de todas as tabs
+            for (let i = 1; i <= this.totalTabs; i++) {
+                this.updateTabVisualState(i);
+            }
+
+            this._updateTimeout = null;
+        }, 10); // 10ms debounce
     }
 
     /**
@@ -394,16 +430,64 @@ class SimpleTabNavigation {
     loadTabState() {
         try {
             const saved = localStorage.getItem('creditscore_tab_state');
-            if (saved) {
-                const state = JSON.parse(saved);
-                this.currentTab = state.currentTab || 1;
-                this.completedTabs = new Set(state.completedTabs || []);
-                this.tabsWithErrors = new Set(state.tabsWithErrors || []);
-                this.tabsWithWarnings = new Set(state.tabsWithWarnings || []);
+            if (!saved) return;
+
+            const state = JSON.parse(saved);
+
+            // ✅ Validar estrutura do estado salvo
+            if (!this.#validateTabState(state)) {
+                console.warn('[SimpleTabNavigation] Estado corrompido detectado - limpando localStorage');
+                localStorage.removeItem('creditscore_tab_state');
+                return;
             }
+
+            // ✅ Restaurar apenas valores válidos
+            this.currentTab = state.currentTab;
+            this.completedTabs = new Set(state.completedTabs);
+            this.tabsWithErrors = new Set(state.tabsWithErrors);
+            this.tabsWithWarnings = new Set(state.tabsWithWarnings);
+
+            console.log(`[SimpleTabNavigation] Estado restaurado: tab ${this.currentTab}`);
         } catch (e) {
-            console.warn('Could not load tab state from localStorage:', e);
+            console.warn('[SimpleTabNavigation] Erro ao carregar estado - limpando:', e);
+            localStorage.removeItem('creditscore_tab_state');
         }
+    }
+
+    /**
+     * Valida estrutura do estado salvo
+     * @private
+     */
+    #validateTabState(state) {
+        // Validar tipos básicos
+        if (!state || typeof state !== 'object') return false;
+
+        // Validar currentTab
+        const currentTab = parseInt(state.currentTab);
+        if (isNaN(currentTab) || currentTab < 1 || currentTab > this.totalTabs) {
+            return false;
+        }
+
+        // Validar arrays de tabs
+        const tabArrays = [
+            state.completedTabs,
+            state.tabsWithErrors,
+            state.tabsWithWarnings
+        ];
+
+        for (const arr of tabArrays) {
+            if (!Array.isArray(arr)) return false;
+
+            // Validar cada tab no array
+            for (const tabNum of arr) {
+                const num = parseInt(tabNum);
+                if (isNaN(num) || num < 1 || num > this.totalTabs) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // ============================================
@@ -473,6 +557,144 @@ class SimpleTabNavigation {
         }
 
         return allValid;
+    }
+
+    /**
+     * Dispara cálculo automático ao navegar para abas de resultado
+     * Integrado com CalculationOrchestrator e CalculationState
+     * @param {number} tabNumber
+     */
+    async handleCalculationTrigger(tabNumber) {
+        // Abas de resultado que requerem cálculo
+        const resultTabs = [6, 7, 8]; // Índices, Scoring, Relatórios
+
+        if (!resultTabs.includes(tabNumber)) {
+            return; // Não é aba de resultado, não faz nada
+        }
+
+        // Verificar se orchestrator está disponível
+        if (!window.calculationOrchestrator) {
+            console.warn('[TabNavigation] CalculationOrchestrator não disponível');
+            return;
+        }
+
+        if (!window.calculationState) {
+            console.warn('[TabNavigation] CalculationState não disponível');
+            return;
+        }
+
+        const state = window.calculationState.getState();
+
+        // Verificar se precisa recalcular
+        const needsCalculation = state.dataChanged || !state.lastCalculated;
+
+        if (!needsCalculation) {
+            console.log(`[TabNavigation] Cálculos já atualizados, não é necessário recalcular`);
+            return;
+        }
+
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        console.log(`🎯 [TabNavigation] Aba ${tabNumber} - Disparando cálculo automático`);
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+
+        try {
+            // Mostrar loading overlay
+            this.showCalculatingOverlay();
+
+            // Executar cálculos via orchestrator
+            const results = await window.calculationOrchestrator.performAllCalculations();
+
+            // Ocultar loading
+            this.hideCalculatingOverlay();
+
+            // Mostrar toast de sucesso
+            this.showToast('Cálculos atualizados com sucesso', 'success');
+
+            console.log('✅ [TabNavigation] Cálculo automático concluído');
+
+        } catch (error) {
+            // Ocultar loading
+            this.hideCalculatingOverlay();
+
+            // Tratar erro
+            this.handleCalculationError(error);
+
+            console.error('❌ [TabNavigation] Erro no cálculo automático:', error);
+        }
+    }
+
+    /**
+     * Mostra overlay de loading durante cálculo
+     */
+    showCalculatingOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'calculating-overlay';
+        overlay.id = 'calculatingOverlay';
+        overlay.innerHTML = `
+            <div class="spinner"></div>
+            <p>Calculando índices financeiros...</p>
+            <small>Processando dados e validações</small>
+        `;
+
+        const activeSection = document.querySelector('.form-section.active');
+        if (activeSection) {
+            activeSection.style.position = 'relative';
+            activeSection.appendChild(overlay);
+        }
+    }
+
+    /**
+     * Oculta overlay de loading
+     */
+    hideCalculatingOverlay() {
+        const overlay = document.getElementById('calculatingOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+
+    /**
+     * Exibe toast notification
+     * @param {string} message
+     * @param {string} type - 'success', 'error', 'warning', 'info'
+     */
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        // Auto-remove após 3 segundos
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    /**
+     * Trata erros de cálculo
+     * @param {Error} error
+     */
+    handleCalculationError(error) {
+        if (error.name === 'ValidationError') {
+            // Erro de validação - mostrar campos faltantes
+            const errorList = error.errors.map(err => err.message).join('\n');
+
+            this.showToast(
+                `Dados incompletos: ${error.errors.length} campos precisam ser preenchidos`,
+                'error'
+            );
+
+            console.error('Erros de validação:', errorList);
+
+        } else {
+            // Erro genérico
+            this.showToast(
+                `Erro ao calcular: ${error.message}`,
+                'error'
+            );
+        }
     }
 }
 
