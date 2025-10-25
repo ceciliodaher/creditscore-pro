@@ -252,6 +252,12 @@ export class AutoSave {
                 await this.db.save('autosave', saveData);
                 this.lastSaveTimestamp = saveData.timestamp;
                 this.isDirty = false;
+
+                // Marcar dados como alterados para recálculo automático
+                if (window.calculationState) {
+                    window.calculationState.markDirty();
+                }
+
                 this.#updateSaveStatus(this.messages.autosave.saved);
                 console.log('💾 AutoSave: dados salvos no IndexedDB');
                 return true;
@@ -262,6 +268,12 @@ export class AutoSave {
                 localStorage.setItem('creditscore_autosave', JSON.stringify(saveData));
                 this.lastSaveTimestamp = saveData.timestamp;
                 this.isDirty = false;
+
+                // Marcar dados como alterados para recálculo automático
+                if (window.calculationState) {
+                    window.calculationState.markDirty();
+                }
+
                 this.#updateSaveStatus(this.messages.autosave.saved);
                 console.log('💾 AutoSave: dados salvos no localStorage (fallback)');
                 return true;
@@ -372,11 +384,24 @@ export class AutoSave {
 
                 // localStorage é síncrono, ideal para beforeunload
                 localStorage.setItem('creditscore_autosave', JSON.stringify(saveData));
+
+                // Marcar dados como alterados para recálculo automático
+                if (window.calculationState) {
+                    window.calculationState.markDirty();
+                }
+
                 console.log('💾 AutoSave: salvamento forçado antes de sair');
             } catch (error) {
                 console.error('❌ Erro no salvamento forçado:', error);
             }
         }
+    }
+
+    /**
+     * Salva dados imediatamente (usado para save manual)
+     */
+    saveNow() {
+        this.#performAutoSave();
     }
 
     // ============================================

@@ -2003,6 +2003,7 @@
     <script type="module" src="../assets/js/core/calculation-state.js"></script>
     <script type="module" src="../assets/js/core/validation-engine.js"></script>
     <script type="module" src="../assets/js/core/calculation-orchestrator.js"></script>
+    <script type="module" src="../assets/js/ui/calculation-indicators.js"></script>
     <script type="module" src="../assets/js/core/creditscore-module.js"></script>
     <script type="module" src="../assets/js/core/form-generator.js"></script>
     <script type="module" src="../assets/js/core/navigation-controller.js"></script>
@@ -2242,6 +2243,28 @@
                         console.log('✅ ConcentracaoRiscoIntegration inicializado');
                     } else {
                         console.warn('⚠️ ConcentracaoRiscoIntegration não disponível');
+                    }
+
+                    // ========================================
+                    // FASE 4.5.2: REGISTRAR CALCULATORS NO ORCHESTRATOR
+                    // ========================================
+                    // Registra calculators para uso no fluxo automático de cálculo
+                    // (acionado ao navegar para abas de resultado 6, 7, 8)
+
+                    if (window.IndicesFinanceirosCalculator && window.calculationOrchestrator) {
+                        const indicesCalc = new window.IndicesFinanceirosCalculator(this.config, this.messages);
+                        window.calculationOrchestrator.registerCalculator('indices', indicesCalc);
+                        console.log('✅ IndicesFinanceirosCalculator registrado no orchestrator');
+                    } else {
+                        console.warn('⚠️ IndicesFinanceirosCalculator ou CalculationOrchestrator não disponível');
+                    }
+
+                    if (window.ScoringEngine && window.calculationOrchestrator) {
+                        const scoringCalc = new window.ScoringEngine(this.config, this.messages);
+                        window.calculationOrchestrator.registerCalculator('scoring', scoringCalc);
+                        console.log('✅ ScoringEngine registrado no orchestrator');
+                    } else {
+                        console.warn('⚠️ ScoringEngine ou CalculationOrchestrator não disponível');
                     }
 
                     // 4.6. ImportManager (precisa de config, creditScoreModule)
