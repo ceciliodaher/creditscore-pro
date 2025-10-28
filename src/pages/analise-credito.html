@@ -253,6 +253,24 @@
                         </div>
                     </div>
 
+                    <!-- Tabs para Demonstrativos: Balanço Patrimonial e DRE -->
+                    <div class="demonstrativos-tabs-container" style="margin-top: 2rem;">
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="balanco">📊 Balanço Patrimonial</button>
+                            <button class="tab-btn" data-tab="dre">📈 DRE</button>
+                        </div>
+
+                        <!-- TAB: BALANÇO PATRIMONIAL -->
+                        <div id="balanco" class="tab-content active">
+                            <h3 class="text-[#091A30] mb-6 mt-6">📊 Balanço Patrimonial</h3>
+
+                            <!-- INSTRUÇÕES BALANÇO -->
+                            <div class="alert alert-info" style="margin-bottom: 2rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                                <strong>📋 Instruções:</strong> Preencha os Balanços Patrimoniais históricos de 3 anos completos + 1 balancete parcial (se aplicável).
+                                Todos os valores monetários devem ser em <strong>R$ (Reais)</strong>.
+                                Os totalizadores serão calculados automaticamente conforme você preenche os campos.
+                            </div>
+
                     <!-- Tabela Matricial Cronológica COMPLETA (50 contas × 4 períodos = 200 inputs) -->
                     <div class="balanco-container">
                         <table class="table-analise" >
@@ -1004,51 +1022,12 @@
                         <button id="btnImportarExcel" class="btn btn-secondary">📥 Importar Excel/JSON</button>
                         <button id="btnExportar" class="btn btn-secondary">📤 Exportar JSON</button>
                     </div>
-
-                    <!-- Tabs de Análises -->
-                    <div class="analises-container">
-                        <div class="tabs-header">
-                            <button class="tab-btn active" data-tab="analise-horizontal">Análise Horizontal</button>
-                            <button class="tab-btn" data-tab="analise-vertical">Análise Vertical</button>
-                            <button class="tab-btn" data-tab="indicadores">Indicadores</button>
-                            <button class="tab-btn" data-tab="graficos">Gráficos</button>
                         </div>
+                        <!-- END TAB: BALANÇO PATRIMONIAL -->
 
-                        <!-- Tab: Análise Horizontal -->
-                        <div id="analise-horizontal" class="tab-content active">
-                            <div id="tabelaAnaliseHorizontal" class="empty-state">
-                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
-                            </div>
-                        </div>
-
-                        <!-- Tab: Análise Vertical -->
-                        <div id="analise-vertical" class="tab-content">
-                            <div id="tabelaAnaliseVertical" class="empty-state">
-                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
-                            </div>
-                        </div>
-
-                        <!-- Tab: Indicadores -->
-                        <div id="indicadores" class="tab-content">
-                            <div id="tabelaIndicadores" class="empty-state">
-                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
-                            </div>
-                        </div>
-
-                        <!-- Tab: Gráficos -->
-                        <div id="graficos" class="tab-content">
-                            <div id="containerGraficos" class="empty-state">
-                                <p>⏳ Aguardando preenchimento das demonstrações financeiras...</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr style="margin: 3rem 0; border: 0; border-top: 2px solid #e0e0e0;">
-
-                    <!-- =========================================== -->
-                    <!-- DRE - DEMONSTRAÇÃO DO RESULTADO             -->
-                    <!-- =========================================== -->
-                    <h3 class="text-[#091A30] mb-6">📈 Demonstração do Resultado do Exercício (DRE)</h3>
+                        <!-- TAB: DRE -->
+                        <div id="dre" class="tab-content">
+                            <h3 class="text-[#091A30] mb-6 mt-6">📈 Demonstração do Resultado do Exercício (DRE)</h3>
 
                     <!-- INSTRUÇÕES -->
                     <div class="alert alert-info" style="margin-bottom: 2rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
@@ -1517,7 +1496,14 @@
                             </tbody>
                         </table>
                     </div>
+                        </div>
+                        <!-- END TAB: DRE -->
+
                     </div>
+                    <!-- END demonstrativos-tabs-container -->
+
+                    </div>
+                    <!-- END form-section demonstracoes -->
 
                     <!-- ========================================= -->
                     <!-- SEÇÃO 3: ANÁLISE DE ENDIVIDAMENTO -->
@@ -2745,9 +2731,47 @@
                 }, 5000);
             }
         }
-        
+
+        /**
+         * Gerenciador de tabs internos (Balanço vs DRE)
+         * Handles tab switching within the demonstrativos module
+         */
+        function initDemonstrativosTabHandlers() {
+            const tabButtons = document.querySelectorAll('.demonstrativos-tabs-container .tab-btn');
+            const tabContents = document.querySelectorAll('.demonstrativos-tabs-container .tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Remove active class from all tab contents
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    button.classList.add('active');
+
+                    // Show target tab content
+                    const targetContent = document.getElementById(targetTab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+
+                    console.log(`[Demonstrativos] Switched to tab: ${targetTab}`);
+                });
+            });
+
+            console.log('[Demonstrativos] Tab handlers initialized');
+        }
+
         // Inicializar aplicação quando DOM estiver pronto
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize demonstrativos tabs
+            initDemonstrativosTabHandlers();
+
+            // Initialize main app
             window.creditScoreApp = new CreditScoreProApp();
             window.creditScoreApp.init();
         });
