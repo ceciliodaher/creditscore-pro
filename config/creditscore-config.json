@@ -198,7 +198,7 @@
   
   "database": {
     "name": "creditscore_pro_db",
-    "version": 2,
+    "version": 3,
     "stores": {
       "empresas": {
         "keyPath": "id",
@@ -239,13 +239,15 @@
       "autosave": {
         "keyPath": "id",
         "indexes": {
-          "timestamp": { "unique": false }
+          "timestamp": { "unique": false },
+          "empresaId": { "unique": false }
         }
       },
       "calculation_data": {
         "keyPath": "key",
         "indexes": {
-          "timestamp": { "unique": false }
+          "timestamp": { "unique": false },
+          "empresaId": { "unique": false }
         }
       },
       "calculation_history": {

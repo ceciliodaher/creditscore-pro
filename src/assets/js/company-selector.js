@@ -87,8 +87,23 @@ class CompanySelector {
       // Carregar empresas
       this.state.companies = await this.loadCompanies();
 
-      // Identificar empresa ativa
-      this.state.selectedCompany = this.state.companies.find(c => c.active) || this.state.companies[0];
+      // FASE 0: Recuperar empresa ativa do localStorage (se existir)
+      const savedEmpresaId = this.getActiveCompanyFromLocalStorage();
+      if (savedEmpresaId) {
+        const savedCompany = this.state.companies.find(c => c.id === savedEmpresaId);
+        if (savedCompany) {
+          this.state.selectedCompany = savedCompany;
+          // Garantir que está marcada como ativa
+          savedCompany.active = true;
+          console.log(`[CompanySelector] Restaurado empresa do localStorage: ${savedCompany.razaoSocial} (ID: ${savedEmpresaId})`);
+        } else {
+          // Empresa não encontrada, usar primeira disponível
+          this.state.selectedCompany = this.state.companies.find(c => c.active) || this.state.companies[0];
+        }
+      } else {
+        // Identificar empresa ativa (comportamento original)
+        this.state.selectedCompany = this.state.companies.find(c => c.active) || this.state.companies[0];
+      }
 
       // Renderizar UI
       this.render();
@@ -361,6 +376,9 @@ class CompanySelector {
 
       // Update database
       await this.updateActiveCompany(company.id);
+
+      // FASE 0: Persistir empresa ativa no localStorage
+      this.persistActiveCompany(company.id);
 
       // Update local state
       this.state.companies.forEach(c => {
@@ -802,6 +820,36 @@ class CompanySelector {
   defaultErrorHandler(error) {
     console.error('[CompanySelector] Error:', error);
     alert(`Erro: ${error.message}`);
+  }
+
+  /**
+   * FASE 0: Persiste empresa ativa no localStorage
+   * @param {number} empresaId - ID da empresa ativa
+   */
+  persistActiveCompany(empresaId) {
+    try {
+      localStorage.setItem('creditscore_empresaAtiva', empresaId.toString());
+      console.log(`✓ Empresa ativa persistida no localStorage: ${empresaId}`);
+    } catch (error) {
+      console.error('[CompanySelector] Erro ao persistir no localStorage:', error);
+    }
+  }
+
+  /**
+   * FASE 0: Recupera empresa ativa do localStorage
+   * @returns {number|null} ID da empresa ativa ou null se não existir
+   */
+  getActiveCompanyFromLocalStorage() {
+    try {
+      const empresaId = localStorage.getItem('creditscore_empresaAtiva');
+      if (empresaId) {
+        return parseInt(empresaId, 10);
+      }
+      return null;
+    } catch (error) {
+      console.error('[CompanySelector] Erro ao recuperar do localStorage:', error);
+      return null;
+    }
   }
 
   /**

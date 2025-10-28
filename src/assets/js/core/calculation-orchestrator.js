@@ -160,6 +160,25 @@ export class CalculationOrchestrator {
     // ====================================================================
 
     /**
+     * FASE 0: Obtém empresaId do EmpresaAccessManager
+     * @private
+     * @returns {number} ID da empresa ativa
+     * @throws {Error} Se empresaId não disponível
+     */
+    #getEmpresaId() {
+        const empresaId = window.EmpresaAccessManager?.getContext()?.empresaId;
+
+        if (!empresaId) {
+            throw new Error(
+                'empresaId não disponível - ' +
+                'Nenhuma empresa selecionada. Use CompanySelector para selecionar uma empresa.'
+            );
+        }
+
+        return empresaId;
+    }
+
+    /**
      * Coleta dados do IndexedDB
      * @private
      * @returns {Promise<Object>}
@@ -167,6 +186,9 @@ export class CalculationOrchestrator {
      */
     async #collectData() {
         console.log('📥 [CalculationOrchestrator] Coletando dados do IndexedDB...');
+
+        // FASE 0: Obter empresaId
+        const empresaId = this.#getEmpresaId();
 
         const required = [
             'balanco',
@@ -181,13 +203,16 @@ export class CalculationOrchestrator {
 
         for (const key of required) {
             try {
+                // FASE 0: Usar chave composta com empresaId
+                const compositeKey = `${key}_${empresaId}`;
+
                 // Usar retry mechanism para cada operação de leitura
                 const value = await retryIndexedDBOperation(
-                    () => this.#dbManager.get('calculation_data', key),
+                    () => this.#dbManager.get('calculation_data', compositeKey),
                     {
                         maxAttempts: 3,
                         baseDelay: 500,
-                        operationName: `Leitura de '${key}'`
+                        operationName: `Leitura de '${compositeKey}'`
                     }
                 );
 
@@ -207,11 +232,11 @@ export class CalculationOrchestrator {
         // NO FALLBACKS - fail explicitly
         if (missing.length > 0) {
             throw new Error(
-                `Dados obrigatórios não encontrados no IndexedDB: ${missing.join(', ')}`
+                `Dados obrigatórios não encontrados no IndexedDB para empresa ${empresaId}: ${missing.join(', ')}`
             );
         }
 
-        console.log('✅ Dados coletados do IndexedDB:', Object.keys(data));
+        console.log(`✅ Dados coletados do IndexedDB (empresa ${empresaId}):`, Object.keys(data));
 
         return data;
     }
@@ -335,9 +360,13 @@ export class CalculationOrchestrator {
      */
     async saveHistory() {
         try {
+            // FASE 0: Obter empresaId
+            const empresaId = this.#getEmpresaId();
+
             await retryIndexedDBOperation(
                 () => this.#dbManager.save('calculation_history', {
                     timestamp: Date.now(),
+                    empresaId: empresaId, // FASE 0: Adicionar empresaId
                     entries: this.#history
                 }),
                 {
@@ -347,7 +376,7 @@ export class CalculationOrchestrator {
                 }
             );
 
-            console.log('💾 Histórico salvo no IndexedDB');
+            console.log(`💾 Histórico salvo no IndexedDB (empresa ${empresaId})`);
         } catch (error) {
             console.error('❌ [CalculationOrchestrator] Falha ao salvar histórico no IndexedDB:', error);
             // NO FALLBACK - erro explícito
@@ -360,8 +389,20 @@ export class CalculationOrchestrator {
      */
     async loadHistory() {
         try {
+            // FASE 0: Obter empresaId
+            let empresaId;
+            try {
+                empresaId = this.#getEmpresaId();
+            } catch (error) {
+                // Se empresa ainda não selecionada, apenas retornar histórico vazio
+                console.log('ℹ️ Nenhuma empresa selecionada ainda - histórico vazio');
+                this.#history = [];
+                return;
+            }
+
+            // FASE 0: Filtrar histórico por empresaId usando getAllByIndex()
             const saved = await retryIndexedDBOperation(
-                () => this.#dbManager.getAll('calculation_history'),
+                () => this.#dbManager.getAllByIndex('calculation_history', 'empresaId', empresaId),
                 {
                     maxAttempts: 3,
                     baseDelay: 500,
@@ -370,12 +411,12 @@ export class CalculationOrchestrator {
             );
 
             if (saved && saved.length > 0) {
-                // Pegar a entrada mais recente
+                // Pegar a entrada mais recente desta empresa
                 const latestEntry = saved.sort((a, b) => b.timestamp - a.timestamp)[0];
                 this.#history = latestEntry.entries || [];
-                console.log(`📥 Histórico carregado do IndexedDB (${this.#history.length} entradas)`);
+                console.log(`📥 Histórico carregado do IndexedDB (empresa ${empresaId}, ${this.#history.length} entradas)`);
             } else {
-                console.log('ℹ️ Nenhum histórico encontrado no IndexedDB');
+                console.log(`ℹ️ Nenhum histórico encontrado no IndexedDB para empresa ${empresaId}`);
                 this.#history = [];
             }
         } catch (error) {

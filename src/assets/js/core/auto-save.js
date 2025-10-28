@@ -190,10 +190,13 @@ export class AutoSave {
     async checkForSavedData() {
         let savedData = null;
 
-        // Buscar dados no IndexedDB com retry
         try {
+            // FASE 0: Obter chave composta específica da empresa
+            const key = this.#getAutoSaveKey();
+
+            // Buscar dados no IndexedDB com retry
             savedData = await retryIndexedDBOperation(
-                () => this.db.get('autosave', 'current_session'),
+                () => this.db.get('autosave', key),
                 {
                     maxAttempts: 3,
                     baseDelay: 500,
@@ -201,13 +204,19 @@ export class AutoSave {
                 }
             );
         } catch (error) {
+            // Se erro é por empresaId não disponível, apenas retornar false (empresa ainda não selecionada)
+            if (error.message.includes('empresaId não disponível')) {
+                console.log('ℹ️ Nenhuma empresa selecionada ainda - aguardando seleção');
+                return false;
+            }
+
             console.error('❌ Erro ao buscar dados salvos no IndexedDB:', error);
             // NO FALLBACK - falhar explicitamente
             throw new Error(`Falha ao verificar dados salvos: ${error.message}`);
         }
 
         if (!savedData) {
-            console.log('ℹ️ Nenhum dado salvo encontrado no IndexedDB');
+            console.log('ℹ️ Nenhum dado salvo encontrado no IndexedDB para esta empresa');
             return false;
         }
 
@@ -236,13 +245,18 @@ export class AutoSave {
      */
     async save() {
         try {
+            // FASE 0: Obter empresaId e chave composta
+            const empresaId = this.#getEmpresaId();
+            const key = this.#getAutoSaveKey();
+
             // Coletar dados
             const formData = this.#collectFormData();
             const moduleId = this.#getCurrentModuleId();
             const completedModules = this.#getCompletedModules();
 
             const saveData = {
-                id: 'current_session',
+                id: key, // FASE 0: Usar chave composta
+                empresaId: empresaId, // FASE 0: Adicionar empresaId aos dados
                 timestamp: Date.now(),
                 moduleId: moduleId,
                 formData: formData,
@@ -269,7 +283,7 @@ export class AutoSave {
             }
 
             this.#updateSaveStatus(this.messages.autosave.saved);
-            console.log('💾 AutoSave: dados salvos no IndexedDB');
+            console.log(`💾 AutoSave: dados salvos no IndexedDB (empresa ${empresaId})`);
             return true;
         } catch (error) {
             console.error('❌ Erro ao salvar dados:', error);
@@ -346,9 +360,12 @@ export class AutoSave {
      */
     async clearSavedData() {
         try {
+            // FASE 0: Obter chave composta específica da empresa
+            const key = this.#getAutoSaveKey();
+
             // Limpar IndexedDB com retry
             await retryIndexedDBOperation(
-                () => this.db.delete('autosave', 'current_session'),
+                () => this.db.delete('autosave', key),
                 {
                     maxAttempts: 3,
                     baseDelay: 500,
@@ -356,7 +373,7 @@ export class AutoSave {
                 }
             );
 
-            console.log('🗑️ Dados de auto-save limpos do IndexedDB');
+            console.log(`🗑️ Dados de auto-save limpos do IndexedDB (chave: ${key})`);
         } catch (error) {
             console.error('❌ Erro ao limpar dados do IndexedDB:', error);
             // NO FALLBACK - erro explícito
@@ -374,9 +391,20 @@ export class AutoSave {
         if (this.isDirty) {
             // Salvamento síncrono para beforeunload
             try {
+                // FASE 0: Obter empresaId e chave composta
+                let empresaId, key;
+                try {
+                    empresaId = this.#getEmpresaId();
+                    key = this.#getAutoSaveKey();
+                } catch (error) {
+                    console.warn('⚠️ Não foi possível obter empresaId para forceSave:', error.message);
+                    return; // Não salvar se empresa não está selecionada
+                }
+
                 const formData = this.#collectFormData();
                 const saveData = {
-                    id: 'current_session',
+                    id: key, // FASE 0: Usar chave composta
+                    empresaId: empresaId, // FASE 0: Adicionar empresaId
                     timestamp: Date.now(),
                     moduleId: this.#getCurrentModuleId(),
                     formData: formData,
@@ -385,14 +413,14 @@ export class AutoSave {
                 };
 
                 // localStorage é síncrono, ideal para beforeunload (EXCEÇÃO justificada)
-                localStorage.setItem('creditscore_autosave', JSON.stringify(saveData));
+                localStorage.setItem(`creditscore_autosave_${empresaId}`, JSON.stringify(saveData));
 
                 // Marcar dados como alterados para recálculo automático
                 if (window.calculationState) {
                     window.calculationState.markDirty();
                 }
 
-                console.log('💾 AutoSave: salvamento forçado antes de sair');
+                console.log(`💾 AutoSave: salvamento forçado antes de sair (empresa ${empresaId})`);
             } catch (error) {
                 console.error('❌ Erro no salvamento forçado:', error);
             }
@@ -409,6 +437,35 @@ export class AutoSave {
     // ============================================
     // MÉTODOS PRIVADOS
     // ============================================
+
+    /**
+     * FASE 0: Obtém empresaId do EmpresaAccessManager
+     * @private
+     * @returns {number} ID da empresa ativa
+     * @throws {Error} Se empresaId não disponível
+     */
+    #getEmpresaId() {
+        const empresaId = window.EmpresaAccessManager?.getContext()?.empresaId;
+
+        if (!empresaId) {
+            throw new Error(
+                'empresaId não disponível - ' +
+                'Nenhuma empresa selecionada. Use CompanySelector para selecionar uma empresa.'
+            );
+        }
+
+        return empresaId;
+    }
+
+    /**
+     * FASE 0: Gera chave composta para autosave
+     * @private
+     * @returns {string} Chave no formato "autosave_{empresaId}"
+     */
+    #getAutoSaveKey() {
+        const empresaId = this.#getEmpresaId();
+        return `autosave_${empresaId}`;
+    }
 
     /**
      * Executa salvamento automático

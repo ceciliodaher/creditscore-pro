@@ -41,23 +41,57 @@ class CreditscoreIndexedDB {
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
+                const oldVersion = event.oldVersion;
+                const transaction = event.target.transaction;
 
                 // Cria stores conforme configuração
                 Object.entries(dbConfig.stores).forEach(([storeName, storeCfg]) => {
+                    let store;
+
                     if (!db.objectStoreNames.contains(storeName)) {
                         const opts = {
                             keyPath: storeCfg.keyPath,
                             autoIncrement: !!storeCfg.autoIncrement
                         };
-                        const store = db.createObjectStore(storeName, opts);
+                        store = db.createObjectStore(storeName, opts);
+                    } else {
+                        store = transaction.objectStore(storeName);
+                    }
 
-                        if (storeCfg.indexes) {
-                            Object.entries(storeCfg.indexes).forEach(([indexName, indexCfg]) => {
+                    // Adiciona índices que não existem
+                    if (storeCfg.indexes) {
+                        Object.entries(storeCfg.indexes).forEach(([indexName, indexCfg]) => {
+                            if (!store.indexNames.contains(indexName)) {
                                 store.createIndex(indexName, indexName, indexCfg);
-                            });
-                        }
+                            }
+                        });
                     }
                 });
+
+                // Migration específica v2 → v3: Adicionar empresaId aos índices
+                if (oldVersion === 2 && dbConfig.version === 3) {
+                    console.log('🔄 Migrando IndexedDB de v2 para v3 (adicionando índices empresaId)');
+
+                    // autosave: adicionar índice empresaId (se não existe)
+                    if (db.objectStoreNames.contains('autosave')) {
+                        const autosaveStore = transaction.objectStore('autosave');
+                        if (!autosaveStore.indexNames.contains('empresaId')) {
+                            autosaveStore.createIndex('empresaId', 'empresaId', { unique: false });
+                            console.log('✅ Índice empresaId adicionado em autosave');
+                        }
+                    }
+
+                    // calculation_data: adicionar índice empresaId (se não existe)
+                    if (db.objectStoreNames.contains('calculation_data')) {
+                        const calcDataStore = transaction.objectStore('calculation_data');
+                        if (!calcDataStore.indexNames.contains('empresaId')) {
+                            calcDataStore.createIndex('empresaId', 'empresaId', { unique: false });
+                            console.log('✅ Índice empresaId adicionado em calculation_data');
+                        }
+                    }
+
+                    console.log('✅ Migration v2 → v3 concluída');
+                }
             };
         });
     }
@@ -95,6 +129,25 @@ class CreditscoreIndexedDB {
             const store = tx.objectStore(storeName);
             const source = indexName ? store.index(indexName) : store;
             const req = source.getAll();
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    /**
+     * Obtém todos os registros de uma store filtrando por um índice específico
+     * @param {string} storeName - Nome da store
+     * @param {string} indexName - Nome do índice
+     * @param {any} indexValue - Valor do índice para filtrar
+     * @returns {Promise<Array>} Array de registros que correspondem ao filtro
+     */
+    static async getAllByIndex(storeName, indexName, indexValue) {
+        const db = await CreditscoreIndexedDB.openDatabase();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction([storeName], 'readonly');
+            const store = tx.objectStore(storeName);
+            const index = store.index(indexName);
+            const req = index.getAll(indexValue);
             req.onsuccess = () => resolve(req.result);
             req.onerror = () => reject(req.error);
         });
