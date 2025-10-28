@@ -432,19 +432,90 @@ class ImportManager {
             custosProdutos: periodosDRE[3].custosProdutos
         };
 
+        // ========== TRANSFORMAÇÕES ADICIONAIS PARA SCORING ENGINE ==========
+
+        // Helper: converter string "sim"/"nao" para boolean
+        const toBoolean = (val) => {
+            if (typeof val === 'boolean') return val;
+            const lower = String(val || '').toLowerCase();
+            return lower === 'sim' || lower === 'yes' || lower === 'true' || lower === '1';
+        };
+
+        // 1. COMPLIANCE TRANSFORMATION - Arrays vazios para métodos que usam .filter()
+        const complianceTransformado = {
+            // Arrays vazios (form só tem sim/nao, não detalhes)
+            protestos: [],
+            socios: [],
+            processosJudiciais: [],
+
+            // Regularidade fiscal transformada de certidões
+            regularidadeFiscal: {
+                federal: toBoolean(formDataFlat.certidaoNegativaFederal),
+                estadual: toBoolean(formDataFlat.certidaoNegativaEstadual),
+                municipal: toBoolean(formDataFlat.certidaoNegativaMunicipal)
+            }
+        };
+
+        // 2. CADASTRO TRANSFORMATION - Adiciona composicaoSocietaria
+        const cadastroTransformado = {
+            ...formDataFlat,
+            composicaoSocietaria: []  // Array vazio (precisa input separado)
+        };
+
+        // 3. ENDIVIDAMENTO TRANSFORMATION - Array + conversão numérica
+        const endividamentoTransformado = {
+            ...formDataFlat,
+            historicoPagamentos: [],  // Array vazio (precisa input separado)
+
+            // Converter campos numéricos de string para number
+            contasReceberTotal: toNumber(formDataFlat.contasReceberTotal || '0'),
+            contasReceber90Dias: toNumber(formDataFlat.contasReceber90Dias || '0'),
+            contasPagarTotal: toNumber(formDataFlat.contasPagarTotal || '0'),
+            contasPagar90Dias: toNumber(formDataFlat.contasPagar90Dias || '0')
+        };
+
+        // 4. RELACIONAMENTO TRANSFORMATION - Nova seção com operações anteriores
+        const relacionamentoTransformado = {
+            operacoesAnteriores: []  // Array vazio (precisa input separado)
+        };
+
+        // 5. CONCENTRAÇÃO TRANSFORMATION - Arrays de clientes/fornecedores
+        const concentracaoTransformada = {
+            clientes: [1, 2, 3, 4, 5]
+                .map(i => ({
+                    nome: formDataFlat[`cliente_nome_${i}`] || '',
+                    receita: toNumber(formDataFlat[`cliente_receita_${i}`] || '0')
+                }))
+                .filter(c => c.nome.trim() !== ''),  // Remove entradas vazias
+
+            fornecedores: [1, 2, 3, 4, 5]
+                .map(i => ({
+                    nome: formDataFlat[`fornecedor_nome_${i}`] || '',
+                    compras: toNumber(formDataFlat[`fornecedor_compras_${i}`] || '0')
+                }))
+                .filter(f => f.nome.trim() !== '')  // Remove entradas vazias
+        };
+
+        console.log('✅ [Transformer] Transformações adicionais concluídas');
+        console.log('   - Compliance: arrays vazios criados');
+        console.log('   - Cadastro: composicaoSocietaria adicionada');
+        console.log('   - Endividamento: historicoPagamentos + conversões numéricas');
+        console.log('   - Relacionamento: operacoesAnteriores criado');
+        console.log('   - Concentração: clientes/fornecedores em arrays');
+
         // Retorna estrutura compatível com recalcularAnaliseCompleta
         return {
-            cadastro: formDataFlat,
+            cadastro: cadastroTransformado,
             demonstracoes: {
                 balanco: balancoTransformado,
                 dre: dreTransformada
             },
             balanco: balancoTransformado,
             dre: dreTransformada,
-            endividamento: formDataFlat,
-            compliance: formDataFlat,
-            clientes: formDataFlat,
-            fornecedores: formDataFlat
+            endividamento: endividamentoTransformado,
+            compliance: complianceTransformado,
+            relacionamento: relacionamentoTransformado,
+            concentracao: concentracaoTransformada
         };
     }
 
