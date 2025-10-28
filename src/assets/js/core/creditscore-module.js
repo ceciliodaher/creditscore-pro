@@ -577,26 +577,28 @@ class CreditScoreModule {
             }
             
             // 3. Análise de capital de giro
-            if (this.capitalGiroCalculator && resultado.indices) {
-                resultado.capitalGiro = await this.capitalGiroCalculator.analisar(resultado.indices);
+            if (this.capitalGiroCalculator && dados.demonstracoes) {
+                resultado.capitalGiro = await this.capitalGiroCalculator.calcularTodos(dados.demonstracoes);
                 console.log('✅ Análise de capital de giro realizada');
             }
             
             // 4. Calcular scoring de crédito
             if (this.scoringEngine) {
                 resultado.scoring = await this.scoringEngine.calcularScoring({
-                    dadosCadastrais: dados.cadastro,
-                    dadosFinanceiros: resultado.indices,
-                    dadosEndividamento: dados.endividamento,
-                    dadosCompliance: dados.compliance
+                    cadastro: dados.cadastro,
+                    demonstracoes: dados.demonstracoes,
+                    endividamento: dados.endividamento,
+                    compliance: dados.compliance,
+                    indices: resultado.indices,
+                    capitalGiro: resultado.capitalGiro
                 });
                 console.log('✅ Scoring de crédito calculado');
             }
-            
-            // 5. Verificações de compliance
-            if (this.complianceChecker && dados.cadastro) {
-                resultado.compliance = await this.complianceChecker.verificar(dados.cadastro);
-                console.log('✅ Verificações de compliance realizadas');
+
+            // 5. Compliance data (já disponível do import)
+            resultado.compliance = dados.compliance || null;
+            if (resultado.compliance) {
+                console.log('✅ Dados de compliance carregados');
             }
             
             // 6. Gerar alertas baseados na configuração
