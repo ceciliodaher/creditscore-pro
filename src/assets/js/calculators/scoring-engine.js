@@ -599,11 +599,11 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.financeiro.criterios.evolucaoFaturamento;
         const pontosPossiveis = this.pontuacao.categorias.financeiro.evolucaoFaturamento;
 
-        if (!demonstracoes.dre || demonstracoes.dre.length < 2) {
-            throw new Error('ScoringEngine: necessário pelo menos 2 anos de DRE para avaliar evolução de faturamento');
+        if (!demonstracoes.dre?.periodos || demonstracoes.dre.periodos.length < 2) {
+            throw new Error('ScoringEngine: necessário pelo menos 2 períodos de DRE para avaliar evolução de faturamento');
         }
 
-        const dres = demonstracoes.dre.sort((a, b) => a.ano - b.ano);
+        const dres = demonstracoes.dre.periodos;
         const receitaInicial = dres[0].receitaLiquida;
         const receitaFinal = dres[dres.length - 1].receitaLiquida;
         const anos = dres.length - 1;
@@ -832,8 +832,8 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.financeiro.criterios.consistenciaDados;
         const pontosPossiveis = this.pontuacao.categorias.financeiro.consistenciaDados;
 
-        if (!demonstracoes.balanco || demonstracoes.balanco.length === 0) {
-            throw new Error('ScoringEngine: demonstracoes.balanco obrigatório para avaliar consistência');
+        if (!demonstracoes.balanco?.periodos || demonstracoes.balanco.periodos.length === 0) {
+            throw new Error('ScoringEngine: demonstracoes.balanco.periodos obrigatório para avaliar consistência');
         }
 
         let inconsistenciasGraves = 0;
@@ -841,7 +841,7 @@ export class ScoringEngine {
         let inconsistenciasLeves = 0;
         let anosSemInconsistencia = 0;
 
-        for (const balanco of demonstracoes.balanco) {
+        for (const balanco of demonstracoes.balanco.periodos) {
             const ativo = balanco.ativoTotal;
             const passivo = balanco.passivoTotal;
             const pl = this.#somarValores(balanco.patrimonioLiquido);
@@ -867,7 +867,7 @@ export class ScoringEngine {
             }
         }
 
-        const totalAnos = demonstracoes.balanco.length;
+        const totalAnos = demonstracoes.balanco.periodos.length;
 
         if (anosSemInconsistencia === totalAnos) {
             return { nome: msgCriterio.nome, pontos: pontosPossiveis, nivel: 'excelente', avaliacao: msgCriterio.excelente };
@@ -1042,11 +1042,11 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.endividamento.criterios.nivelEndividamento;
         const pontosPossiveis = this.pontuacao.categorias.endividamento.nivelEndividamento;
 
-        if (!demonstracoes.balanco || demonstracoes.balanco.length === 0) {
-            throw new Error('ScoringEngine: demonstracoes.balanco obrigatório para avaliar endividamento');
+        if (!demonstracoes.balanco?.periodos || demonstracoes.balanco.periodos.length === 0) {
+            throw new Error('ScoringEngine: demonstracoes.balanco.periodos obrigatório para avaliar endividamento');
         }
 
-        const balanco = demonstracoes.balanco[demonstracoes.balanco.length - 1];
+        const balanco = demonstracoes.balanco.periodos[demonstracoes.balanco.periodos.length - 1];
         const passivoExigivel = balanco.passivoTotal;
         const pl = this.#somarValores(balanco.patrimonioLiquido);
 
@@ -1104,11 +1104,11 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.endividamento.criterios.composicaoEndividamento;
         const pontosPossiveis = this.pontuacao.categorias.endividamento.composicaoEndividamento;
 
-        if (!demonstracoes.balanco || demonstracoes.balanco.length === 0) {
-            throw new Error('ScoringEngine: demonstracoes.balanco obrigatório para avaliar composição de endividamento');
+        if (!demonstracoes.balanco?.periodos || demonstracoes.balanco.periodos.length === 0) {
+            throw new Error('ScoringEngine: demonstracoes.balanco.periodos obrigatório para avaliar composição de endividamento');
         }
 
-        const balanco = demonstracoes.balanco[demonstracoes.balanco.length - 1];
+        const balanco = demonstracoes.balanco.periodos[demonstracoes.balanco.periodos.length - 1];
         const pc = this.#somarValores(balanco.passivo.circulante);
         const pnc = this.#somarValores(balanco.passivo.naoCirculante);
         const total = pc + pnc;

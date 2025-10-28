@@ -272,6 +272,12 @@ class ImportManager {
             };
         });
 
+        // Criar array representation para Balanço (scoring-engine espera array)
+        const balancoPeriodsArray = ['p1', 'p2', 'p3', 'p4'].map((periodo, index) => ({
+            ano: periodo,
+            ...periodos[index]
+        }));
+
         // DRE (4 períodos - mesma lógica do Balanço)
         const periodosDRE = ['p1', 'p2', 'p3', 'p4'].map(p => {
             // RECEITA BRUTA
@@ -360,6 +366,12 @@ class ImportManager {
             };
         });
 
+        // Criar array representation para DRE (scoring-engine espera array)
+        const drePeriodsArray = ['p1', 'p2', 'p3', 'p4'].map((periodo, index) => ({
+            ano: periodo,
+            ...periodosDRE[index]
+        }));
+
         console.log('✅ [Transformer] Transformação concluída');
         console.log('   - Períodos Balanço processados: 4');
         console.log('   - Períodos DRE processados: 4');
@@ -374,6 +386,9 @@ class ImportManager {
             p2: periodos[1],
             p3: periodos[2],
             p4: periodos[3],
+
+            // Array representation (para scoring-engine que usa .sort(), .filter(), etc)
+            periodos: balancoPeriodsArray,
 
             // Estrutura hierárquica para cálculos (usa dados do p4 - último período)
             ativo: {
@@ -421,6 +436,9 @@ class ImportManager {
             p2: periodosDRE[1],
             p3: periodosDRE[2],
             p4: periodosDRE[3],
+
+            // Array representation (para scoring-engine que usa .sort(), .filter(), etc)
+            periodos: drePeriodsArray,
 
             // Valores do último período (p4) para uso direto
             receitaLiquida: periodosDRE[3].receitaLiquida,
