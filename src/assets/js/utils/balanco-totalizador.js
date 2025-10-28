@@ -154,35 +154,63 @@ class BalancoTotalizador {
         // PASSIVO CIRCULANTE
         // ========================================
 
-        const fornecedores = this.getValor(`fornecedores_p${p}`);
+        // 10. Obrigações Financeiras CP
         const emprestimosCP = this.getValor(`emprestimosCP_p${p}`);
+        const obrigacoesFinanceirasCP = emprestimosCP; // Por enquanto, só empréstimos
+        this.setValor(`obrigacoesFinanceirasCP_p${p}`, obrigacoesFinanceirasCP);
+
+        // 11. Obrigações Trabalhistas
         const salariosPagar = this.getValor(`salariosPagar_p${p}`);
         const encargosSociaisPagar = this.getValor(`encargosSociaisPagar_p${p}`);
-        const impostosPagar = this.getValor(`impostosRecolher_p${p}`);
-        const dividendosPagar = this.getValor(`dividendosPagar_p${p}`);
-        const adiantamentosClientes = this.getValor(`adiantamentosClientes_p${p}`);
-        const obrigacoesFiscais = this.getValor(`obrigacoesFiscais_p${p}`);
-        const outrosPC = this.getValor(`outrosPC_p${p}`);
+        const obrigacoesTrabalhistas = salariosPagar + encargosSociaisPagar;
+        this.setValor(`obrigacoesTrabalhistas_p${p}`, obrigacoesTrabalhistas);
 
-        const passivoCirculanteTotal = fornecedores + emprestimosCP +
-                                        salariosPagar + encargosSociaisPagar + impostosPagar +
-                                        dividendosPagar + adiantamentosClientes + obrigacoesFiscais +
-                                        outrosPC; // Correção: 'obrigacoesFiscais' estava com alias incorreto
+        // 12. Obrigações Fiscais
+        const impostosPagar = this.getValor(`impostosRecolher_p${p}`);
+        const obrigacoesFiscais = this.getValor(`obrigacoesFiscais_p${p}`);
+        const obrigacoesFiscaisTotal = impostosPagar + obrigacoesFiscais;
+        this.setValor(`obrigacoesFiscaisTotal_p${p}`, obrigacoesFiscaisTotal);
+
+        // 13. Fornecedores e Adiantamentos
+        const fornecedores = this.getValor(`fornecedores_p${p}`);
+        const adiantamentosClientes = this.getValor(`adiantamentosClientes_p${p}`);
+        const fornecedoresAdiantamentos = fornecedores + adiantamentosClientes;
+        this.setValor(`fornecedoresAdiantamentos_p${p}`, fornecedoresAdiantamentos);
+
+        // 14. Outros Passivos Circulantes
+        const dividendosPagar = this.getValor(`dividendosPagar_p${p}`);
+        const outrosPC = this.getValor(`outrosPC_p${p}`);
+        const outrosPassivosCirculantes = dividendosPagar + outrosPC;
+        this.setValor(`outrosPassivosCirculantes_p${p}`, outrosPassivosCirculantes);
+
+        // 15. Passivo Circulante Total
+        const passivoCirculanteTotal = obrigacoesFinanceirasCP + obrigacoesTrabalhistas +
+                                        obrigacoesFiscaisTotal + fornecedoresAdiantamentos +
+                                        outrosPassivosCirculantes;
         this.setValor(`passivoCirculanteTotal_p${p}`, passivoCirculanteTotal);
 
         // ========================================
         // PASSIVO NÃO CIRCULANTE
         // ========================================
 
+        // 16. Obrigações Financeiras LP
         const emprestimosLP = this.getValor(`emprestimosLP_p${p}`);
         const financiamentosLP = this.getValor(`financiamentosImobiliarios_p${p}`);
         const debentures = this.getValor(`debentures_p${p}`);
+        const obrigacoesFinanceirasLP = emprestimosLP + financiamentosLP + debentures;
+        this.setValor(`obrigacoesFinanceirasLP_p${p}`, obrigacoesFinanceirasLP);
+
+        // 17. Provisões
         const provisoesTrabalhistas = this.getValor(`provisoesTrabalhistas_p${p}`);
         const provisoesFiscais = this.getValor(`provisoesFiscais_p${p}`);
+        const provisoesTotal = provisoesTrabalhistas + provisoesFiscais;
+        this.setValor(`provisoesTotal_p${p}`, provisoesTotal);
+
+        // 18. Outros Passivos Não Circulantes
         const outrosPNC = this.getValor(`outrosPNC_p${p}`);
 
-        const passivoNaoCirculanteTotal = emprestimosLP + financiamentosLP + debentures +
-                                           provisoesTrabalhistas + provisoesFiscais + outrosPNC;
+        // 19. Passivo Não Circulante Total
+        const passivoNaoCirculanteTotal = obrigacoesFinanceirasLP + provisoesTotal + outrosPNC;
         this.setValor(`passivoNaoCirculanteTotal_p${p}`, passivoNaoCirculanteTotal);
 
         // ========================================

@@ -6,12 +6,12 @@
 
 ## 📊 Resumo Executivo
 
-### Progresso Geral: 15% → 25% (FASE 0 Completa)
+### Progresso Geral: 15% → 45% (FASE 0 e FASE 1 Parcial)
 
 | Fase | Status | Progresso | Tempo Estimado | Tempo Real |
 |------|--------|-----------|----------------|------------|
 | **FASE 0** | ✅ **CONCLUÍDA** | 100% | 4-6h | ~5h |
-| FASE 1 | ⏳ Aguardando | 0% | 6-8h | - |
+| **FASE 1** | 🔄 **EM ANDAMENTO** | 66% | 6-8h | ~4h |
 | FASE 2 | ⏳ Aguardando | 0% | 3-4h | - |
 | FASE 3 | ⏳ Aguardando | 0% | 2-3h | - |
 | FASE 4 | ⏳ Aguardando | 0% | 2-3h | - |
@@ -171,41 +171,130 @@ const balanco = await manager.loadBalanco(); // Carrega da empresa ativa
 
 ---
 
-## 🚀 Próximos Passos - FASE 1 (6-8h)
+## 🔄 FASE 1: Calculadores Financeiros (66% CONCLUÍDA)
 
-### Objetivo
-Implementar os **calculadores** de Análise Horizontal, Análise Vertical e Indicadores Financeiros.
+### Implementações Realizadas
 
-### Tarefas Pendentes
+#### 1. AnaliseHorizontalCalculator ✅
+**Arquivo**: `src/assets/js/calculators/analise-horizontal-calculator.js` (472 linhas)
 
-#### 1. Calculador de Análise Horizontal (2-3h)
-**Arquivo**: `src/assets/js/calculators/analise-horizontal-calculator.js`
+**Funcionalidades Implementadas**:
+- ✅ Variações percentuais entre períodos (P1→P2, P2→P3, P3→P4)
+- ✅ CAGR (Compound Annual Growth Rate) com 4 métodos de cálculo
+- ✅ Identificação de tendências (crescente/decrescente/estável)
+- ✅ Cálculo de consistência e confiança das tendências
+- ✅ Geração de alertas (crítico >50%, aviso >20%, info para tendências)
+- ✅ NO FALLBACKS: validação rigorosa, exceções explícitas
+- ✅ Config externo (analise-horizontal-config.json)
 
-**Funcionalidades**:
-- Calcular variações entre períodos (P1→P2, P2→P3, P3→P4)
-- Calcular CAGR (taxa de crescimento composta)
-- Identificar tendências (crescente, decrescente, estável)
-- Gerar alertas críticos baseados em thresholds
+**Config Criado**: `config/analise-horizontal-config.json`
+```json
+{
+  "thresholds": {
+    "variacaoSignificativa": 0.20,
+    "variacaoCritica": 0.50,
+    "tendenciaEstavel": 0.05
+  },
+  "periodos": { "minimo": 2, "maximo": 4 },
+  "confianca": { "alta": 0.8, "media": 0.5 }
+}
+```
 
-#### 2. Calculador de Análise Vertical (2-3h)
-**Arquivo**: `src/assets/js/calculators/analise-vertical-calculator.js`
+#### 2. Correção do BalancoTotalizador ✅
+**Arquivo**: `src/assets/js/utils/balanco-totalizador.js`
 
-**Funcionalidades**:
-- Calcular percentuais sobre base (Ativo Total ou Receita Líquida)
-- Identificar concentrações críticas
-- Validar consistência (soma = 100%)
+**Problema Identificado**: PC e PNC não tinham subtotais intermediários
 
-#### 3. Calculador de Indicadores (2-3h)
+**Subtotais Adicionados** (6 novos):
+
+**Passivo Circulante**:
+- `obrigacoesFinanceirasCP` (Empréstimos CP)
+- `obrigacoesTrabalhistas` (Salários + Encargos)
+- `obrigacoesFiscaisTotal` (Impostos + Obrigações Fiscais)
+- `fornecedoresAdiantamentos` (Fornecedores + Adiantamentos Clientes)
+- `outrosPassivosCirculantes` (Dividendos + Outros PC)
+
+**Passivo Não Circulante**:
+- `obrigacoesFinanceirasLP` (Empréstimos LP + Financiamentos + Debêntures)
+- `provisoesTotal` (Provisões Trabalhistas + Fiscais)
+- `outrosPNC` (direto)
+
+**Resultado**: Hierarquia completa de 3 níveis no Balanço
+
+#### 3. AnaliseVerticalCalculator ✅
+**Arquivo**: `src/assets/js/calculators/analise-vertical-calculator.js` (462 linhas)
+
+**Funcionalidades Implementadas**:
+- ✅ Cálculo de percentuais sobre base (Ativo Total ou Receita Líquida)
+- ✅ Validação hierárquica COMPLETA (todos os níveis)
+- ✅ Identificação de concentrações (alta >30%, crítica >50%, extrema >70%)
+- ✅ Geração de alertas de concentração E validação
+- ✅ NO FALLBACKS: validação rigorosa
+- ✅ Config externo com TODA a hierarquia mapeada
+
+**Config Criado**: `config/analise-vertical-config.json`
+
+**Hierarquias Validadas**:
+
+**Balanço** (17 validações hierárquicas):
+- Nível 1: AC + ANC = 100% Ativo Total
+- Nível 2: 5 subgrupos de AC, 4 subgrupos de ANC
+- Nível 3: Componentes dentro de cada subgrupo
+- Passivo: PC + PNC + PL = 100% Total
+- PC com 5 subgrupos (agora corrigido)
+- PNC com 3 subgrupos (agora corrigido)
+
+**DRE** (8 validações hierárquicas):
+- Receita Bruta (3 componentes)
+- Deduções (6 componentes)
+- Custos (3 componentes)
+- Despesas Vendas (4 componentes)
+- Despesas Admin (5 componentes)
+- Despesas Operacionais (3 componentes)
+- Depreciação/Amortização (2 componentes)
+- Impostos Lucro (2 componentes)
+
+**Exemplo de Validação**:
+```json
+{
+  "ativo_nivel1": {
+    "descricao": "AC + ANC = 100% Ativo Total",
+    "base": "ativoTotal",
+    "componentes": ["ativoCirculanteTotal", "ativoNaoCirculanteTotal"]
+  }
+}
+```
+
+### Arquivos Criados/Modificados
+
+**Criados** (3):
+1. `config/analise-horizontal-config.json` (21 linhas)
+2. `config/analise-vertical-config.json` (168 linhas)
+3. `src/assets/js/calculators/analise-horizontal-calculator.js` (472 linhas)
+4. `src/assets/js/calculators/analise-vertical-calculator.js` (462 linhas)
+
+**Modificados** (1):
+1. `src/assets/js/utils/balanco-totalizador.js` (+40 linhas para subtotais PC/PNC)
+
+**Total**: ~1.163 linhas adicionadas
+
+---
+
+## 🚀 Próximos Passos - FASE 1 (Pendente)
+
+### Tarefas Restantes (2-3h)
+
+#### 1. Calculador de Indicadores Financeiros (2h)
 **Arquivo**: `src/assets/js/calculators/indicadores-calculator.js`
 
 **Funcionalidades**:
-- Liquidez (corrente, seca, imediata)
-- Endividamento (total, composição, alavancagem)
-- Rentabilidade (ROE, ROA, margens)
-- Atividade (giros, prazos)
-- Cobertura (juros, serviço da dívida)
+- Liquidez: corrente, seca, imediata, geral
+- Endividamento: geral, LP, composição, alavancagem
+- Rentabilidade: ROE, ROA, margens (bruta, EBITDA, operacional, líquida)
+- Atividade: giros (estoque, contas receber, ativo), prazos médios
+- Cobertura: juros, serviço da dívida
 
-#### 4. Integração e Testes (1h)
+#### 2. Integração e Testes (1h)
 - Integrar calculadores com DemonstrativosManager
 - Integrar com AnalisesRenderer (já criado)
 - Validar isolamento entre empresas

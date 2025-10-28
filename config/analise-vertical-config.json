@@ -1,0 +1,195 @@
+{
+  "versao": "1.0.0",
+  "descricao": "Configuração para Análise Vertical (Composição Percentual) com validação hierárquica completa",
+  "autor": "Sistema CreditScore Pro - FASE 1",
+  "dataAtualizacao": "2025-10-28",
+
+  "bases": {
+    "balanco": {
+      "campo": "ativoTotal",
+      "label": "Ativo Total",
+      "descricao": "Base de 100% para cálculo percentual de todas as contas do Balanço"
+    },
+    "dre": {
+      "campo": "receitaLiquida",
+      "label": "Receita Líquida",
+      "descricao": "Base de 100% para cálculo percentual de todas as contas da DRE"
+    }
+  },
+
+  "thresholds": {
+    "concentracaoAlta": 0.30,
+    "concentracaoCritica": 0.50,
+    "concentracaoExtrema": 0.70,
+    "toleranciaValidacao": 0.02
+  },
+
+  "alertas": {
+    "habilitado": true,
+    "niveis": ["crítico", "aviso", "info"],
+    "gerarParaConcentracao": true,
+    "gerarParaValidacao": true
+  },
+
+  "validacoesSoma100": {
+    "balanco": {
+      "ativo_nivel1": {
+        "descricao": "Ativo Circulante + Ativo Não Circulante = 100% Ativo Total",
+        "base": "ativoTotal",
+        "componentes": ["ativoCirculanteTotal", "ativoNaoCirculanteTotal"]
+      },
+      "ativoCirculante_nivel2": {
+        "descricao": "Subgrupos do Ativo Circulante = 100% AC",
+        "base": "ativoCirculanteTotal",
+        "componentes": [
+          "disponibilidadesTotal",
+          "contasReceberLiquido",
+          "estoquesTotal",
+          "impostosRecuperar",
+          "adiantamentosFornecedores",
+          "outrosAC"
+        ]
+      },
+      "disponibilidades_nivel3": {
+        "descricao": "Componentes de Disponibilidades = 100% Disponibilidades",
+        "base": "disponibilidadesTotal",
+        "componentes": ["caixa", "bancos", "aplicacoes"]
+      },
+      "estoques_nivel3": {
+        "descricao": "Componentes de Estoques = 100% Estoques",
+        "base": "estoquesTotal",
+        "componentes": ["estoqueMP", "estoqueWIP", "estoqueProdAcabados", "estoquePecasReposicao"]
+      },
+      "ativoNaoCirculante_nivel2": {
+        "descricao": "Subgrupos do Ativo Não Circulante = 100% ANC",
+        "base": "ativoNaoCirculanteTotal",
+        "componentes": [
+          "realizavelLPTotal",
+          "investimentosTotal",
+          "imobilizadoLiquido",
+          "intangivelLiquido"
+        ]
+      },
+      "realizavelLP_nivel3": {
+        "descricao": "Componentes de Realizável LP = 100% Realizável LP",
+        "base": "realizavelLPTotal",
+        "componentes": ["titulosReceberLP", "depositosJudiciais", "outrosCreditosLP"]
+      },
+      "investimentos_nivel3": {
+        "descricao": "Componentes de Investimentos = 100% Investimentos",
+        "base": "investimentosTotal",
+        "componentes": ["participacoesSocietarias", "outrosInvestimentos"]
+      },
+      "passivoEPL_nivel1": {
+        "descricao": "Passivo Circulante + Passivo Não Circulante + PL = 100% Total",
+        "base": "totalPassivoPL",
+        "componentes": [
+          "passivoCirculanteTotal",
+          "passivoNaoCirculanteTotal",
+          "patrimonioLiquidoTotal"
+        ]
+      },
+      "passivoCirculante_nivel2": {
+        "descricao": "Subgrupos do Passivo Circulante = 100% PC",
+        "base": "passivoCirculanteTotal",
+        "componentes": [
+          "obrigacoesFinanceirasCP",
+          "obrigacoesTrabalhistas",
+          "obrigacoesFiscaisTotal",
+          "fornecedoresAdiantamentos",
+          "outrosPassivosCirculantes"
+        ]
+      },
+      "obrigacoesTrabalhistas_nivel3": {
+        "descricao": "Componentes de Obrigações Trabalhistas = 100% Obrigações Trabalhistas",
+        "base": "obrigacoesTrabalhistas",
+        "componentes": ["salariosPagar", "encargosSociaisPagar"]
+      },
+      "obrigacoesFiscaisCP_nivel3": {
+        "descricao": "Componentes de Obrigações Fiscais CP = 100% Obrigações Fiscais",
+        "base": "obrigacoesFiscaisTotal",
+        "componentes": ["impostosRecolher", "obrigacoesFiscais"]
+      },
+      "fornecedoresAdiantamentos_nivel3": {
+        "descricao": "Fornecedores + Adiantamentos = 100% Fornecedores/Adiantamentos",
+        "base": "fornecedoresAdiantamentos",
+        "componentes": ["fornecedores", "adiantamentosClientes"]
+      },
+      "outrosPassivosCirculantes_nivel3": {
+        "descricao": "Outros Passivos Circulantes = 100%",
+        "base": "outrosPassivosCirculantes",
+        "componentes": ["dividendosPagar", "outrosPC"]
+      },
+      "passivoNaoCirculante_nivel2": {
+        "descricao": "Subgrupos do Passivo Não Circulante = 100% PNC",
+        "base": "passivoNaoCirculanteTotal",
+        "componentes": [
+          "obrigacoesFinanceirasLP",
+          "provisoesTotal",
+          "outrosPNC"
+        ]
+      },
+      "obrigacoesFinanceirasLP_nivel3": {
+        "descricao": "Componentes de Obrigações Financeiras LP = 100%",
+        "base": "obrigacoesFinanceirasLP",
+        "componentes": ["emprestimosLP", "financiamentosImobiliarios", "debentures"]
+      },
+      "provisoes_nivel3": {
+        "descricao": "Componentes de Provisões = 100% Provisões",
+        "base": "provisoesTotal",
+        "componentes": ["provisoesTrabalhistas", "provisoesFiscais"]
+      }
+    },
+    "dre": {
+      "receitaBruta": {
+        "descricao": "Componentes da Receita Bruta = 100% Receita Bruta",
+        "base": "receitaBrutaTotal",
+        "componentes": ["vendasProdutos", "vendasServicos", "outrasReceitas"]
+      },
+      "deducoes": {
+        "descricao": "Componentes das Deduções = 100% Deduções",
+        "base": "deducoesTotal",
+        "componentes": ["icms", "pis", "cofins", "iss", "devolucoesVendas", "abatimentos"]
+      },
+      "custos": {
+        "descricao": "Componentes dos Custos = 100% Custos",
+        "base": "custosTotal",
+        "componentes": ["cmv", "custosServicos", "maoObraProducao"]
+      },
+      "despesasVendas": {
+        "descricao": "Componentes de Despesas com Vendas = 100% Despesas Vendas",
+        "base": "despesasVendasTotal",
+        "componentes": ["comissoes", "marketingPublicidade", "fretesEntregas", "outrasDespesasVendas"]
+      },
+      "despesasAdmin": {
+        "descricao": "Componentes de Despesas Administrativas = 100% Despesas Admin",
+        "base": "despesasAdminTotal",
+        "componentes": ["salariosAdmin", "encargosAdmin", "alugueisAdmin", "servicosAdmin", "outrasDespesasAdmin"]
+      },
+      "despesasOperacionais": {
+        "descricao": "Componentes de Despesas Operacionais = 100% Despesas Operacionais",
+        "base": "despesasOperacionaisTotal",
+        "componentes": ["despesasVendasTotal", "despesasAdminTotal", "outrasDespesasOp"]
+      },
+      "depreciacaoAmortizacao": {
+        "descricao": "Componentes de Depreciação/Amortização = 100% Depreciação/Amortização",
+        "base": "depreciacaoAmortizacaoTotal",
+        "componentes": ["depreciacao", "amortizacao"]
+      },
+      "impostosLucro": {
+        "descricao": "Componentes de Impostos sobre o Lucro = 100% Impostos Lucro",
+        "base": "impostosLucroTotal",
+        "componentes": ["irpj", "csll"]
+      }
+    }
+  },
+
+  "notas": [
+    "Análise Vertical calcula o percentual de cada conta sobre a base principal (Ativo Total ou Receita Líquida)",
+    "Validações hierárquicas garantem que subgrupos somem 100% ± tolerância (2%) de seus totalizadores",
+    "Para Balanço: 3 níveis de hierarquia (Total → Grupos → Subgrupos)",
+    "Para DRE: 2 níveis de hierarquia (Total → Totalizadores parciais → Componentes)",
+    "Alertas de concentração identificam dependência excessiva de poucas contas (>30%, >50%, >70%)",
+    "Correção FASE 1: balanco-totalizador.js agora inclui subtotais intermediários de PC e PNC"
+  ]
+}

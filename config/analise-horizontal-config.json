@@ -1,0 +1,20 @@
+{
+  "thresholds": {
+    "variacaoSignificativa": 0.20,
+    "variacaoCritica": 0.50,
+    "tendenciaEstavel": 0.05
+  },
+  "periodos": {
+    "minimo": 2,
+    "maximo": 4,
+    "recomendado": 4
+  },
+  "confianca": {
+    "alta": 0.8,
+    "media": 0.5
+  },
+  "alertas": {
+    "habilitado": true,
+    "niveis": ["crítico", "aviso", "info"]
+  }
+}
