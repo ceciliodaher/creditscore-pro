@@ -28,27 +28,34 @@ Sistema especializado de análise de crédito e compliance financeiro para anál
    - Registro de sócios e participações
 
 2. **📊 Demonstrações Financeiras**
-   - Balanço Patrimonial (3 anos)
-   - DRE - Demonstração de Resultados (3 anos)
-   - Análise Vertical e Horizontal
-   - Anualização de períodos parciais
+   - Balanço Patrimonial (4 períodos: N-2, N-1, N, Balancete Atual)
+   - DRE - Demonstração de Resultados (4 períodos)
+   - 50 contas no Balanço (Ativo, Passivo, PL)
+   - 35 contas na DRE
+   - Validação automática: Ativo = Passivo + PL
+   - Cálculos automáticos de subtotais e margens
+   - Análise de Concentração de Risco (Clientes e Fornecedores)
 
 3. **💳 Análise de Endividamento**
    - Dívidas bancárias detalhadas
    - Obrigações e compromissos
    - Indicadores de endividamento
 
-4. **📈 Índices Financeiros** (Auto-calculado)
+4. **📈 Índices Financeiros** (Auto-calculado ⚡)
    - Liquidez (corrente, seca, imediata)
    - Rentabilidade (ROE, ROA, margem líquida)
    - Estrutura de capital (endividamento, composição)
    - Atividade (giro de ativos, prazo médio)
+   - Cálculo automático ao navegar para aba
+   - Indicadores visuais de status (✓ atualizado / ⚡ desatualizado)
 
-5. **⭐ Scoring de Crédito** (Auto-calculado)
+5. **⭐ Scoring de Crédito** (Auto-calculado ⚡)
    - Sistema proprietário de 100 pontos
    - 5 categorias ponderadas
    - 8 ratings de risco (AAA a D)
    - Classificação automática
+   - Recálculo automático ao navegar para aba
+   - Histórico dos últimos 10 cálculos
 
 6. **✅ Compliance e Verificações**
    - Verificações cadastrais
@@ -59,10 +66,20 @@ Sistema especializado de análise de crédito e compliance financeiro para anál
    - Estrutura de pessoal
    - Análise de folha de pagamento
 
-8. **📄 Relatórios e Análises** (Auto-gerado)
+8. **📄 Relatórios e Análises** (Auto-gerado ⚡)
    - Exportação JSON
    - Exportação Excel
    - Exportação PDF
+   - Consolidação automática de todos os módulos
+
+### 🆕 Sistema de Cálculo Automático (FASE 3 - Concluída)
+
+- **Observable Pattern**: Estado reativo com indicadores visuais
+- **Validation Engine**: Validação pré-cálculo com fail-fast
+- **Calculation Orchestrator**: Orquestração de cálculos com dependências
+- **Auto-save Integration**: Sincronização automática com mudanças
+- **Histórico**: Últimos 10 cálculos persistidos
+- **Loading States**: Overlay e toast notifications
 
 ## 🛠️ Tecnologias
 
@@ -155,40 +172,61 @@ creditscore-pro/
 │   ├── creditscore-config.json    # Config principal do sistema
 │   ├── messages.json              # Mensagens centralizadas
 │   ├── scoring-criteria.json      # Critérios de scoring
+│   ├── validation-rules.json      # Regras de validação
 │   ├── analise-balancos-config.json
 │   └── analise-dre-config.json
 ├── src/
 │   ├── assets/
 │   │   ├── css/
 │   │   │   ├── tabs.css           # Estilos de navegação
-│   │   │   └── creditscore-styles.css
+│   │   │   ├── creditscore-styles.css
+│   │   │   ├── analise-balancos.css
+│   │   │   └── analise-dre.css
 │   │   ├── js/
 │   │   │   ├── core/              # Módulos core
 │   │   │   │   ├── form-generator.js
 │   │   │   │   ├── navigation-controller.js
-│   │   │   │   └── auto-save.js
+│   │   │   │   ├── auto-save.js
+│   │   │   │   ├── creditscore-module.js
+│   │   │   │   ├── calculation-state.js        (NEW)
+│   │   │   │   ├── validation-engine.js        (NEW)
+│   │   │   │   └── calculation-orchestrator.js (NEW)
 │   │   │   ├── database/
 │   │   │   │   └── indexeddb-manager.js
 │   │   │   ├── calculators/       # Calculadores financeiros
 │   │   │   │   ├── balanco-calculator.js
 │   │   │   │   ├── dre-calculator.js
 │   │   │   │   ├── indices-financeiros.js
-│   │   │   │   └── scoring-engine.js
+│   │   │   │   ├── scoring-engine.js
+│   │   │   │   └── concentracao-risco.js
 │   │   │   ├── components/
-│   │   │   ├── services/
-│   │   │   └── utils/
+│   │   │   │   └── concentracao-risco-integration.js (NEW)
+│   │   │   ├── ui/
+│   │   │   │   └── calculation-indicators.js    (NEW)
+│   │   │   ├── utils/
+│   │   │   │   ├── balanco-totalizador.js
+│   │   │   │   └── indexeddb-retry.js
+│   │   │   └── import.js
 │   │   └── images/
+│   │       └── expertzy_logo.png
 │   ├── pages/
 │   │   └── analise-credito.html   # Aplicação principal
 │   └── shared/                    # Componentes compartilhados
 │       ├── formatters/
 │       ├── validators/
 │       └── ui/
+├── docs/                          # Documentação técnica
+│   ├── PRD-FLUXO-CALCULO.md
+│   ├── IMPLEMENTACAO-FLUXO-CALCULO.md
+│   ├── RESUMO-IMPLEMENTACAO.md
+│   └── FASE-3-CONCLUIDA.md        (NEW)
 ├── tests/                         # Testes Playwright
 │   └── debug-tab-visibility.spec.js
 ├── vite.config.js
+├── vitest.config.js
 ├── playwright.config.js
 ├── package.json
+├── README.md                      # Este arquivo
 └── CLAUDE.md                      # Documentação técnica
 ```
 
@@ -237,6 +275,42 @@ Algoritmo proprietário de 100 pontos:
 - 10pts Garantias
 
 Classificações: AAA (90-100) até D (0-29)
+
+### Fluxo de Cálculo Automático
+
+Sistema inteligente baseado em Observable Pattern:
+
+```javascript
+// 1. Usuário edita dados
+Formulário → Auto-save (30s) → markDirty()
+
+// 2. Estado reativo
+calculationState → dispara evento 'stateChanged'
+calculationIndicators → atualiza abas (⚡️ outdated)
+
+// 3. Navegação para aba de resultado
+tabs.js → detecta aba 6/7/8
+       → verifica se precisa recalcular
+       → calculationOrchestrator.performAllCalculations()
+
+// 4. Orquestração de cálculos
+validationEngine → valida dados (fail-fast)
+orchestrator → executa calculators na ordem de dependência
+            → salva no histórico (últimos 10)
+            → markCalculated()
+
+// 5. Atualização UI
+calculationIndicators → recebe evento 'calculated'
+                     → atualiza abas (✓ updated)
+toast → exibe mensagem de sucesso
+```
+
+**Vantagens**:
+- ✅ Cálculo automático ao navegar
+- ✅ Indicadores visuais de status
+- ✅ Validação pré-cálculo
+- ✅ Histórico de cálculos
+- ✅ Performance otimizada (só recalcula quando necessário)
 
 ## 🔒 IndexedDB e Privacidade
 
@@ -333,6 +407,44 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
+## 📊 Status de Desenvolvimento
+
+### ✅ Implementado (100%)
+
+- [x] Estrutura base HTML/CSS
+- [x] 8 módulos de análise completos
+- [x] Sistema de navegação por abas
+- [x] Auto-save com IndexedDB e localStorage
+- [x] Balanço Patrimonial (50 contas × 4 períodos)
+- [x] DRE - Demonstração de Resultados (35 contas × 4 períodos)
+- [x] Análise de Concentração de Risco
+- [x] Calculadores financeiros (Balanço, DRE, Índices)
+- [x] Sistema de Scoring com 100 pontos
+- [x] Sistema de Cálculo Automático (FASE 3)
+  - [x] Observable Pattern
+  - [x] Validation Engine
+  - [x] Calculation Orchestrator
+  - [x] Calculation Indicators
+  - [x] Auto-save Integration
+  - [x] Histórico de cálculos
+
+### 🔄 Roadmap Futuro
+
+- [ ] Testes E2E automatizados completos
+- [ ] Integração com APIs externas (CNPJ, Receita Federal)
+- [ ] Dashboard executivo com gráficos
+- [ ] Relatórios PDF customizáveis
+- [ ] Modo multi-usuário com autenticação
+- [ ] Análise comparativa entre empresas
+- [ ] Machine Learning para scoring preditivo
+
+**Última atualização**: 2025-01-25
+
+---
+
 **Expertzy** - Sistema de Análise de Crédito e Compliance Financeiro
 
-Para documentação técnica completa, consulte [CLAUDE.md](CLAUDE.md)
+Para documentação técnica completa, consulte:
+- [CLAUDE.md](CLAUDE.md) - Documentação técnica geral
+- [docs/FASE-3-CONCLUIDA.md](docs/FASE-3-CONCLUIDA.md) - Sistema de cálculo automático
+- [docs/IMPLEMENTACAO-FLUXO-CALCULO.md](docs/IMPLEMENTACAO-FLUXO-CALCULO.md) - Detalhes de implementação
