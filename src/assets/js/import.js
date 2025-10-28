@@ -123,8 +123,9 @@ class ImportManager {
         // Helper: converte string para número
         const toNumber = (val) => {
             if (val === null || val === undefined || val === '') return 0;
-            // Para o balanço, sempre usamos o valor absoluto, pois as contas redutoras são subtraídas na fórmula.
-            // Para a DRE e contas como Lucros/Prejuízos, precisamos manter o sinal.
+            // Preserva o sinal original (positivo ou negativo).
+            // Usado para: contas retificadoras (PDD, Depreciação, Ações em Tesouraria) que vêm negativas,
+            // e contas como Lucros/Prejuízos Acumulados que podem ser positivas ou negativas.
             const num = typeof val === 'string' ? parseFloat(val.replace(/[^0-9.-]/g, '')) : val;
             return isNaN(num) ? 0 : num;
         };
@@ -144,8 +145,8 @@ class ImportManager {
             const disponibilidadesTotal = caixa + bancos + aplicacoes;
 
             const contasReceber = toPositiveNumber(formDataFlat[`contasReceber_${p}`]);
-            const pdd = toPositiveNumber(formDataFlat[`pdd_${p}`]);
-            const contasReceberLiquido = contasReceber - pdd; // Correção: PDD é redutora
+            const pdd = toNumber(formDataFlat[`pdd_${p}`]); // PDD é conta retificadora (vem negativa do formulário)
+            const contasReceberLiquido = contasReceber + pdd; // Soma (pdd já é negativo)
 
             const estoqueMP = toPositiveNumber(formDataFlat[`estoqueMP_${p}`]);
             const estoqueWIP = toPositiveNumber(formDataFlat[`estoqueWIP_${p}`]);
@@ -179,15 +180,15 @@ class ImportManager {
             const imobilizadoAndamento = toPositiveNumber(formDataFlat[`imobilizadoAndamento_${p}`]);
             const imobilizadoBruto = terrenos + edificacoes + maquinasEquipamentos + veiculos +
                                    moveisUtensilios + equipamentosInformatica + imobilizadoAndamento;
-            const depreciacaoAcumulada = toPositiveNumber(formDataFlat[`depreciacaoAcumulada_${p}`]);
-            const imobilizadoLiquido = imobilizadoBruto - depreciacaoAcumulada; // Correção: Depreciação é redutora
+            const depreciacaoAcumulada = toNumber(formDataFlat[`depreciacaoAcumulada_${p}`]); // Conta retificadora (vem negativa)
+            const imobilizadoLiquido = imobilizadoBruto + depreciacaoAcumulada; // Soma (já é negativo)
 
             const software = toPositiveNumber(formDataFlat[`software_${p}`]);
             const marcasPatentes = toPositiveNumber(formDataFlat[`marcasPatentes_${p}`]);
             const goodwill = toPositiveNumber(formDataFlat[`goodwill_${p}`]);
             const intangivelBruto = software + marcasPatentes + goodwill;
-            const amortizacaoAcumulada = toPositiveNumber(formDataFlat[`amortizacaoAcumulada_${p}`]);
-            const intangivelLiquido = intangivelBruto - amortizacaoAcumulada; // Correção: Amortização é redutora
+            const amortizacaoAcumulada = toNumber(formDataFlat[`amortizacaoAcumulada_${p}`]); // Conta retificadora (vem negativa)
+            const intangivelLiquido = intangivelBruto + amortizacaoAcumulada; // Soma (já é negativo)
 
             const ativoNaoCirculanteTotal = realizavelLPTotal + investimentosTotal + imobilizadoLiquido + intangivelLiquido;
 
@@ -224,12 +225,12 @@ class ImportManager {
             const reservaCapital = toPositiveNumber(formDataFlat[`reservaCapital_${p}`]);
             const reservaLucros = toPositiveNumber(formDataFlat[`reservaLucros_${p}`]);
             const reservaLegal = toPositiveNumber(formDataFlat[`reservaLegal_${p}`]);
-            const lucrosPrejuizosAcumulados = lucrosPrejuizosAcumuladosInicial + lucroDoPeriodo;
+            const lucrosPrejuizosAcumulados = toNumber(formDataFlat[`lucrosPrejuizosAcumulados_${p}`]);
 
             const ajustesAvaliacaoPatrimonial = toPositiveNumber(formDataFlat[`ajustesAvaliacaoPatrimonial_${p}`]);
-            const acoesTesouraria = toPositiveNumber(formDataFlat[`acoesTesouraria_${p}`]);
+            const acoesTesouraria = toNumber(formDataFlat[`acoesTesouraria_${p}`]); // Conta retificadora do PL (vem negativa)
 
-            const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros + reservaLegal + lucrosPrejuizosAcumulados + ajustesAvaliacaoPatrimonial - acoesTesouraria;
+            const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros + reservaLegal + lucrosPrejuizosAcumulados + ajustesAvaliacaoPatrimonial + acoesTesouraria; // Soma (já é negativo)
             const passivoTotal = passivoCirculanteTotal + passivoNaoCirculanteTotal;
             const passivoPLTotal = passivoTotal + patrimonioLiquidoTotal;
 
@@ -319,12 +320,8 @@ class ImportManager {
             const servicosProfissionais = toNumber(formDataFlat[`servicosProfissionais_${p}`] ?? '0');
             const administrativas = toNumber(formDataFlat[`administrativas_${p}`] ?? '0');
             const outrasDespesas = toNumber(formDataFlat[`outrasDespesas_${p}`] ?? '0');
-            const despesasAdministrativas = pessoal + alugueis + utilidades + seguros + manutencao +
-                                           tecnologiaInformacao + servicosProfissionais + administrativas +
-                                           outrasDespesas;
-
-            const lucroOperacional = lucroBruto + despesasVendas + despesasAdministrativas;
-
+            const despesasAdministrativas = pessoal + alugueis + utilidades + seguros + manutencao + tecnologiaInformacao + servicosProfissionais + administrativas;
+            const lucroOperacional = lucroBruto + despesasVendas + despesasAdministrativas + outrasDespesas; // Despesas já são negativas
             // RESULTADO FINANCEIRO E NÃO OPERACIONAL
             const receitasFinanceiras = toNumber(formDataFlat[`receitasFinanceiras_${p}`]);
             const despesasFinanceiras = toNumber(formDataFlat[`despesasFinanceiras_${p}`]);

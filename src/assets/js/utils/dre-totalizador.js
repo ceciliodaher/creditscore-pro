@@ -34,8 +34,8 @@ class DRETotalizador {
      * Inicializa event listeners
      */
     init() {
-        // Contar inputs da DRE (têm data-demonstrativo="dre")
-        const inputsDRE = document.querySelectorAll('.input-valor[data-demonstrativo="dre"]');
+        // Contar inputs da DRE (dentro do container #dre)
+        const inputsDRE = document.querySelectorAll('#dre .input-valor');
         console.log(`📝 Encontrados ${inputsDRE.length} inputs de DRE`);
 
         // Adicionar listener em cada input
@@ -100,10 +100,12 @@ class DRETotalizador {
         // ========================================
 
         const cmv = this.getValor(`cmv_p${p}`);
-        const custosServicos = this.getValor(`custosServicos_p${p}`);
-        const maoObraProducao = this.getValor(`maoObraProducao_p${p}`);
+        const materiaPrima = this.getValor(`materiaPrima_p${p}`);
+        const maoObraDireta = this.getValor(`maoObraDireta_p${p}`);
+        const cif = this.getValor(`cif_p${p}`);
+        const csp = this.getValor(`csp_p${p}`);
 
-        const custosTotal = cmv + custosServicos + maoObraProducao;
+        const custosTotal = cmv + materiaPrima + maoObraDireta + cif + csp;
         this.setValor(`custosTotal_p${p}`, custosTotal);
 
         // ========================================
@@ -123,25 +125,28 @@ class DRETotalizador {
 
         // Despesas com Vendas
         const comissoes = this.getValor(`comissoes_p${p}`);
-        const marketingPublicidade = this.getValor(`marketingPublicidade_p${p}`);
-        const fretesEntregas = this.getValor(`fretesEntregas_p${p}`);
-        const outrasDespesasVendas = this.getValor(`outrasDespesasVendas_p${p}`);
-        const despesasVendasTotal = comissoes + marketingPublicidade + fretesEntregas + outrasDespesasVendas;
+        const vendasMarketing = this.getValor(`vendasMarketing_p${p}`);
+        const frete = this.getValor(`frete_p${p}`);
+        const outrasDespVendas = this.getValor(`outrasDespVendas_p${p}`);
+        const despesasVendasTotal = comissoes + vendasMarketing + frete + outrasDespVendas;
         this.setValor(`despesasVendasTotal_p${p}`, despesasVendasTotal);
 
         // Despesas Administrativas
-        const salariosAdmin = this.getValor(`salariosAdmin_p${p}`);
-        const encargosAdmin = this.getValor(`encargosAdmin_p${p}`);
-        const alugueisAdmin = this.getValor(`alugueisAdmin_p${p}`);
-        const servicosAdmin = this.getValor(`servicosAdmin_p${p}`);
-        const outrasDespesasAdmin = this.getValor(`outrasDespesasAdmin_p${p}`);
-        const despesasAdminTotal = salariosAdmin + encargosAdmin + alugueisAdmin + servicosAdmin + outrasDespesasAdmin;
+        const pessoal = this.getValor(`pessoal_p${p}`);
+        const alugueis = this.getValor(`alugueis_p${p}`);
+        const utilidades = this.getValor(`utilidades_p${p}`);
+        const seguros = this.getValor(`seguros_p${p}`);
+        const manutencao = this.getValor(`manutencao_p${p}`);
+        const tecnologiaInformacao = this.getValor(`tecnologiaInformacao_p${p}`);
+        const servicosProfissionais = this.getValor(`servicosProfissionais_p${p}`);
+        const administrativas = this.getValor(`administrativas_p${p}`);
+        const despesasAdminTotal = pessoal + alugueis + utilidades + seguros + manutencao + tecnologiaInformacao + servicosProfissionais + administrativas;
         this.setValor(`despesasAdminTotal_p${p}`, despesasAdminTotal);
 
         // Outras Despesas Operacionais
-        const outrasDespesasOp = this.getValor(`outrasDespesasOp_p${p}`);
+        const outrasDespesas = this.getValor(`outrasDespesas_p${p}`);
 
-        const despesasOperacionaisTotal = despesasVendasTotal + despesasAdminTotal + outrasDespesasOp;
+        const despesasOperacionaisTotal = despesasVendasTotal + despesasAdminTotal + outrasDespesas;
         this.setValor(`despesasOperacionaisTotal_p${p}`, despesasOperacionaisTotal);
 
         // ========================================
@@ -159,9 +164,8 @@ class DRETotalizador {
         // DEPRECIAÇÃO E AMORTIZAÇÃO
         // ========================================
 
-        const depreciacao = this.getValor(`depreciacao_p${p}`);
-        const amortizacao = this.getValor(`amortizacao_p${p}`);
-        const depreciacaoAmortizacaoTotal = depreciacao + amortizacao;
+        const depreciacaoAmortizacao = this.getValor(`depreciacaoAmortizacao_p${p}`);
+        const depreciacaoAmortizacaoTotal = depreciacaoAmortizacao;
         this.setValor(`depreciacaoAmortizacaoTotal_p${p}`, depreciacaoAmortizacaoTotal);
 
         // ========================================
@@ -181,32 +185,32 @@ class DRETotalizador {
 
         const receitasFinanceiras = this.getValor(`receitasFinanceiras_p${p}`);
         const despesasFinanceiras = this.getValor(`despesasFinanceiras_p${p}`);
-        const resultadoFinanceiro = receitasFinanceiras - despesasFinanceiras;
-        this.setValor(`resultadoFinanceiro_p${p}`, resultadoFinanceiro);
+        const resultadoFinanceiroLiquido = receitasFinanceiras - despesasFinanceiras;
+        this.setValor(`resultadoFinanceiroLiquido_p${p}`, resultadoFinanceiroLiquido);
 
         // ========================================
         // OUTRAS RECEITAS E DESPESAS
         // ========================================
 
-        const outrasReceitasNaoOp = this.getValor(`outrasReceitasNaoOp_p${p}`);
-        const outrasDespesasNaoOp = this.getValor(`outrasDespesasNaoOp_p${p}`);
-        const outrasReceitasDespesas = outrasReceitasNaoOp - outrasDespesasNaoOp;
-        this.setValor(`outrasReceitasDespesas_p${p}`, outrasReceitasDespesas);
+        const receitasNaoOperacionais = this.getValor(`receitasNaoOperacionais_p${p}`);
+        const despesasNaoOperacionais = this.getValor(`despesasNaoOperacionais_p${p}`);
+        const outrasReceitasDespesasLiquido = receitasNaoOperacionais - despesasNaoOperacionais;
+        this.setValor(`outrasReceitasDespesasLiquido_p${p}`, outrasReceitasDespesasLiquido);
 
         // ========================================
         // LAIR (Lucro Antes do IR)
         // ========================================
 
-        const lair = ebit + resultadoFinanceiro + outrasReceitasDespesas;
+        const lair = ebit + resultadoFinanceiroLiquido + outrasReceitasDespesasLiquido;
         this.setValor(`lair_p${p}`, lair);
 
         // ========================================
         // IMPOSTOS SOBRE O LUCRO
         // ========================================
 
-        const irpj = this.getValor(`irpj_p${p}`);
+        const ir = this.getValor(`ir_p${p}`);
         const csll = this.getValor(`csll_p${p}`);
-        const impostosLucroTotal = irpj + csll;
+        const impostosLucroTotal = ir + csll;
         this.setValor(`impostosLucroTotal_p${p}`, impostosLucroTotal);
 
         // ========================================

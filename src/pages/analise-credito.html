@@ -258,6 +258,7 @@
                         <div class="tabs-header">
                             <button type="button" class="tab-btn active" data-tab="balanco">📊 Balanço Patrimonial</button>
                             <button type="button" class="tab-btn" data-tab="dre">📈 DRE</button>
+                            <button type="button" class="tab-btn" data-tab="analises">🔍 Análises Integradas</button>
                         </div>
 
                         <!-- TAB: BALANÇO PATRIMONIAL -->
@@ -1057,31 +1058,31 @@
                                 </tr>
                                 <tr class="conta-detalhe">
                                     <td>Vendas de Produtos</td>
-                                    <td><input type="text" id="vendasProdutos_p1" name="vendasProdutos_p1" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasProdutos_p2" name="vendasProdutos_p2" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasProdutos_p3" name="vendasProdutos_p3" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasProdutos_p4" name="vendasProdutos_p4" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasProdutos_p1" name="vendasProdutos_p1" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasProdutos_p2" name="vendasProdutos_p2" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasProdutos_p3" name="vendasProdutos_p3" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasProdutos_p4" name="vendasProdutos_p4" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe">
                                     <td>Vendas de Serviços</td>
-                                    <td><input type="text" id="vendasServicos_p1" name="vendasServicos_p1" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasServicos_p2" name="vendasServicos_p2" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasServicos_p3" name="vendasServicos_p3" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasServicos_p4" name="vendasServicos_p4" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasServicos_p1" name="vendasServicos_p1" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasServicos_p2" name="vendasServicos_p2" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasServicos_p3" name="vendasServicos_p3" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasServicos_p4" name="vendasServicos_p4" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe last-in-group">
                                     <td>Outras Receitas Operacionais</td>
-                                    <td><input type="text" id="outrasReceitas_p1" name="outrasReceitas_p1" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasReceitas_p2" name="outrasReceitas_p2" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasReceitas_p3" name="outrasReceitas_p3" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasReceitas_p4" name="outrasReceitas_p4" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasReceitas_p1" name="outrasReceitas_p1" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasReceitas_p2" name="outrasReceitas_p2" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasReceitas_p3" name="outrasReceitas_p3" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasReceitas_p4" name="outrasReceitas_p4" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL RECEITA BRUTA</td>
-                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="receitaBrutaTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="receitaBrutaTotal_p1" data-total="receitaBrutaTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="receitaBrutaTotal_p2" data-total="receitaBrutaTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="receitaBrutaTotal_p3" data-total="receitaBrutaTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="receitaBrutaTotal_p4" data-total="receitaBrutaTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- GRUPO: DEDUÇÕES DA RECEITA -->
@@ -1090,61 +1091,61 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) ICMS sobre Vendas</td>
-                                    <td><input type="text" id="icms_p1" name="icms_p1" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="1"></td>
-                                    <td><input type="text" id="icms_p2" name="icms_p2" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="2"></td>
-                                    <td><input type="text" id="icms_p3" name="icms_p3" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="3"></td>
-                                    <td><input type="text" id="icms_p4" name="icms_p4" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="4"></td>
+                                    <td><input type="text" id="icms_p1" name="icms_p1" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="icms_p2" name="icms_p2" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="icms_p3" name="icms_p3" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="icms_p4" name="icms_p4" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) PIS sobre Vendas</td>
-                                    <td><input type="text" id="pis_p1" name="pis_p1" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="1"></td>
-                                    <td><input type="text" id="pis_p2" name="pis_p2" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="2"></td>
-                                    <td><input type="text" id="pis_p3" name="pis_p3" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="3"></td>
-                                    <td><input type="text" id="pis_p4" name="pis_p4" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="4"></td>
+                                    <td><input type="text" id="pis_p1" name="pis_p1" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pis_p2" name="pis_p2" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pis_p3" name="pis_p3" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pis_p4" name="pis_p4" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) COFINS sobre Vendas</td>
-                                    <td><input type="text" id="cofins_p1" name="cofins_p1" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="1"></td>
-                                    <td><input type="text" id="cofins_p2" name="cofins_p2" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="2"></td>
-                                    <td><input type="text" id="cofins_p3" name="cofins_p3" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="3"></td>
-                                    <td><input type="text" id="cofins_p4" name="cofins_p4" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="4"></td>
+                                    <td><input type="text" id="cofins_p1" name="cofins_p1" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cofins_p2" name="cofins_p2" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cofins_p3" name="cofins_p3" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cofins_p4" name="cofins_p4" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) ISS sobre Serviços</td>
-                                    <td><input type="text" id="iss_p1" name="iss_p1" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="1"></td>
-                                    <td><input type="text" id="iss_p2" name="iss_p2" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="2"></td>
-                                    <td><input type="text" id="iss_p3" name="iss_p3" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="3"></td>
-                                    <td><input type="text" id="iss_p4" name="iss_p4" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="4"></td>
+                                    <td><input type="text" id="iss_p1" name="iss_p1" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="iss_p2" name="iss_p2" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="iss_p3" name="iss_p3" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="iss_p4" name="iss_p4" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Devoluções e Cancelamentos</td>
-                                    <td><input type="text" id="devolucoesVendas_p1" name="devolucoesVendas_p1" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="1"></td>
-                                    <td><input type="text" id="devolucoesVendas_p2" name="devolucoesVendas_p2" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="2"></td>
-                                    <td><input type="text" id="devolucoesVendas_p3" name="devolucoesVendas_p3" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="3"></td>
-                                    <td><input type="text" id="devolucoesVendas_p4" name="devolucoesVendas_p4" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="4"></td>
+                                    <td><input type="text" id="devolucoesVendas_p1" name="devolucoesVendas_p1" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="devolucoesVendas_p2" name="devolucoesVendas_p2" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="devolucoesVendas_p3" name="devolucoesVendas_p3" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="devolucoesVendas_p4" name="devolucoesVendas_p4" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Abatimentos Concedidos</td>
-                                    <td><input type="text" id="abatimentos_p1" name="abatimentos_p1" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="1"></td>
-                                    <td><input type="text" id="abatimentos_p2" name="abatimentos_p2" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="2"></td>
-                                    <td><input type="text" id="abatimentos_p3" name="abatimentos_p3" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="3"></td>
-                                    <td><input type="text" id="abatimentos_p4" name="abatimentos_p4" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="4"></td>
+                                    <td><input type="text" id="abatimentos_p1" name="abatimentos_p1" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="abatimentos_p2" name="abatimentos_p2" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="abatimentos_p3" name="abatimentos_p3" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="abatimentos_p4" name="abatimentos_p4" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL DEDUÇÕES</td>
-                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="deducoesTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="deducoesTotal_p1" data-total="deducoesTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="deducoesTotal_p2" data-total="deducoesTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="deducoesTotal_p3" data-total="deducoesTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="deducoesTotal_p4" data-total="deducoesTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL: RECEITA LÍQUIDA -->
                                 <tr class="total-row">
                                     <td>RECEITA OPERACIONAL LÍQUIDA</td>
-                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="receitaLiquida" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="receitaLiquida_p1" data-total="receitaLiquida" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="receitaLiquida_p2" data-total="receitaLiquida" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="receitaLiquida_p3" data-total="receitaLiquida" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="receitaLiquida_p4" data-total="receitaLiquida" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- GRUPO: CUSTOS OPERACIONAIS -->
@@ -1154,10 +1155,10 @@
                                 <!-- CUSTO DA MERCADORIA VENDIDA (CMV) - para Comércio -->
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Custo da Mercadoria Vendida (CMV)</td>
-                                    <td><input type="text" id="cmv_p1" name="cmv_p1" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="1"></td>
-                                    <td><input type="text" id="cmv_p2" name="cmv_p2" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="2"></td>
-                                    <td><input type="text" id="cmv_p3" name="cmv_p3" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="3"></td>
-                                    <td><input type="text" id="cmv_p4" name="cmv_p4" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="4"></td>
+                                    <td><input type="text" id="cmv_p1" name="cmv_p1" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cmv_p2" name="cmv_p2" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cmv_p3" name="cmv_p3" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cmv_p4" name="cmv_p4" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <!-- CUSTO DO PRODUTO VENDIDO (CPV) - para Indústria -->
                                 <tr class="subcategoria-level2 negative-account">
@@ -1165,55 +1166,55 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td class="pl-4">(-) Matéria-Prima</td>
-                                    <td><input type="text" id="materiaPrima_p1" name="materiaPrima_p1" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="1"></td>
-                                    <td><input type="text" id="materiaPrima_p2" name="materiaPrima_p2" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="2"></td>
-                                    <td><input type="text" id="materiaPrima_p3" name="materiaPrima_p3" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="3"></td>
-                                    <td><input type="text" id="materiaPrima_p4" name="materiaPrima_p4" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="4"></td>
+                                    <td><input type="text" id="materiaPrima_p1" name="materiaPrima_p1" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="materiaPrima_p2" name="materiaPrima_p2" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="materiaPrima_p3" name="materiaPrima_p3" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="materiaPrima_p4" name="materiaPrima_p4" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td class="pl-4">(-) Mão de Obra Direta (Produção)</td>
-                                    <td><input type="text" id="maoObraDireta_p1" name="maoObraDireta_p1" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="1"></td>
-                                    <td><input type="text" id="maoObraDireta_p2" name="maoObraDireta_p2" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="2"></td>
-                                    <td><input type="text" id="maoObraDireta_p3" name="maoObraDireta_p3" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="3"></td>
-                                    <td><input type="text" id="maoObraDireta_p4" name="maoObraDireta_p4" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="4"></td>
+                                    <td><input type="text" id="maoObraDireta_p1" name="maoObraDireta_p1" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="maoObraDireta_p2" name="maoObraDireta_p2" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="maoObraDireta_p3" name="maoObraDireta_p3" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="maoObraDireta_p4" name="maoObraDireta_p4" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td class="pl-4">(-) Custos Indiretos de Fabricação (CIF)</td>
-                                    <td><input type="text" id="cif_p1" name="cif_p1" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="1"></td>
-                                    <td><input type="text" id="cif_p2" name="cif_p2" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="2"></td>
-                                    <td><input type="text" id="cif_p3" name="cif_p3" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="3"></td>
-                                    <td><input type="text" id="cif_p4" name="cif_p4" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="4"></td>
+                                    <td><input type="text" id="cif_p1" name="cif_p1" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cif_p2" name="cif_p2" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cif_p3" name="cif_p3" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="cif_p4" name="cif_p4" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <!-- CUSTO DO SERVIÇO PRESTADO (CSP) - para Serviços -->
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Custo do Serviço Prestado (CSP)</td>
-                                    <td><input type="text" id="csp_p1" name="csp_p1" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="1"></td>
-                                    <td><input type="text" id="csp_p2" name="csp_p2" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="2"></td>
-                                    <td><input type="text" id="csp_p3" name="csp_p3" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="3"></td>
-                                    <td><input type="text" id="csp_p4" name="csp_p4" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="4"></td>
+                                    <td><input type="text" id="csp_p1" name="csp_p1" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csp_p2" name="csp_p2" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csp_p3" name="csp_p3" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csp_p4" name="csp_p4" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL CUSTOS OPERACIONAIS</td>
-                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="custosTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="custosTotal_p1" data-total="custosTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="custosTotal_p2" data-total="custosTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="custosTotal_p3" data-total="custosTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="custosTotal_p4" data-total="custosTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL: LUCRO BRUTO -->
                                 <tr class="total-row">
                                     <td>LUCRO BRUTO</td>
-                                    <td class="total-valor" data-total="lucroBruto" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroBruto" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroBruto" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroBruto" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroBruto_p1" data-total="lucroBruto" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroBruto_p2" data-total="lucroBruto" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroBruto_p3" data-total="lucroBruto" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroBruto_p4" data-total="lucroBruto" data-periodo="4">R$ 0,00</td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Margem Bruta (%)</td>
-                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="1">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="2">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="3">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemBruta" data-periodo="4">0,00%</td>
+                                    <td class="subtotal-valor" id="margemBruta_p1" data-total="margemBruta" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" id="margemBruta_p2" data-total="margemBruta" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" id="margemBruta_p3" data-total="margemBruta" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" id="margemBruta_p4" data-total="margemBruta" data-periodo="4">0,00%</td>
                                 </tr>
 
                                 <!-- GRUPO: DESPESAS DE VENDAS -->
@@ -1222,38 +1223,38 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Comissões sobre Vendas</td>
-                                    <td><input type="text" id="comissoes_p1" name="comissoes_p1" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="1"></td>
-                                    <td><input type="text" id="comissoes_p2" name="comissoes_p2" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="2"></td>
-                                    <td><input type="text" id="comissoes_p3" name="comissoes_p3" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="3"></td>
-                                    <td><input type="text" id="comissoes_p4" name="comissoes_p4" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="4"></td>
+                                    <td><input type="text" id="comissoes_p1" name="comissoes_p1" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="comissoes_p2" name="comissoes_p2" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="comissoes_p3" name="comissoes_p3" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="comissoes_p4" name="comissoes_p4" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Marketing e Publicidade</td>
-                                    <td><input type="text" id="vendasMarketing_p1" name="vendasMarketing_p1" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasMarketing_p2" name="vendasMarketing_p2" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasMarketing_p3" name="vendasMarketing_p3" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasMarketing_p4" name="vendasMarketing_p4" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasMarketing_p1" name="vendasMarketing_p1" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasMarketing_p2" name="vendasMarketing_p2" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasMarketing_p3" name="vendasMarketing_p3" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="vendasMarketing_p4" name="vendasMarketing_p4" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Fretes e Entregas</td>
-                                    <td><input type="text" id="frete_p1" name="frete_p1" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="1"></td>
-                                    <td><input type="text" id="frete_p2" name="frete_p2" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="2"></td>
-                                    <td><input type="text" id="frete_p3" name="frete_p3" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="3"></td>
-                                    <td><input type="text" id="frete_p4" name="frete_p4" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="4"></td>
+                                    <td><input type="text" id="frete_p1" name="frete_p1" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="frete_p2" name="frete_p2" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="frete_p3" name="frete_p3" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="frete_p4" name="frete_p4" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas de Vendas</td>
-                                    <td><input type="text" id="outrasDespVendas_p1" name="outrasDespVendas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasDespVendas_p2" name="outrasDespVendas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasDespVendas_p3" name="outrasDespVendas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasDespVendas_p4" name="outrasDespVendas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasDespVendas_p1" name="outrasDespVendas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespVendas_p2" name="outrasDespVendas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespVendas_p3" name="outrasDespVendas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespVendas_p4" name="outrasDespVendas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Subtotal Despesas de Vendas</td>
-                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasVendasTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasVendasTotal_p1" data-total="despesasVendasTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasVendasTotal_p2" data-total="despesasVendasTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasVendasTotal_p3" data-total="despesasVendasTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasVendasTotal_p4" data-total="despesasVendasTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- GRUPO: DESPESAS ADMINISTRATIVAS -->
@@ -1262,98 +1263,98 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Salários Administrativos</td>
-                                    <td><input type="text" id="pessoal_p1" name="pessoal_p1" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="1"></td>
-                                    <td><input type="text" id="pessoal_p2" name="pessoal_p2" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="2"></td>
-                                    <td><input type="text" id="pessoal_p3" name="pessoal_p3" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="3"></td>
-                                    <td><input type="text" id="pessoal_p4" name="pessoal_p4" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="4"></td>
+                                    <td><input type="text" id="pessoal_p1" name="pessoal_p1" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pessoal_p2" name="pessoal_p2" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pessoal_p3" name="pessoal_p3" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="pessoal_p4" name="pessoal_p4" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Aluguéis e Condomínios</td>
-                                    <td><input type="text" id="alugueis_p1" name="alugueis_p1" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="1"></td>
-                                    <td><input type="text" id="alugueis_p2" name="alugueis_p2" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="2"></td>
-                                    <td><input type="text" id="alugueis_p3" name="alugueis_p3" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="3"></td>
-                                    <td><input type="text" id="alugueis_p4" name="alugueis_p4" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="4"></td>
+                                    <td><input type="text" id="alugueis_p1" name="alugueis_p1" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="alugueis_p2" name="alugueis_p2" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="alugueis_p3" name="alugueis_p3" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="alugueis_p4" name="alugueis_p4" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Utilidades (Água, Luz, Telecom)</td>
-                                    <td><input type="text" id="utilidades_p1" name="utilidades_p1" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="1"></td>
-                                    <td><input type="text" id="utilidades_p2" name="utilidades_p2" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="2"></td>
-                                    <td><input type="text" id="utilidades_p3" name="utilidades_p3" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="3"></td>
-                                    <td><input type="text" id="utilidades_p4" name="utilidades_p4" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="4"></td>
+                                    <td><input type="text" id="utilidades_p1" name="utilidades_p1" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="utilidades_p2" name="utilidades_p2" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="utilidades_p3" name="utilidades_p3" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="utilidades_p4" name="utilidades_p4" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Seguros</td>
-                                    <td><input type="text" id="seguros_p1" name="seguros_p1" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="1"></td>
-                                    <td><input type="text" id="seguros_p2" name="seguros_p2" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="2"></td>
-                                    <td><input type="text" id="seguros_p3" name="seguros_p3" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="3"></td>
-                                    <td><input type="text" id="seguros_p4" name="seguros_p4" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="4"></td>
+                                    <td><input type="text" id="seguros_p1" name="seguros_p1" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="seguros_p2" name="seguros_p2" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="seguros_p3" name="seguros_p3" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="seguros_p4" name="seguros_p4" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Manutenção e Reparos</td>
-                                    <td><input type="text" id="manutencao_p1" name="manutencao_p1" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="1"></td>
-                                    <td><input type="text" id="manutencao_p2" name="manutencao_p2" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="2"></td>
-                                    <td><input type="text" id="manutencao_p3" name="manutencao_p3" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="3"></td>
-                                    <td><input type="text" id="manutencao_p4" name="manutencao_p4" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="4"></td>
+                                    <td><input type="text" id="manutencao_p1" name="manutencao_p1" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="manutencao_p2" name="manutencao_p2" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="manutencao_p3" name="manutencao_p3" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="manutencao_p4" name="manutencao_p4" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Tecnologia da Informação</td>
-                                    <td><input type="text" id="tecnologiaInformacao_p1" name="tecnologiaInformacao_p1" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="1"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p2" name="tecnologiaInformacao_p2" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="2"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p3" name="tecnologiaInformacao_p3" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="3"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p4" name="tecnologiaInformacao_p4" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="4"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p1" name="tecnologiaInformacao_p1" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p2" name="tecnologiaInformacao_p2" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p3" name="tecnologiaInformacao_p3" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p4" name="tecnologiaInformacao_p4" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) Serviços de Terceiros</td>
-                                    <td><input type="text" id="servicosProfissionais_p1" name="servicosProfissionais_p1" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="1"></td>
-                                    <td><input type="text" id="servicosProfissionais_p2" name="servicosProfissionais_p2" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="2"></td>
-                                    <td><input type="text" id="servicosProfissionais_p3" name="servicosProfissionais_p3" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="3"></td>
-                                    <td><input type="text" id="servicosProfissionais_p4" name="servicosProfissionais_p4" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="4"></td>
+                                    <td><input type="text" id="servicosProfissionais_p1" name="servicosProfissionais_p1" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="servicosProfissionais_p2" name="servicosProfissionais_p2" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="servicosProfissionais_p3" name="servicosProfissionais_p3" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="servicosProfissionais_p4" name="servicosProfissionais_p4" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Administrativas</td>
-                                    <td><input type="text" id="administrativas_p1" name="administrativas_p1" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="1"></td>
-                                    <td><input type="text" id="administrativas_p2" name="administrativas_p2" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="2"></td>
-                                    <td><input type="text" id="administrativas_p3" name="administrativas_p3" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="3"></td>
-                                    <td><input type="text" id="administrativas_p4" name="administrativas_p4" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="4"></td>
+                                    <td><input type="text" id="administrativas_p1" name="administrativas_p1" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="administrativas_p2" name="administrativas_p2" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="administrativas_p3" name="administrativas_p3" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="administrativas_p4" name="administrativas_p4" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Subtotal Despesas Administrativas</td>
-                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasAdminTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasAdminTotal_p1" data-total="despesasAdminTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasAdminTotal_p2" data-total="despesasAdminTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasAdminTotal_p3" data-total="despesasAdminTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasAdminTotal_p4" data-total="despesasAdminTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- OUTRAS DESPESAS OPERACIONAIS -->
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Operacionais</td>
-                                    <td><input type="text" id="outrasDespesas_p1" name="outrasDespesas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasDespesas_p2" name="outrasDespesas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasDespesas_p3" name="outrasDespesas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasDespesas_p4" name="outrasDespesas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasDespesas_p1" name="outrasDespesas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespesas_p2" name="outrasDespesas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespesas_p3" name="outrasDespesas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="outrasDespesas_p4" name="outrasDespesas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL DESPESAS OPERACIONAIS</td>
-                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="despesasOperacionaisTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasOperacionaisTotal_p1" data-total="despesasOperacionaisTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasOperacionaisTotal_p2" data-total="despesasOperacionaisTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasOperacionaisTotal_p3" data-total="despesasOperacionaisTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="despesasOperacionaisTotal_p4" data-total="despesasOperacionaisTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL: EBITDA -->
                                 <tr class="total-row">
                                     <td>EBITDA</td>
-                                    <td class="total-valor" data-total="ebitda" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebitda" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebitda" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebitda" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="ebitda_p1" data-total="ebitda" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="ebitda_p2" data-total="ebitda" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="ebitda_p3" data-total="ebitda" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="ebitda_p4" data-total="ebitda" data-periodo="4">R$ 0,00</td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Margem EBITDA (%)</td>
-                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="1">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="2">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="3">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemEBITDA" data-periodo="4">0,00%</td>
+                                    <td class="subtotal-valor" id="margemEBITDA_p1" data-total="margemEBITDA" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" id="margemEBITDA_p2" data-total="margemEBITDA" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" id="margemEBITDA_p3" data-total="margemEBITDA" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" id="margemEBITDA_p4" data-total="margemEBITDA" data-periodo="4">0,00%</td>
                                 </tr>
 
                                 <!-- GRUPO: DEPRECIAÇÃO E AMORTIZAÇÃO -->
@@ -1362,33 +1363,33 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Depreciação e Amortização</td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p1" name="depreciacaoAmortizacao_p1" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="1"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p2" name="depreciacaoAmortizacao_p2" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="2"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p3" name="depreciacaoAmortizacao_p3" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="3"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p4" name="depreciacaoAmortizacao_p4" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="4"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p1" name="depreciacaoAmortizacao_p1" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p2" name="depreciacaoAmortizacao_p2" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p3" name="depreciacaoAmortizacao_p3" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p4" name="depreciacaoAmortizacao_p4" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Total Deprec. e Amortiz.</td>
-                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="depreciacaoAmortizacaoTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="depreciacaoAmortizacaoTotal_p1" data-total="depreciacaoAmortizacaoTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="depreciacaoAmortizacaoTotal_p2" data-total="depreciacaoAmortizacaoTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="depreciacaoAmortizacaoTotal_p3" data-total="depreciacaoAmortizacaoTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="depreciacaoAmortizacaoTotal_p4" data-total="depreciacaoAmortizacaoTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL: EBIT -->
                                 <tr class="total-row">
                                     <td>EBIT (Lucro Operacional)</td>
-                                    <td class="total-valor" data-total="ebit" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebit" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebit" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="ebit" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="ebit_p1" data-total="ebit" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="ebit_p2" data-total="ebit" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="ebit_p3" data-total="ebit" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="ebit_p4" data-total="ebit" data-periodo="4">R$ 0,00</td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Margem Operacional (%)</td>
-                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="1">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="2">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="3">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemOperacional" data-periodo="4">0,00%</td>
+                                    <td class="subtotal-valor" id="margemOperacional_p1" data-total="margemOperacional" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" id="margemOperacional_p2" data-total="margemOperacional" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" id="margemOperacional_p3" data-total="margemOperacional" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" id="margemOperacional_p4" data-total="margemOperacional" data-periodo="4">0,00%</td>
                                 </tr>
 
                                 <!-- GRUPO: RESULTADO FINANCEIRO -->
@@ -1397,24 +1398,24 @@
                                 </tr>
                                 <tr class="conta-detalhe">
                                     <td>(+) Receitas Financeiras</td>
-                                    <td><input type="text" id="receitasFinanceiras_p1" name="receitasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="1"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p2" name="receitasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="2"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p3" name="receitasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="3"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p4" name="receitasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="4"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p1" name="receitasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p2" name="receitasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p3" name="receitasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p4" name="receitasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Despesas Financeiras</td>
-                                    <td><input type="text" id="despesasFinanceiras_p1" name="despesasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="1"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p2" name="despesasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="2"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p3" name="despesasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="3"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p4" name="despesasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="4"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p1" name="despesasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p2" name="despesasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p3" name="despesasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p4" name="despesasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Resultado Financeiro Líquido</td>
-                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="resultadoFinanceiroLiquido" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="resultadoFinanceiroLiquido_p1" data-total="resultadoFinanceiroLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="resultadoFinanceiroLiquido_p2" data-total="resultadoFinanceiroLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="resultadoFinanceiroLiquido_p3" data-total="resultadoFinanceiroLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="resultadoFinanceiroLiquido_p4" data-total="resultadoFinanceiroLiquido" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- GRUPO: OUTRAS RECEITAS/DESPESAS -->
@@ -1423,33 +1424,33 @@
                                 </tr>
                                 <tr class="conta-detalhe">
                                     <td>(+) Outras Receitas Não-Operacionais</td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p1" name="receitasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="1"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p2" name="receitasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="2"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p3" name="receitasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="3"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p4" name="receitasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="4"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p1" name="receitasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p2" name="receitasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p3" name="receitasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p4" name="receitasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Não-Operacionais</td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p1" name="despesasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="1"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p2" name="despesasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="2"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p3" name="despesasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="3"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p4" name="despesasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="4"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p1" name="despesasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p2" name="despesasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p3" name="despesasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p4" name="despesasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Outras Receitas/Despesas Líquidas</td>
-                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="outrasReceitasDespesasLiquido" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="outrasReceitasDespesasLiquido_p1" data-total="outrasReceitasDespesasLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="outrasReceitasDespesasLiquido_p2" data-total="outrasReceitasDespesasLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="outrasReceitasDespesasLiquido_p3" data-total="outrasReceitasDespesasLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="outrasReceitasDespesasLiquido_p4" data-total="outrasReceitasDespesasLiquido" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL: LAIR -->
                                 <tr class="total-row">
                                     <td>LAIR (Lucro Antes do IR)</td>
-                                    <td class="total-valor" data-total="lair" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lair" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lair" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lair" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="lair_p1" data-total="lair" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="lair_p2" data-total="lair" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="lair_p3" data-total="lair" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="lair_p4" data-total="lair" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- GRUPO: IMPOSTOS SOBRE LUCRO -->
@@ -1458,46 +1459,120 @@
                                 </tr>
                                 <tr class="conta-detalhe negative-account">
                                     <td>(-) IRPJ</td>
-                                    <td><input type="text" id="ir_p1" name="ir_p1" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="1"></td>
-                                    <td><input type="text" id="ir_p2" name="ir_p2" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="2"></td>
-                                    <td><input type="text" id="ir_p3" name="ir_p3" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="3"></td>
-                                    <td><input type="text" id="ir_p4" name="ir_p4" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="4"></td>
+                                    <td><input type="text" id="ir_p1" name="ir_p1" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="ir_p2" name="ir_p2" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="ir_p3" name="ir_p3" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="ir_p4" name="ir_p4" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) CSLL</td>
-                                    <td><input type="text" id="csll_p1" name="csll_p1" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="1"></td>
-                                    <td><input type="text" id="csll_p2" name="csll_p2" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="2"></td>
-                                    <td><input type="text" id="csll_p3" name="csll_p3" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="3"></td>
-                                    <td><input type="text" id="csll_p4" name="csll_p4" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="4"></td>
+                                    <td><input type="text" id="csll_p1" name="csll_p1" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="1" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csll_p2" name="csll_p2" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="2" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csll_p3" name="csll_p3" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="3" data-demonstrativo="dre"></td>
+                                    <td><input type="text" id="csll_p4" name="csll_p4" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="4" data-demonstrativo="dre"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Total Impostos sobre Lucro</td>
-                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="1">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="2">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="3">R$ 0,00</td>
-                                    <td class="subtotal-valor" data-total="impostosSobreLucroTotal" data-periodo="4">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="impostosSobreLucroTotal_p1" data-total="impostosSobreLucroTotal" data-periodo="1">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="impostosSobreLucroTotal_p2" data-total="impostosSobreLucroTotal" data-periodo="2">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="impostosSobreLucroTotal_p3" data-total="impostosSobreLucroTotal" data-periodo="3">R$ 0,00</td>
+                                    <td class="subtotal-valor" id="impostosSobreLucroTotal_p4" data-total="impostosSobreLucroTotal" data-periodo="4">R$ 0,00</td>
                                 </tr>
 
                                 <!-- TOTAL FINAL: LUCRO LÍQUIDO -->
                                 <tr class="total-row">
                                     <td>LUCRO LÍQUIDO DO EXERCÍCIO</td>
-                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="1">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="2">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="3">R$ 0,00</td>
-                                    <td class="total-valor" data-total="lucroLiquido" data-periodo="4">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroLiquido_p1" data-total="lucroLiquido" data-periodo="1">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroLiquido_p2" data-total="lucroLiquido" data-periodo="2">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroLiquido_p3" data-total="lucroLiquido" data-periodo="3">R$ 0,00</td>
+                                    <td class="total-valor" id="lucroLiquido_p4" data-total="lucroLiquido" data-periodo="4">R$ 0,00</td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Margem Líquida (%)</td>
-                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="1">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="2">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="3">0,00%</td>
-                                    <td class="subtotal-valor" data-total="margemLiquida" data-periodo="4">0,00%</td>
+                                    <td class="subtotal-valor" id="margemLiquida_p1" data-total="margemLiquida" data-periodo="1">0,00%</td>
+                                    <td class="subtotal-valor" id="margemLiquida_p2" data-total="margemLiquida" data-periodo="2">0,00%</td>
+                                    <td class="subtotal-valor" id="margemLiquida_p3" data-total="margemLiquida" data-periodo="3">0,00%</td>
+                                    <td class="subtotal-valor" id="margemLiquida_p4" data-total="margemLiquida" data-periodo="4">0,00%</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                         </div>
                         <!-- END TAB: DRE -->
+
+                        <!-- TAB: ANÁLISES INTEGRADAS -->
+                        <div id="analises" class="tab-content">
+                            <h3 class="text-[#091A30] mb-6 mt-6">🔍 Análises Integradas</h3>
+
+                            <!-- Instruções e Botão Recalcular -->
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="alert alert-info" style="flex: 1; margin-right: 1rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                                    <strong>📊 Análises Automáticas:</strong> As análises são calculadas automaticamente ao salvar os demonstrativos.
+                                    Use o botão "Recalcular" se modificou os dados e deseja atualizar as análises.
+                                </div>
+                                <button type="button" id="btnRecalcularAnalises" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors shadow-md">
+                                    🔄 Recalcular Análises
+                                </button>
+                            </div>
+
+                            <!-- Container: Análise Horizontal -->
+                            <div id="container-analise-horizontal" class="analysis-section mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                                <h4 class="text-lg font-bold text-[#091A30] mb-4 border-b pb-2">📈 Análise Horizontal (Evolução Temporal)</h4>
+                                <div id="ah-results" class="results-container">
+                                    <p class="text-gray-500 italic">Aguardando cálculo das análises...</p>
+                                </div>
+                            </div>
+
+                            <!-- Container: Análise Vertical -->
+                            <div id="container-analise-vertical" class="analysis-section mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                                <h4 class="text-lg font-bold text-[#091A30] mb-4 border-b pb-2">📊 Análise Vertical (Composição Percentual)</h4>
+                                <div id="av-results" class="results-container">
+                                    <p class="text-gray-500 italic">Aguardando cálculo das análises...</p>
+                                </div>
+                            </div>
+
+                            <!-- Container: Indicadores Financeiros -->
+                            <div id="container-indicadores" class="analysis-section mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                                <h4 class="text-lg font-bold text-[#091A30] mb-4 border-b pb-2">💹 Indicadores Financeiros (37 indicadores)</h4>
+
+                                <!-- Sub-containers por categoria -->
+                                <div id="indicadores-liquidez" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">💧 Liquidez (4 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-endividamento" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">💳 Endividamento (4 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-estrutura" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">🏗️ Estrutura de Capital (3 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-rentabilidade" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">📈 Rentabilidade (2 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-ciclo" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">🔄 Ciclo Operacional (5 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-margens" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">💰 Margens e Custos DRE (10 indicadores)</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+
+                                <div id="indicadores-outros" class="mb-6">
+                                    <h5 class="font-semibold text-gray-700 mb-3">📊 Outros Indicadores</h5>
+                                    <div class="indicadores-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END TAB: ANÁLISES INTEGRADAS -->
 
                     </div>
                     <!-- END demonstrativos-tabs-container -->
@@ -2061,7 +2136,8 @@
     <script type="module" src="../assets/js/calculators/scoring-engine.js"></script>
     <script type="module" src="../assets/js/calculators/analise-vertical-horizontal.js"></script>
     <script type="module" src="../assets/js/calculators/balanco-calculator.js"></script>
-    <script type="module" src="../assets/js/utils/balanco-totalizador.js"></script>
+    <script type="module" src="../assets/js/utils/balanco-totalizador.js"></script>    
+    <script type="module" src="../assets/js/utils/dre-totalizador.js"></script>
     <script type="module" src="../assets/js/calculators/capital-giro.js"></script>
     <script type="module" src="../assets/js/calculators/concentracao-risco.js"></script>
     <script type="module" src="../assets/js/components/concentracao-risco-integration.js"></script>
@@ -2767,13 +2843,22 @@
         }
 
         // Inicializar aplicação quando DOM estiver pronto
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Initialize demonstrativos tabs
             initDemonstrativosTabHandlers();
 
             // Initialize main app
             window.creditScoreApp = new CreditScoreProApp();
             window.creditScoreApp.init();
+
+            // Initialize Análises Integradas module (FASE 2)
+            try {
+                const { initAnalisesIntegradas } = await import('../assets/js/init-analises.js');
+                window.analisesHandlers = await initAnalisesIntegradas();
+                console.log('✅ Módulo de Análises Integradas inicializado');
+            } catch (error) {
+                console.error('❌ Erro ao carregar módulo de Análises:', error);
+            }
         });
         
         // Prevenir perda de dados ao sair da página
