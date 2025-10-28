@@ -219,25 +219,37 @@ export class AnaliseVerticalHorizontal {
             this.#validarEstruturaBalanco(balanco, ano);
 
             const ativoTotal = balanco.ativoTotal;
-            // ✅ CORREÇÃO: A validação deve ser contra Passivo Total + Patrimônio Líquido
-            const passivoMaisPL = balanco.passivoTotal + balanco.patrimonioLiquido.total;
 
-            // Validar equação contábil
+            // CORREÇÃO: Calcular Passivo Total corretamente (apenas PC + PNC, sem PL)
+            // Se o objeto já tem os totais calculados, usar; senão, somar os componentes
+            const passivoTotal = balanco.passivoTotal ||
+                (balanco.passivoCirculanteTotal + balanco.passivoNaoCirculanteTotal);
+
+            const patrimonioLiquidoTotal = balanco.patrimonioLiquido.total;
+            const passivoMaisPL = passivoTotal + patrimonioLiquidoTotal;
+
+            // Validar equação contábil: Ativo Total = Passivo Total + Patrimônio Líquido
             const diferenca = Math.abs(ativoTotal - passivoMaisPL);
             if (diferenca > this.thresholds.inconsistenciaMaxima) {
                 throw new Error(
                     `AnaliseVerticalHorizontal: balanço ${ano} desbalanceado - ` +
-                    `Ativo Total (${ativoTotal}) ≠ Passivo + PL (${passivoMaisPL}), diferença: ${diferenca.toFixed(2)}`
+                    `Ativo Total (${ativoTotal}) ≠ Passivo + PL (${passivoMaisPL}), ` +
+                    `[Passivo: ${passivoTotal}, PL: ${patrimonioLiquidoTotal}], ` +
+                    `diferença: ${diferenca.toFixed(2)}`
                 );
             }
 
+            // CORREÇÃO: Usar ativoTotal como base para TODAS as seções (padrão contábil)
+            // Na análise vertical do balanço, todos os itens são % do Ativo Total
             resultado[ano] = {
                 ativo: this.#calcularPercentualBalanco(balanco.ativo, ativoTotal, 'ativo'),
-                passivo: this.#calcularPercentualBalanco(balanco.passivo, passivoTotal, 'passivo'),
-                patrimonioLiquido: this.#calcularPercentualBalanco(balanco.patrimonioLiquido, passivoTotal, 'pl'),
+                passivo: this.#calcularPercentualBalanco(balanco.passivo, ativoTotal, 'passivo'),
+                patrimonioLiquido: this.#calcularPercentualBalanco(balanco.patrimonioLiquido, ativoTotal, 'pl'),
                 validacao: {
                     ativoTotal,
                     passivoTotal,
+                    patrimonioLiquidoTotal,
+                    passivoMaisPL,
                     diferenca,
                     balanceado: true,
                 },

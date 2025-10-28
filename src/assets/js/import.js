@@ -338,13 +338,18 @@ class ImportManager {
 
             const lucroLiquido = lajir + ir + csll;
 
+            // Calcular despesas operacionais totais (exigido pela análise vertical/horizontal)
+            const despesasOperacionais = despesasVendas + despesasAdministrativas + outrasDespesas;
+
             // Retorna estrutura hierárquica do período
             return {
                 receitaBruta,
-                deducoesReceita,
+                deducoes: deducoesReceita, // Renomeado para compatibilidade com análise vertical/horizontal
+                deducoesReceita, // Mantido para compatibilidade com código existente
                 receitaLiquida,
                 custosProdutos,
                 lucroBruto,
+                despesasOperacionais, // Campo obrigatório para análise vertical/horizontal
                 despesasVendas,
                 despesasAdministrativas,
                 depreciacaoAmortizacao: toNumber(formDataFlat[`depreciacaoAmortizacao_${p}`] ?? '0'), // Lendo o campo separadamente
