@@ -1,0 +1,424 @@
+{
+  "version": "1.0.0",
+  "description": "Configuração de parâmetros e thresholds para cálculo de indicadores financeiros - 37 indicadores (24 Balanço + 10 DRE + 3 calculados)",
+  "lastUpdated": "2025-10-28",
+
+  "parametros": {
+    "liquidezCorrente": {
+      "label": "Liquidez Corrente",
+      "descricao": "Capacidade de pagamento de curto prazo (AC/PC)",
+      "categoria": "Liquidez",
+      "fonte": "Balanço"
+    },
+    "liquidezSeca": {
+      "label": "Liquidez Seca",
+      "descricao": "Liquidez excluindo estoques ((AC - Estoques)/PC)",
+      "categoria": "Liquidez",
+      "fonte": "Balanço"
+    },
+    "liquidezImediata": {
+      "label": "Liquidez Imediata",
+      "descricao": "Capacidade de pagamento com recursos disponíveis (Disponível/PC)",
+      "categoria": "Liquidez",
+      "fonte": "Balanço"
+    },
+    "liquidezGeral": {
+      "label": "Liquidez Geral",
+      "descricao": "Capacidade de pagamento total ((AC + RLP)/(PC + PNC))",
+      "categoria": "Liquidez",
+      "fonte": "Balanço"
+    },
+
+    "endividamentoGeral": {
+      "label": "Endividamento Geral",
+      "descricao": "Participação de capital de terceiros no ativo ((PC + PNC)/AT)",
+      "categoria": "Endividamento",
+      "fonte": "Balanço"
+    },
+    "endividamentoLP": {
+      "label": "Endividamento LP",
+      "descricao": "Dívidas de longo prazo sobre ativo (PNC/AT)",
+      "categoria": "Endividamento",
+      "fonte": "Balanço"
+    },
+    "composicaoEndividamento": {
+      "label": "Composição do Endividamento",
+      "descricao": "Concentração de dívidas no curto prazo (PC/(PC + PNC))",
+      "categoria": "Endividamento",
+      "fonte": "Balanço"
+    },
+    "garantiaCapitalProprio": {
+      "label": "Garantia Capital Próprio",
+      "descricao": "Proporção de capital próprio sobre dívidas totais (PL/(PC + PNC))",
+      "categoria": "Endividamento",
+      "fonte": "Balanço"
+    },
+
+    "participacaoCapitalTerceiros": {
+      "label": "Participação Capital de Terceiros",
+      "descricao": "Relação entre capital de terceiros e próprio ((PC + PNC)/PL)",
+      "categoria": "Estrutura",
+      "fonte": "Balanço"
+    },
+    "imobilizacaoPatrimonio": {
+      "label": "Imobilização do Patrimônio",
+      "descricao": "Recursos próprios aplicados no ativo permanente (AP/PL)",
+      "categoria": "Estrutura",
+      "fonte": "Balanço"
+    },
+    "imobilizacaoRecursos": {
+      "label": "Imobilização de Recursos",
+      "descricao": "Recursos totais aplicados no ativo permanente (AP/(PL + PNC))",
+      "categoria": "Estrutura",
+      "fonte": "Balanço"
+    },
+
+    "inadimplenciaClientes": {
+      "label": "Inadimplência de Clientes",
+      "descricao": "Percentual de clientes inadimplentes sobre contas a receber",
+      "categoria": "Inadimplência",
+      "fonte": "Balanço"
+    },
+    "inadimplenciaFornecedores": {
+      "label": "Inadimplência com Fornecedores",
+      "descricao": "Percentual de fornecedores inadimplentes sobre contas a pagar",
+      "categoria": "Inadimplência",
+      "fonte": "Balanço"
+    },
+
+    "evolucaoPatrimonial": {
+      "label": "Evolução Patrimonial",
+      "descricao": "Crescimento do patrimônio líquido entre períodos",
+      "categoria": "Evolução",
+      "fonte": "Balanço (requer período anterior)"
+    },
+
+    "roe": {
+      "label": "ROE - Return on Equity",
+      "descricao": "Retorno sobre patrimônio líquido (Lucro Líquido/PL)",
+      "categoria": "Rentabilidade",
+      "fonte": "Balanço + DRE"
+    },
+    "roa": {
+      "label": "ROA - Return on Assets",
+      "descricao": "Retorno sobre ativo total (Lucro Líquido/AT)",
+      "categoria": "Rentabilidade",
+      "fonte": "Balanço + DRE"
+    },
+
+    "concentracaoClientes": {
+      "label": "Concentração de Clientes",
+      "descricao": "Dependência dos principais clientes",
+      "categoria": "Concentração",
+      "fonte": "Balanço"
+    },
+    "concentracaoFornecedores": {
+      "label": "Concentração de Fornecedores",
+      "descricao": "Dependência dos principais fornecedores",
+      "categoria": "Concentração",
+      "fonte": "Balanço"
+    },
+
+    "coberturaJuros": {
+      "label": "Cobertura de Juros",
+      "descricao": "Capacidade de pagar juros (EBITDA/Despesas Financeiras)",
+      "categoria": "Capacidade de Pagamento",
+      "fonte": "Balanço + DRE"
+    },
+
+    "prazoMedioRecebimento": {
+      "label": "PMR - Prazo Médio de Recebimento",
+      "descricao": "Dias para receber vendas a prazo (Contas a Receber/Receita Líquida × 360)",
+      "categoria": "Ciclo Operacional",
+      "fonte": "Balanço + DRE",
+      "unidade": "dias"
+    },
+    "prazoMedioPagamento": {
+      "label": "PMP - Prazo Médio de Pagamento",
+      "descricao": "Dias para pagar fornecedores (Fornecedores/Compras × 360)",
+      "categoria": "Ciclo Operacional",
+      "fonte": "Balanço + DRE",
+      "unidade": "dias"
+    },
+    "prazoMedioEstoques": {
+      "label": "PME - Prazo Médio de Estoques",
+      "descricao": "Dias de permanência em estoque (Estoques/CMV × 360)",
+      "categoria": "Ciclo Operacional",
+      "fonte": "Balanço + DRE",
+      "unidade": "dias"
+    },
+    "cicloOperacional": {
+      "label": "Ciclo Operacional",
+      "descricao": "Tempo entre compra e recebimento (PME + PMR)",
+      "categoria": "Ciclo Operacional",
+      "fonte": "Balanço + DRE",
+      "unidade": "dias"
+    },
+    "cicloFinanceiro": {
+      "label": "Ciclo Financeiro (Caixa)",
+      "descricao": "Tempo entre pagamento e recebimento (Ciclo Operacional - PMP)",
+      "categoria": "Ciclo Operacional",
+      "fonte": "Balanço + DRE",
+      "unidade": "dias"
+    },
+
+    "margemBruta": {
+      "label": "Margem Bruta",
+      "descricao": "Lucratividade sobre vendas antes das despesas operacionais (Lucro Bruto/Receita Líquida)",
+      "categoria": "Margens",
+      "fonte": "DRE"
+    },
+    "margemEbitda": {
+      "label": "Margem EBITDA",
+      "descricao": "Geração operacional de caixa (EBITDA/Receita Líquida)",
+      "categoria": "Margens",
+      "fonte": "DRE"
+    },
+    "margemOperacional": {
+      "label": "Margem Operacional",
+      "descricao": "Resultado operacional sobre vendas (Lucro Operacional/Receita Líquida)",
+      "categoria": "Margens",
+      "fonte": "DRE"
+    },
+    "margemLiquida": {
+      "label": "Margem Líquida",
+      "descricao": "Lucratividade final (Lucro Líquido/Receita Líquida)",
+      "categoria": "Margens",
+      "fonte": "DRE"
+    },
+
+    "custosVariaveis": {
+      "label": "Custos Variáveis (%)",
+      "descricao": "Custos que variam com produção/vendas sobre receita",
+      "categoria": "Estrutura de Custos",
+      "fonte": "DRE"
+    },
+    "custosFixos": {
+      "label": "Custos Fixos (%)",
+      "descricao": "Custos fixos sobre receita líquida",
+      "categoria": "Estrutura de Custos",
+      "fonte": "DRE"
+    },
+    "margemContribuicao": {
+      "label": "Margem de Contribuição",
+      "descricao": "Contribuição para cobrir custos fixos (Receita - Custos Variáveis)/Receita",
+      "categoria": "Estrutura de Custos",
+      "fonte": "DRE"
+    },
+
+    "pontoEquilibrio": {
+      "label": "Ponto de Equilíbrio",
+      "descricao": "Receita necessária para cobrir todos os custos (Custos Fixos/Margem Contribuição)",
+      "categoria": "Break-even",
+      "fonte": "DRE",
+      "unidade": "R$"
+    },
+    "margemSeguranca": {
+      "label": "Margem de Segurança",
+      "descricao": "Distância da receita atual ao ponto de equilíbrio",
+      "categoria": "Break-even",
+      "fonte": "DRE"
+    },
+
+    "grauAlavancagem": {
+      "label": "Grau de Alavancagem Operacional",
+      "descricao": "Sensibilidade do lucro a variações na receita (Margem Contribuição/Lucro Operacional)",
+      "categoria": "Alavancagem",
+      "fonte": "DRE",
+      "unidade": "multiplicador"
+    }
+  },
+
+  "thresholds": {
+    "liquidezCorrente": {
+      "bom": { "min": 1.5, "emoji": "🟢", "descricao": "Excelente capacidade de pagamento" },
+      "atencao": { "min": 1.0, "max": 1.5, "emoji": "🟡", "descricao": "Capacidade moderada" },
+      "critico": { "max": 1.0, "emoji": "🔴", "descricao": "Risco de liquidez" }
+    },
+    "liquidezSeca": {
+      "bom": { "min": 1.0, "emoji": "🟢", "descricao": "Boa liquidez sem estoques" },
+      "atencao": { "min": 0.7, "max": 1.0, "emoji": "🟡", "descricao": "Liquidez moderada" },
+      "critico": { "max": 0.7, "emoji": "🔴", "descricao": "Dependência de estoques" }
+    },
+    "liquidezImediata": {
+      "bom": { "min": 0.5, "emoji": "🟢", "descricao": "Bom disponível imediato" },
+      "atencao": { "min": 0.2, "max": 0.5, "emoji": "🟡", "descricao": "Disponível moderado" },
+      "critico": { "max": 0.2, "emoji": "🔴", "descricao": "Baixo caixa" }
+    },
+    "liquidezGeral": {
+      "bom": { "min": 1.2, "emoji": "🟢", "descricao": "Boa capacidade geral" },
+      "atencao": { "min": 0.9, "max": 1.2, "emoji": "🟡", "descricao": "Capacidade moderada" },
+      "critico": { "max": 0.9, "emoji": "🔴", "descricao": "Risco financeiro" }
+    },
+
+    "endividamentoGeral": {
+      "bom": { "max": 0.5, "emoji": "🟢", "descricao": "Endividamento saudável" },
+      "atencao": { "min": 0.5, "max": 0.7, "emoji": "🟡", "descricao": "Endividamento elevado" },
+      "critico": { "min": 0.7, "emoji": "🔴", "descricao": "Endividamento crítico" }
+    },
+    "endividamentoLP": {
+      "bom": { "max": 0.3, "emoji": "🟢", "descricao": "Baixo endividamento LP" },
+      "atencao": { "min": 0.3, "max": 0.5, "emoji": "🟡", "descricao": "Endividamento LP moderado" },
+      "critico": { "min": 0.5, "emoji": "🔴", "descricao": "Alto endividamento LP" }
+    },
+    "composicaoEndividamento": {
+      "bom": { "max": 0.4, "emoji": "🟢", "descricao": "Dívidas bem distribuídas" },
+      "atencao": { "min": 0.4, "max": 0.6, "emoji": "🟡", "descricao": "Concentração moderada CP" },
+      "critico": { "min": 0.6, "emoji": "🔴", "descricao": "Concentração crítica CP" }
+    },
+    "garantiaCapitalProprio": {
+      "bom": { "min": 1.0, "emoji": "🟢", "descricao": "Capital próprio supera dívidas" },
+      "atencao": { "min": 0.5, "max": 1.0, "emoji": "🟡", "descricao": "Garantia moderada" },
+      "critico": { "max": 0.5, "emoji": "🔴", "descricao": "Baixa garantia" }
+    },
+
+    "participacaoCapitalTerceiros": {
+      "bom": { "max": 1.0, "emoji": "🟢", "descricao": "Baixa dependência terceiros" },
+      "atencao": { "min": 1.0, "max": 2.0, "emoji": "🟡", "descricao": "Dependência moderada" },
+      "critico": { "min": 2.0, "emoji": "🔴", "descricao": "Alta dependência terceiros" }
+    },
+    "imobilizacaoPatrimonio": {
+      "bom": { "max": 0.7, "emoji": "🟢", "descricao": "Boa flexibilidade" },
+      "atencao": { "min": 0.7, "max": 1.0, "emoji": "🟡", "descricao": "Imobilização moderada" },
+      "critico": { "min": 1.0, "emoji": "🔴", "descricao": "Excesso de imobilização" }
+    },
+    "imobilizacaoRecursos": {
+      "bom": { "max": 0.6, "emoji": "🟢", "descricao": "Recursos bem distribuídos" },
+      "atencao": { "min": 0.6, "max": 0.8, "emoji": "🟡", "descricao": "Imobilização moderada" },
+      "critico": { "min": 0.8, "emoji": "🔴", "descricao": "Alta imobilização" }
+    },
+
+    "inadimplenciaClientes": {
+      "bom": { "max": 5, "emoji": "🟢", "descricao": "Baixa inadimplência" },
+      "atencao": { "min": 5, "max": 10, "emoji": "🟡", "descricao": "Inadimplência moderada" },
+      "critico": { "min": 10, "emoji": "🔴", "descricao": "Alta inadimplência" }
+    },
+    "inadimplenciaFornecedores": {
+      "bom": { "max": 5, "emoji": "🟢", "descricao": "Bom pagamento fornecedores" },
+      "atencao": { "min": 5, "max": 15, "emoji": "🟡", "descricao": "Atrasos moderados" },
+      "critico": { "min": 15, "emoji": "🔴", "descricao": "Muitos atrasos" }
+    },
+
+    "evolucaoPatrimonial": {
+      "bom": { "min": 5, "emoji": "🟢", "descricao": "Crescimento saudável" },
+      "atencao": { "min": 0, "max": 5, "emoji": "🟡", "descricao": "Crescimento baixo" },
+      "critico": { "max": 0, "emoji": "🔴", "descricao": "Redução patrimonial" }
+    },
+
+    "roe": {
+      "bom": { "min": 15, "emoji": "🟢", "descricao": "Excelente retorno" },
+      "atencao": { "min": 5, "max": 15, "emoji": "🟡", "descricao": "Retorno moderado" },
+      "critico": { "max": 5, "emoji": "🔴", "descricao": "Baixo retorno" }
+    },
+    "roa": {
+      "bom": { "min": 10, "emoji": "🟢", "descricao": "Boa eficiência ativos" },
+      "atencao": { "min": 3, "max": 10, "emoji": "🟡", "descricao": "Eficiência moderada" },
+      "critico": { "max": 3, "emoji": "🔴", "descricao": "Baixa eficiência" }
+    },
+
+    "concentracaoClientes": {
+      "bom": { "max": 30, "emoji": "🟢", "descricao": "Carteira diversificada" },
+      "atencao": { "min": 30, "max": 50, "emoji": "🟡", "descricao": "Concentração moderada" },
+      "critico": { "min": 50, "emoji": "🔴", "descricao": "Alta concentração" }
+    },
+    "concentracaoFornecedores": {
+      "bom": { "max": 40, "emoji": "🟢", "descricao": "Fornecedores diversificados" },
+      "atencao": { "min": 40, "max": 60, "emoji": "🟡", "descricao": "Concentração moderada" },
+      "critico": { "min": 60, "emoji": "🔴", "descricao": "Alta dependência" }
+    },
+
+    "coberturaJuros": {
+      "bom": { "min": 3, "emoji": "🟢", "descricao": "Boa capacidade pagamento juros" },
+      "atencao": { "min": 1.5, "max": 3, "emoji": "🟡", "descricao": "Capacidade moderada" },
+      "critico": { "max": 1.5, "emoji": "🔴", "descricao": "Dificuldade pagar juros" }
+    },
+
+    "prazoMedioRecebimento": {
+      "bom": { "max": 30, "emoji": "🟢", "descricao": "Recebimento rápido" },
+      "atencao": { "min": 30, "max": 60, "emoji": "🟡", "descricao": "Prazo moderado" },
+      "critico": { "min": 60, "emoji": "🔴", "descricao": "Prazo longo" }
+    },
+    "prazoMedioPagamento": {
+      "bom": { "min": 45, "emoji": "🟢", "descricao": "Bom prazo negociado" },
+      "atencao": { "min": 30, "max": 45, "emoji": "🟡", "descricao": "Prazo moderado" },
+      "critico": { "max": 30, "emoji": "🔴", "descricao": "Prazo curto" }
+    },
+    "prazoMedioEstoques": {
+      "bom": { "max": 45, "emoji": "🟢", "descricao": "Giro rápido" },
+      "atencao": { "min": 45, "max": 90, "emoji": "🟡", "descricao": "Giro moderado" },
+      "critico": { "min": 90, "emoji": "🔴", "descricao": "Estoque parado" }
+    },
+    "cicloOperacional": {
+      "bom": { "max": 60, "emoji": "🟢", "descricao": "Ciclo eficiente" },
+      "atencao": { "min": 60, "max": 120, "emoji": "🟡", "descricao": "Ciclo moderado" },
+      "critico": { "min": 120, "emoji": "🔴", "descricao": "Ciclo longo" }
+    },
+    "cicloFinanceiro": {
+      "bom": { "max": 30, "emoji": "🟢", "descricao": "Baixa necessidade caixa" },
+      "atencao": { "min": 30, "max": 60, "emoji": "🟡", "descricao": "Necessidade moderada" },
+      "critico": { "min": 60, "emoji": "🔴", "descricao": "Alta necessidade caixa" }
+    },
+
+    "margemBruta": {
+      "bom": { "min": 30, "emoji": "🟢", "descricao": "Excelente margem" },
+      "atencao": { "min": 15, "max": 30, "emoji": "🟡", "descricao": "Margem moderada" },
+      "critico": { "max": 15, "emoji": "🔴", "descricao": "Margem baixa" }
+    },
+    "margemEbitda": {
+      "bom": { "min": 15, "emoji": "🟢", "descricao": "Boa geração caixa" },
+      "atencao": { "min": 5, "max": 15, "emoji": "🟡", "descricao": "Geração moderada" },
+      "critico": { "max": 5, "emoji": "🔴", "descricao": "Baixa geração" }
+    },
+    "margemOperacional": {
+      "bom": { "min": 10, "emoji": "🟢", "descricao": "Operação eficiente" },
+      "atencao": { "min": 3, "max": 10, "emoji": "🟡", "descricao": "Eficiência moderada" },
+      "critico": { "max": 3, "emoji": "🔴", "descricao": "Operação ineficiente" }
+    },
+    "margemLiquida": {
+      "bom": { "min": 8, "emoji": "🟢", "descricao": "Boa lucratividade" },
+      "atencao": { "min": 2, "max": 8, "emoji": "🟡", "descricao": "Lucratividade moderada" },
+      "critico": { "max": 2, "emoji": "🔴", "descricao": "Baixa lucratividade" }
+    },
+
+    "custosVariaveis": {
+      "bom": { "max": 50, "emoji": "🟢", "descricao": "Custos variáveis controlados" },
+      "atencao": { "min": 50, "max": 70, "emoji": "🟡", "descricao": "Custos moderados" },
+      "critico": { "min": 70, "emoji": "🔴", "descricao": "Custos elevados" }
+    },
+    "custosFixos": {
+      "bom": { "max": 20, "emoji": "🟢", "descricao": "Estrutura enxuta" },
+      "atencao": { "min": 20, "max": 35, "emoji": "🟡", "descricao": "Estrutura moderada" },
+      "critico": { "min": 35, "emoji": "🔴", "descricao": "Estrutura pesada" }
+    },
+    "margemContribuicao": {
+      "bom": { "min": 40, "emoji": "🟢", "descricao": "Boa contribuição" },
+      "atencao": { "min": 25, "max": 40, "emoji": "🟡", "descricao": "Contribuição moderada" },
+      "critico": { "max": 25, "emoji": "🔴", "descricao": "Baixa contribuição" }
+    },
+
+    "pontoEquilibrio": {
+      "bom": { "descricao": "Calculado dinamicamente", "emoji": "🟢" },
+      "atencao": { "descricao": "Avaliação relativa à receita", "emoji": "🟡" },
+      "critico": { "descricao": "Próximo ou acima da receita", "emoji": "🔴" }
+    },
+    "margemSeguranca": {
+      "bom": { "min": 30, "emoji": "🟢", "descricao": "Boa distância break-even" },
+      "atencao": { "min": 10, "max": 30, "emoji": "🟡", "descricao": "Distância moderada" },
+      "critico": { "max": 10, "emoji": "🔴", "descricao": "Próximo ao break-even" }
+    },
+
+    "grauAlavancagem": {
+      "bom": { "min": 1, "max": 3, "emoji": "🟢", "descricao": "Alavancagem saudável" },
+      "atencao": { "min": 3, "max": 5, "emoji": "🟡", "descricao": "Alavancagem moderada" },
+      "critico": { "min": 5, "emoji": "🔴", "descricao": "Alta alavancagem - risco" }
+    }
+  },
+
+  "notas": {
+    "percentuais": "Todos os valores são em percentual (%), exceto quando especificado 'unidade' diferente",
+    "thresholdsInvertidos": "Alguns indicadores têm lógica invertida (ex: endividamento - menor é melhor; PMR - menor é melhor)",
+    "dadosComplementares": "Indicadores de rentabilidade, capacidade pagamento e ciclo operacional requerem dados do DRE",
+    "periodoAnterior": "Indicador 'evolucaoPatrimonial' requer dados do período anterior para comparação",
+    "classificacao": "Sistema de 3 níveis: 🟢 Bom / 🟡 Atenção / 🔴 Crítico. Valores null = ⚪ Sem dados"
+  }
+}

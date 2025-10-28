@@ -1,0 +1,526 @@
+💰 Aplicando máscara monetária a 357 campos currency-mask.js:30:13
+✓ Máscara aplicada ao campo: capitalSocial currency-mask.js:73:13
+✓ Máscara aplicada ao campo: caixa_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: caixa_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: caixa_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: caixa_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: bancos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: bancos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: bancos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: bancos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: aplicacoes_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: aplicacoes_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: aplicacoes_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: aplicacoes_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceber_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceber_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceber_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceber_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pdd_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pdd_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pdd_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pdd_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueMP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueMP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueMP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueMP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueWIP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueWIP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueWIP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueWIP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueProdAcabados_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueProdAcabados_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueProdAcabados_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoqueProdAcabados_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoquePecasReposicao_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoquePecasReposicao_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoquePecasReposicao_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: estoquePecasReposicao_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecuperar_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecuperar_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecuperar_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecuperar_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosFornecedores_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosFornecedores_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosFornecedores_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosFornecedores_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosAC_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosAC_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosAC_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosAC_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: titulosReceberLP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: titulosReceberLP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: titulosReceberLP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: titulosReceberLP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depositosJudiciais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depositosJudiciais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depositosJudiciais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depositosJudiciais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosCreditosLP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosCreditosLP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosCreditosLP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosCreditosLP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: participacoesSocietarias_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: participacoesSocietarias_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: participacoesSocietarias_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: participacoesSocietarias_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosInvestimentos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosInvestimentos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosInvestimentos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosInvestimentos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: terrenos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: terrenos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: terrenos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: terrenos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: edificacoes_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: edificacoes_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: edificacoes_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: edificacoes_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maquinasEquipamentos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maquinasEquipamentos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maquinasEquipamentos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maquinasEquipamentos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: veiculos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: veiculos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: veiculos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: veiculos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: moveisUtensilios_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: moveisUtensilios_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: moveisUtensilios_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: moveisUtensilios_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: equipamentosInformatica_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: equipamentosInformatica_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: equipamentosInformatica_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: equipamentosInformatica_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: imobilizadoAndamento_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: imobilizadoAndamento_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: imobilizadoAndamento_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: imobilizadoAndamento_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAcumulada_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAcumulada_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAcumulada_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAcumulada_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: software_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: software_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: software_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: software_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: marcasPatentes_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: marcasPatentes_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: marcasPatentes_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: marcasPatentes_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: goodwill_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: goodwill_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: goodwill_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: goodwill_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: amortizacaoAcumulada_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: amortizacaoAcumulada_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: amortizacaoAcumulada_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: amortizacaoAcumulada_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedores_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedores_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedores_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedores_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosCP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosCP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosCP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosCP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: salariosPagar_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: salariosPagar_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: salariosPagar_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: salariosPagar_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: encargosSociaisPagar_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: encargosSociaisPagar_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: encargosSociaisPagar_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: encargosSociaisPagar_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecolher_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecolher_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecolher_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: impostosRecolher_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: dividendosPagar_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: dividendosPagar_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: dividendosPagar_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: dividendosPagar_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosClientes_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosClientes_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosClientes_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: adiantamentosClientes_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: obrigacoesFiscais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: obrigacoesFiscais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: obrigacoesFiscais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: obrigacoesFiscais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPC_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPC_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPC_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPC_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosLP_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosLP_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosLP_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: emprestimosLP_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: financiamentosImobiliarios_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: financiamentosImobiliarios_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: financiamentosImobiliarios_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: financiamentosImobiliarios_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: debentures_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: debentures_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: debentures_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: debentures_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesTrabalhistas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesTrabalhistas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesTrabalhistas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesTrabalhistas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesFiscais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesFiscais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesFiscais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: provisoesFiscais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPNC_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPNC_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPNC_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrosPNC_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: capitalSocial_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: capitalSocial_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: capitalSocial_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: capitalSocial_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaCapital_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaCapital_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaCapital_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaCapital_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLucros_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLucros_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLucros_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLucros_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLegal_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLegal_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLegal_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: reservaLegal_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: lucrosPrejuizosAcumulados_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: lucrosPrejuizosAcumulados_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: lucrosPrejuizosAcumulados_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: lucrosPrejuizosAcumulados_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ajustesAvaliacaoPatrimonial_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ajustesAvaliacaoPatrimonial_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ajustesAvaliacaoPatrimonial_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ajustesAvaliacaoPatrimonial_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: acoesTesouraria_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: acoesTesouraria_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: acoesTesouraria_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: acoesTesouraria_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasProdutos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasProdutos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasProdutos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasProdutos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasServicos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasServicos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasServicos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasServicos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasReceitas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasReceitas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasReceitas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasReceitas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: icms_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: icms_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: icms_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: icms_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pis_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pis_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pis_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pis_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cofins_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cofins_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cofins_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cofins_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: iss_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: iss_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: iss_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: iss_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: devolucoesVendas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: devolucoesVendas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: devolucoesVendas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: devolucoesVendas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: abatimentos_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: abatimentos_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: abatimentos_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: abatimentos_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cmv_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cmv_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cmv_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cmv_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: materiaPrima_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: materiaPrima_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: materiaPrima_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: materiaPrima_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maoObraDireta_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maoObraDireta_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maoObraDireta_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: maoObraDireta_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cif_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cif_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cif_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cif_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csp_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csp_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csp_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csp_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: comissoes_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: comissoes_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: comissoes_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: comissoes_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasMarketing_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasMarketing_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasMarketing_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: vendasMarketing_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: frete_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: frete_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: frete_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: frete_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespVendas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespVendas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespVendas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespVendas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pessoal_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pessoal_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pessoal_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: pessoal_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: alugueis_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: alugueis_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: alugueis_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: alugueis_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: utilidades_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: utilidades_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: utilidades_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: utilidades_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: seguros_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: seguros_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: seguros_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: seguros_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: manutencao_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: manutencao_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: manutencao_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: manutencao_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: tecnologiaInformacao_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: tecnologiaInformacao_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: tecnologiaInformacao_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: tecnologiaInformacao_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: servicosProfissionais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: servicosProfissionais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: servicosProfissionais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: servicosProfissionais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: administrativas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: administrativas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: administrativas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: administrativas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespesas_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespesas_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespesas_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: outrasDespesas_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAmortizacao_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAmortizacao_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAmortizacao_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: depreciacaoAmortizacao_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasFinanceiras_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasFinanceiras_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasFinanceiras_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasFinanceiras_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasFinanceiras_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasFinanceiras_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasFinanceiras_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasFinanceiras_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasNaoOperacionais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasNaoOperacionais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasNaoOperacionais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: receitasNaoOperacionais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasNaoOperacionais_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasNaoOperacionais_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasNaoOperacionais_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: despesasNaoOperacionais_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ir_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ir_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ir_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: ir_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csll_p1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csll_p2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csll_p3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: csll_p4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasPagarTotal currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasPagar90Dias currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceberTotal currency-mask.js:73:13
+✓ Máscara aplicada ao campo: contasReceber90Dias currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cliente_receita_1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cliente_receita_2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cliente_receita_3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cliente_receita_4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: cliente_receita_5 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedor_compras_1 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedor_compras_2 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedor_compras_3 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedor_compras_4 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: fornecedor_compras_5 currency-mask.js:73:13
+✓ Máscara aplicada ao campo: folhaPagamentoMensal currency-mask.js:73:13
+✓ Máscara aplicada ao campo: encargosSociais currency-mask.js:73:13
+✓ Currency Mask Module carregado currency-mask.js:162:9
+[PercentageCalculator] 0 produtos inicializados percentage-calculator.js:153:17
+[PercentageCalculator] 0 insumos inicializados percentage-calculator.js:168:17
+[PercentageCalculator] Pronto para uso percentage-calculator.js:178:17
+✅ UIComponents carregado ui-components.js:245:9
+✅ ConfigLoader carregado config-loader.js:309:9
+✅ CreditscoreIndexedDB schema carregado creditscore-indexeddb-schema.js:181:9
+✓ CalculadorAnaliseBalancos exportado para window balanco-calculator.js:1253:13
+📊 BalancoTotalizador inicializado balanco-totalizador.js:25:17
+📈 DRETotalizador inicializado dre-totalizador.js:25:17
+✅ ConcentracaoRiscoCalculator carregado concentracao-risco.js:554:9
+✅ ConcentracaoRiscoIntegration carregado concentracao-risco-integration.js:281:9
+✅ EndividamentoManager carregado endividamento-manager.js:626:9
+✅ EndividamentoCalculator carregado endividamento-calculator.js:675:9
+✅ EndividamentoIntegration carregado endividamento-integration.js:366:9
+MessageLoader carregado message-loader.js:141:9
+📊 [CalculationState] Inicializado calculation-state.js:28:17
+🔍 [ValidationEngine] Inicializado validation-engine.js:36:17
+✅ IndexedDB Retry Utility carregado indexeddb-retry.js:79:9
+📊 [CalculationIndicators] Inicializado calculation-indicators.js:25:17
+📊 [CalculationIndicators] Indicadores atualizados: 
+Object { dataChanged: false, lastCalculated: null, status: "neutral" }
+calculation-indicators.js:75:17
+✅ [CalculationIndicators] Event listeners configurados calculation-indicators.js:46:17
+✅ FormGenerator carregado form-generator.js:1258:9
+✅ AutoSave carregado auto-save.js:786:9
+✅ CreditScoreModule carregado creditscore-module.js:810:9
+[Demonstrativos] Tab handlers initialized analise-credito.html:681:21
+🚀 CreditScore Pro App iniciando... analise-credito.html:25:25
+✅ Configuração carregada: CreditScore Pro v1.0.0 analise-credito.html:412:29
+✅ Messages carregado analise-credito.html:413:29
+✅ Scoring Criteria carregado analise-credito.html:414:29
+✅ Dependências verificadas analise-credito.html:441:25
+✅ ConfigLoader instanciado config-loader.js:14:17
+✅ Configuração validada com sucesso config-loader.js:87:17
+✅ ConfigLoader inicializado config-loader.js:25:17
+✅ ConfigLoader inicializado analise-credito.html:132:29
+✅ FormGenerator instanciado form-generator.js:44:17
+✅ FormGenerator inicializado form-generator.js:61:21
+✅ FormGenerator inicializado analise-credito.html:138:29
+✅ Database inicializado analise-credito.html:143:29
+🎯 [CalculationOrchestrator] Inicializado com IndexedDB calculation-orchestrator.js:48:17
+ℹ️ Nenhuma empresa selecionada ainda - histórico vazio calculation-orchestrator.js:398:25
+✅ CalculationOrchestrator singleton inicializado calculation-orchestrator.js:495:17
+✅ CalculationOrchestrator singleton inicializado analise-credito.html:148:33
+[SimpleTabNavigation] Inicializado com 8 tabs sequenciais tabs.js:43:17
+[SimpleTabNavigation] 8 tabs geradas no HTML tabs.js:101:17
+[SimpleTabNavigation] Estado restaurado: tab 2 tabs.js:450:21
+[SimpleTabNavigation] Tab 2 (demonstracoes) ativa tabs.js:251:17
+[SimpleTabNavigation] init() completo - tab 2 ativa tabs.js:114:17
+✅ SimpleTabNavigation inicializado analise-credito.html:167:29
+✅ NavigationController instanciado navigation-controller.js:105:17
+🔄 [IndexedDB Retry] Restaurar estado de navegação - Tentativa 1/3 indexeddb-retry.js:30:21
+📊 Progresso: 0% (0/8) navigation-controller.js:691:17
+✅ NavigationController inicializado - Módulo atual: 2 navigation-controller.js:133:21
+✅ NavigationController inicializado analise-credito.html:178:29
+✅ CreditScoreModule instanciado creditscore-module.js:59:17
+📊 CalculadorAnaliseBalancos inicializado balanco-calculator.js:25:17
+ℹ️ Nenhum estado de navegação salvo encontrado no IndexedDB navigation-controller.js:572:25
+✓ Config carregada: /config/analise-balancos-config.json balanco-calculator.js:54:21
+  - Parâmetros de indicadores: 11 balanco-calculator.js:55:21
+  - Thresholds de tendências: 12 balanco-calculator.js:56:21
+✅ BalancoCalculator configurado e injetado analise-credito.html:197:29
+✓ EndividamentoManager inicializado endividamento-manager.js:47:17
+✅ EndividamentoManager configurado e injetado analise-credito.html:203:29
+🚀 Inicializando Sistema de Análise de Crédito... creditscore-module.js:71:21
+✅ Configuração válida creditscore-module.js:267:17
+✅ Dependências verificadas creditscore-module.js:305:17
+🔧 Validando dependências injetadas... creditscore-module.js:125:17
+✅ Event listeners configurados creditscore-module.js:234:17
+✅ Todas as dependências validadas com sucesso creditscore-module.js:167:17
+✅ Infraestrutura core inicializada creditscore-module.js:168:17
+✅ IndexedDB conectado: creditscore_pro_db v3 creditscore-module.js:324:21
+🔧 Inicializando IndicesFinanceirosCalculator... indices-financeiros.js:65:17
+✅ IndicesFinanceirosCalculator inicializado indices-financeiros.js:67:17
+Iniciando cálculo do scoring de crédito... scoring-engine.js:52:17
+🔧 Inicializando AnaliseVerticalHorizontal... analise-vertical-horizontal.js:66:17
+✅ AnaliseVerticalHorizontal inicializado analise-vertical-horizontal.js:78:17
+🔧 Inicializando CapitalGiroCalculator... capital-giro.js:75:17
+✅ CapitalGiroCalculator inicializado capital-giro.js:87:17
+✓ ConcentracaoRiscoCalculator inicializado concentracao-risco.js:27:17
+✅ Calculadores inicializados creditscore-module.js:410:17
+✅ Exportadores inicializados creditscore-module.js:448:17
+✅ CreditScoreModule inicializado com sucesso creditscore-module.js:94:21
+✅ CreditScoreModule inicializado analise-credito.html:207:29
+✓ EndividamentoManager inicializado endividamento-manager.js:47:17
+✓ EndividamentoCalculator inicializado endividamento-calculator.js:26:17
+✓ EndividamentoIntegration inicializado endividamento-integration.js:54:17
+✅ EndividamentoIntegration inicializado analise-credito.html:225:33
+✓ ConcentracaoRiscoIntegration inicializado concentracao-risco-integration.js:38:17
+✅ ConcentracaoRiscoIntegration inicializado analise-credito.html:240:33
+✅ ImportManager inicializado e integrado analise-credito.html:275:33
+✅ Ordem de inicialização validada analise-credito.html:373:25
+✅ CreditScore Pro inicializado com sucesso analise-credito.html:297:29
+✅ AnaliseHorizontalCalculator carregado analise-horizontal-calculator.js:537:9
+✅ AnaliseVerticalCalculator carregado analise-vertical-calculator.js:453:9
+✅ AnalysisRenderer carregado analysis-renderer.js:850:9
+✅ IntegrationOrchestrator carregado integration-orchestrator.js:448:9
+✅ DemonstrativosHandlers carregado demonstrativos-handlers.js:441:9
+✅ init-analises.js carregado init-analises.js:88:9
+[initAnalisesIntegradas] 🚀 Inicializando módulo de Análises... init-analises.js:24:13
+[DemonstrativosHandlers] 🚀 Inicializando... demonstrativos-handlers.js:60:17
+[IntegrationOrchestrator] 🚀 Iniciando... integration-orchestrator.js:62:17
+[IntegrationOrchestrator] 📦 Carregando configs... integration-orchestrator.js:73:21
+   ✓ Config analiseHorizontal carregada de /config/analise-horizontal-config.json integration-orchestrator.js:106:25
+   ✓ Config analiseVertical carregada de /config/analise-vertical-config.json integration-orchestrator.js:106:25
+   ✓ Config renderer carregada de /config/analysis-renderer-config.json integration-orchestrator.js:106:25
+   ✓ Config indicadores carregada de /config/indicadores-config.json integration-orchestrator.js:106:25
+[IntegrationOrchestrator] 🔧 Instanciando calculadores... integration-orchestrator.js:77:21
+✅ AnaliseHorizontalCalculator inicializado analise-horizontal-calculator.js:34:17
+   ✓ AnaliseHorizontalCalculator instanciado integration-orchestrator.js:131:21
+✅ AnaliseVerticalCalculator inicializado analise-vertical-calculator.js:35:17
+   ✓ AnaliseVerticalCalculator instanciado integration-orchestrator.js:137:21
+   ✓ IndicadoresCalculator instanciado integration-orchestrator.js:143:21
+[IntegrationOrchestrator] 🎨 Carregando config do Renderer... integration-orchestrator.js:81:21
+[AnalysisRenderer] ✅ Config carregada analysis-renderer.js:39:21
+[IntegrationOrchestrator] ✅ Inicialização completa integration-orchestrator.js:85:21
+[DemonstrativosHandlers] 📡 Registrando event listeners... demonstrativos-handlers.js:84:17
+   ✓ Listener: Botão Recalcular demonstrativos-handlers.js:90:21
+   ✓ Listener: Aba Análises demonstrativos-handlers.js:99:21
+   ✓ Listener: Custom event "demonstrativos:saved" demonstrativos-handlers.js:108:17
+   ✓ Listener: beforeunload demonstrativos-handlers.js:112:17
+[DemonstrativosHandlers] ✅ Inicialização completa demonstrativos-handlers.js:71:21
+[initAnalisesIntegradas] ✅ Módulo de Análises inicializado com sucesso init-analises.js:31:17
+✅ Módulo de Análises Integradas inicializado analise-credito.html:697:25
+📝 Encontrados 204 inputs de Balanço balanco-totalizador.js:39:17
+✅ Event listeners configurados balanco-totalizador.js:56:17
+📝 Encontrados 136 inputs de DRE dre-totalizador.js:39:17
+✅ Event listeners DRE configurados dre-totalizador.js:56:17
+🔄 Transformando dados flat para calculadores... import.js:101:21
+🔧 [Transformer] Iniciando transformação flat → hierárquico import.js:121:17
+✅ [Transformer] Transformação concluída import.js:358:17
+   - Períodos Balanço processados: 4 import.js:359:17
+   - Períodos DRE processados: 4 import.js:360:17
+   - Estrutura: HIERÁRQUICA (ativo.circulante, passivo.circulante) import.js:361:17
+   - Ativo Total (p4): 32210000 import.js:362:17
+   - Receita Líquida (p4): 17757505 import.js:363:17
+🔄 Solicitando recálculo completo da análise... import.js:103:21
+🔄 Recalculando análise completa... creditscore-module.js:704:21
+📦 Usando dados transformados do import creditscore-module.js:710:25
+🔍 Iniciando análise completa de crédito... creditscore-module.js:553:21
+[SimpleTabNavigation] Tab 1 (cadastro) ativa tabs.js:251:17
+📊 Progresso: 0% (0/8) navigation-controller.js:691:17
+🔄 [IndexedDB Retry] Salvar estado de navegação - Tentativa 1/3 indexeddb-retry.js:30:21
+🧭 Navegação: Módulo 2 → 1 navigation-controller.js:283:17
+✅ Índices financeiros calculados creditscore-module.js:570:25
+❌ Erro na análise completa: Error: AnaliseVerticalHorizontal: balanço p1 desbalanceado - Ativo Total (26640000) ≠ Passivo + PL (22210000), diferença: 4430000.00
+    #calcularAnaliseVerticalBalanco analise-vertical-horizontal.js:228
+    analisar analise-vertical-horizontal.js:101
+    executarAnaliseCompleta creditscore-module.js:575
+    recalcularAnaliseCompleta creditscore-module.js:735
+    populateForm import.js:104
+    onload import.js:55
+    handleFileSelection import.js:50
+    setupFileInput import.js:43
+creditscore-module.js:612:21
+❌ Erro ao recalcular análise completa: Error: AnaliseVerticalHorizontal: balanço p1 desbalanceado - Ativo Total (26640000) ≠ Passivo + PL (22210000), diferença: 4430000.00
+    #calcularAnaliseVerticalBalanco analise-vertical-horizontal.js:228
+    analisar analise-vertical-horizontal.js:101
+    executarAnaliseCompleta creditscore-module.js:575
+    recalcularAnaliseCompleta creditscore-module.js:735
+    populateForm import.js:104
+    onload import.js:55
+    handleFileSelection import.js:50
+    setupFileInput import.js:43
+creditscore-module.js:742:21
+💾 Estado de navegação salvo no IndexedDB navigation-controller.js:548:21
+[SimpleTabNavigation] Tab 2 (demonstracoes) ativa tabs.js:251:17

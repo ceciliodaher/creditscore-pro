@@ -1,0 +1,133 @@
+{
+  "versao": "1.0.0",
+  "descricao": "Configuração para AnalysisRenderer - Thresholds, emojis e estilos para renderização de análises",
+  "autor": "Sistema CreditScore Pro - FASE 2",
+  "dataAtualizacao": "2025-10-28",
+
+  "variacoes": {
+    "thresholds": {
+      "crescimentoForte": 0.20,
+      "crescimentoModerado": 0.0,
+      "quedaForte": -0.20
+    },
+    "emojis": {
+      "crescimentoForte": "🚀",
+      "crescimentoModerado": "📈",
+      "quedaForte": "📉",
+      "quedaModerada": "🔻",
+      "estavel": "➖"
+    },
+    "classesTailwind": {
+      "crescimentoForte": "text-green-700",
+      "crescimentoModerado": "text-green-600",
+      "quedaForte": "text-red-700",
+      "quedaModerada": "text-red-600",
+      "estavel": "text-gray-600"
+    }
+  },
+
+  "tendencias": {
+    "emojis": {
+      "crescente": "📈",
+      "decrescente": "📉",
+      "estável": "➖",
+      "default": "❓"
+    },
+    "classesTailwind": {
+      "crescente": "text-green-600",
+      "decrescente": "text-red-600",
+      "estável": "text-gray-600",
+      "default": "text-gray-600"
+    }
+  },
+
+  "confianca": {
+    "badges": {
+      "alta": "bg-green-100 text-green-800",
+      "média": "bg-yellow-100 text-yellow-800",
+      "baixa": "bg-gray-100 text-gray-800",
+      "default": "bg-gray-100 text-gray-800"
+    }
+  },
+
+  "concentracoes": {
+    "backgrounds": {
+      "extrema": "bg-red-100 border-red-400",
+      "crítica": "bg-orange-100 border-orange-400",
+      "alta": "bg-yellow-100 border-yellow-400",
+      "default": "bg-gray-100 border-gray-300"
+    }
+  },
+
+  "alertas": {
+    "backgrounds": {
+      "crítico": "bg-red-50 border-red-300",
+      "aviso": "bg-yellow-50 border-yellow-300",
+      "info": "bg-blue-50 border-blue-300",
+      "default": "bg-gray-50 border-gray-300"
+    },
+    "icones": {
+      "crítico": "🔴",
+      "aviso": "🟡",
+      "info": "🔵",
+      "default": "⚪"
+    }
+  },
+
+  "classificacaoIndicadores": {
+    "palavrasChave": {
+      "positivo": ["excelente", "bom", "ótimo", "adequado", "forte"],
+      "atencao": ["atenção", "médio", "moderado", "regular"],
+      "negativo": ["crítico", "ruim", "baixo", "fraco", "insuficiente"]
+    },
+    "classesTailwind": {
+      "positivo": "text-green-600",
+      "atencao": "text-yellow-600",
+      "negativo": "text-red-600",
+      "default": "text-gray-600"
+    }
+  },
+
+  "validacoes": {
+    "backgrounds": {
+      "sucesso": "bg-green-50 border-green-300",
+      "erro": "bg-red-50 border-red-300",
+      "info": "bg-blue-50 border-blue-300"
+    },
+    "icones": {
+      "valido": "✓",
+      "invalido": "✗",
+      "info": "ℹ"
+    },
+    "classesTailwind": {
+      "valido": "text-green-600",
+      "invalido": "text-red-600",
+      "info": "text-blue-600"
+    }
+  },
+
+  "formatacao": {
+    "moeda": {
+      "locale": "pt-BR",
+      "minimumFractionDigits": 2,
+      "maximumFractionDigits": 2
+    },
+    "percentual": {
+      "multiplicador": 100,
+      "casasDecimais": 2
+    }
+  },
+
+  "limites": {
+    "top10Contas": 10,
+    "maxAlertasExibir": 50
+  },
+
+  "notas": [
+    "Configuração centralizada para renderização de análises",
+    "Todos os thresholds, emojis e estilos são configuráveis",
+    "Permite mudanças visuais sem alterar código JavaScript",
+    "Classes Tailwind podem ser modificadas para adequar ao design",
+    "Emojis podem ser personalizados conforme preferência do usuário"
+  ]
+}

@@ -1,0 +1,489 @@
+{
+  "formData": {
+    "razaoSocial": "Indústria Exemplo S.A.",
+    "nomeFantasia": "Exemplo Indústria",
+    "cnpj": "12.345.678/0001-90",
+    "inscricaoEstadual": "123.456.789.012",
+    "dataConstituicao": "2010-01-15",
+    "uf": "SP",
+    "municipio": "São Paulo",
+    "endereco": "Rua Exemplo, 1000 - Bairro Industrial - CEP 01234-567",
+    "atividadePrincipal": "industria",
+    "capitalSocial": "5000000",
+    "regimeTributario": "lucro_real",
+
+    "periodo1Data": "2022-12-31",
+    "periodo2Data": "2023-12-31",
+    "periodo3Data": "2024-12-31",
+    "periodo4Data": "2025-09-30",
+    "periodo4Parcial": "true",
+    "periodo4Meses": "9",
+
+    "totalFuncionarios": "150",
+    "folhaPagamentoMensal": "450000",
+    "encargosSociais": "180000",
+    "fgtsRegular": "sim",
+    "rotatividade": "8",
+
+    "certidaoNegativaFederal": "sim",
+    "certidaoNegativaEstadual": "sim",
+    "certidaoNegativaMunicipal": "sim",
+    "protestos": "nao",
+    "processosJudiciais": "nao",
+
+    "cliente_nome_1": "Cliente A S.A.",
+    "cliente_receita_1": "3500000",
+    "cliente_nome_2": "Cliente B Ltda",
+    "cliente_receita_2": "2800000",
+    "cliente_nome_3": "Cliente C Comércio",
+    "cliente_receita_3": "1900000",
+    "cliente_nome_4": "Cliente D Indústria",
+    "cliente_receita_4": "1500000",
+    "cliente_nome_5": "Cliente E Distribuidora",
+    "cliente_receita_5": "1200000",
+
+    "fornecedor_nome_1": "Fornecedor X Ltda",
+    "fornecedor_compras_1": "2400000",
+    "fornecedor_nome_2": "Fornecedor Y S.A.",
+    "fornecedor_compras_2": "1800000",
+    "fornecedor_nome_3": "Fornecedor Z Comércio",
+    "fornecedor_compras_3": "1200000",
+    "fornecedor_nome_4": "Fornecedor W Importadora",
+    "fornecedor_compras_4": "900000",
+    "fornecedor_nome_5": "Fornecedor V Distribuidora",
+    "fornecedor_compras_5": "600000",
+
+    "contasReceberTotal": "4200000",
+    "contasReceber90Dias": "3800000",
+    "contasPagarTotal": "2800000",
+    "contasPagar90Dias": "2500000",
+
+    "observacoesRH": "Quadro de funcionários estável. Rotatividade controlada.",
+    "observacoesCompliance": "Empresa em dia com todas as obrigações fiscais e trabalhistas.",
+
+    "caixa_p1": "150000",
+    "caixa_p2": "180000",
+    "caixa_p3": "220000",
+    "caixa_p4": "250000",
+
+    "bancos_p1": "850000",
+    "bancos_p2": "920000",
+    "bancos_p3": "1050000",
+    "bancos_p4": "1150000",
+
+    "aplicacoes_p1": "500000",
+    "aplicacoes_p2": "600000",
+    "aplicacoes_p3": "730000",
+    "aplicacoes_p4": "800000",
+
+    "contasReceber_p1": "3500000",
+    "contasReceber_p2": "3800000",
+    "contasReceber_p3": "4200000",
+    "contasReceber_p4": "4500000",
+
+    "pdd_p1": "-140000",
+    "pdd_p2": "-152000",
+    "pdd_p3": "-168000",
+    "pdd_p4": "-180000",
+
+    "estoqueMP_p1": "1200000",
+    "estoqueMP_p2": "1350000",
+    "estoqueMP_p3": "1500000",
+    "estoqueMP_p4": "1600000",
+
+    "estoqueWIP_p1": "800000",
+    "estoqueWIP_p2": "900000",
+    "estoqueWIP_p3": "1000000",
+    "estoqueWIP_p4": "1100000",
+
+    "estoqueProdAcabados_p1": "1500000",
+    "estoqueProdAcabados_p2": "1650000",
+    "estoqueProdAcabados_p3": "1800000",
+    "estoqueProdAcabados_p4": "1950000",
+
+    "estoquePecasReposicao_p1": "300000",
+    "estoquePecasReposicao_p2": "330000",
+    "estoquePecasReposicao_p3": "360000",
+    "estoquePecasReposicao_p4": "390000",
+
+    "impostosRecuperar_p1": "450000",
+    "impostosRecuperar_p2": "480000",
+    "impostosRecuperar_p3": "520000",
+    "impostosRecuperar_p4": "550000",
+
+    "adiantamentosFornecedores_p1": "200000",
+    "adiantamentosFornecedores_p2": "220000",
+    "adiantamentosFornecedores_p3": "240000",
+    "adiantamentosFornecedores_p4": "260000",
+
+    "outrosAC_p1": "350000",
+    "outrosAC_p2": "370000",
+    "outrosAC_p3": "400000",
+    "outrosAC_p4": "430000",
+
+    "titulosReceberLP_p1": "800000",
+    "titulosReceberLP_p2": "850000",
+    "titulosReceberLP_p3": "900000",
+    "titulosReceberLP_p4": "950000",
+
+    "depositosJudiciais_p1": "350000",
+    "depositosJudiciais_p2": "370000",
+    "depositosJudiciais_p3": "390000",
+    "depositosJudiciais_p4": "410000",
+
+    "outrosCreditosLP_p1": "250000",
+    "outrosCreditosLP_p2": "280000",
+    "outrosCreditosLP_p3": "310000",
+    "outrosCreditosLP_p4": "340000",
+
+    "participacoesSocietarias_p1": "500000",
+    "participacoesSocietarias_p2": "550000",
+    "participacoesSocietarias_p3": "600000",
+    "participacoesSocietarias_p4": "650000",
+
+    "outrosInvestimentos_p1": "200000",
+    "outrosInvestimentos_p2": "220000",
+    "outrosInvestimentos_p3": "240000",
+    "outrosInvestimentos_p4": "260000",
+
+    "terrenos_p1": "2000000",
+    "terrenos_p2": "2000000",
+    "terrenos_p3": "2000000",
+    "terrenos_p4": "2000000",
+
+    "edificacoes_p1": "5000000",
+    "edificacoes_p2": "5000000",
+    "edificacoes_p3": "5200000",
+    "edificacoes_p4": "5200000",
+
+    "maquinasEquipamentos_p1": "8000000",
+    "maquinasEquipamentos_p2": "8500000",
+    "maquinasEquipamentos_p3": "9000000",
+    "maquinasEquipamentos_p4": "9500000",
+
+    "veiculos_p1": "600000",
+    "veiculos_p2": "650000",
+    "veiculos_p3": "700000",
+    "veiculos_p4": "750000",
+
+    "moveisUtensilios_p1": "300000",
+    "moveisUtensilios_p2": "320000",
+    "moveisUtensilios_p3": "340000",
+    "moveisUtensilios_p4": "360000",
+
+    "equipamentosInformatica_p1": "400000",
+    "equipamentosInformatica_p2": "450000",
+    "equipamentosInformatica_p3": "500000",
+    "equipamentosInformatica_p4": "550000",
+
+    "imobilizadoAndamento_p1": "500000",
+    "imobilizadoAndamento_p2": "800000",
+    "imobilizadoAndamento_p3": "1200000",
+    "imobilizadoAndamento_p4": "1500000",
+
+    "depreciacaoAcumulada_p1": "-3200000",
+    "depreciacaoAcumulada_p2": "-3600000",
+    "depreciacaoAcumulada_p3": "-4000000",
+    "depreciacaoAcumulada_p4": "-4320000",
+
+    "software_p1": "300000",
+    "software_p2": "350000",
+    "software_p3": "400000",
+    "software_p4": "450000",
+
+    "marcasPatentes_p1": "600000",
+    "marcasPatentes_p2": "600000",
+    "marcasPatentes_p3": "650000",
+    "marcasPatentes_p4": "650000",
+
+    "goodwill_p1": "800000",
+    "goodwill_p2": "800000",
+    "goodwill_p3": "800000",
+    "goodwill_p4": "800000",
+
+    "amortizacaoAcumulada_p1": "-420000",
+    "amortizacaoAcumulada_p2": "-500000",
+    "amortizacaoAcumulada_p3": "-580000",
+    "amortizacaoAcumulada_p4": "-640000",
+
+    "fornecedores_p1": "2800000",
+    "fornecedores_p2": "3000000",
+    "fornecedores_p3": "3200000",
+    "fornecedores_p4": "3400000",
+
+    "emprestimosCP_p1": "1500000",
+    "emprestimosCP_p2": "1400000",
+    "emprestimosCP_p3": "1300000",
+    "emprestimosCP_p4": "1200000",
+
+    "salariosPagar_p1": "450000",
+    "salariosPagar_p2": "470000",
+    "salariosPagar_p3": "490000",
+    "salariosPagar_p4": "510000",
+
+    "encargosSociaisPagar_p1": "180000",
+    "encargosSociaisPagar_p2": "188000",
+    "encargosSociaisPagar_p3": "196000",
+    "encargosSociaisPagar_p4": "204000",
+
+    "impostosRecolher_p1": "350000",
+    "impostosRecolher_p2": "380000",
+    "impostosRecolher_p3": "420000",
+    "impostosRecolher_p4": "450000",
+
+    "dividendosPagar_p1": "200000",
+    "dividendosPagar_p2": "220000",
+    "dividendosPagar_p3": "240000",
+    "dividendosPagar_p4": "260000",
+
+    "adiantamentosClientes_p1": "150000",
+    "adiantamentosClientes_p2": "160000",
+    "adiantamentosClientes_p3": "170000",
+    "adiantamentosClientes_p4": "180000",
+
+    "obrigacoesFiscais_p1": "280000",
+    "obrigacoesFiscais_p2": "300000",
+    "obrigacoesFiscais_p3": "320000",
+    "obrigacoesFiscais_p4": "340000",
+
+    "outrosPC_p1": "250000",
+    "outrosPC_p2": "270000",
+    "outrosPC_p3": "290000",
+    "outrosPC_p4": "310000",
+
+    "emprestimosLP_p1": "5000000",
+    "emprestimosLP_p2": "4800000",
+    "emprestimosLP_p3": "4600000",
+    "emprestimosLP_p4": "4400000",
+
+    "financiamentosImobiliarios_p1": "2500000",
+    "financiamentosImobiliarios_p2": "2400000",
+    "financiamentosImobiliarios_p3": "2300000",
+    "financiamentosImobiliarios_p4": "2200000",
+
+    "debentures_p1": "0",
+    "debentures_p2": "0",
+    "debentures_p3": "0",
+    "debentures_p4": "0",
+
+    "provisoesTrabalhistas_p1": "400000",
+    "provisoesTrabalhistas_p2": "430000",
+    "provisoesTrabalhistas_p3": "460000",
+    "provisoesTrabalhistas_p4": "490000",
+
+    "provisoesFiscais_p1": "350000",
+    "provisoesFiscais_p2": "380000",
+    "provisoesFiscais_p3": "410000",
+    "provisoesFiscais_p4": "440000",
+
+    "outrosPNC_p1": "300000",
+    "outrosPNC_p2": "320000",
+    "outrosPNC_p3": "340000",
+    "outrosPNC_p4": "360000",
+
+    "capitalSocial_p1": "5000000",
+    "capitalSocial_p2": "5000000",
+    "capitalSocial_p3": "5000000",
+    "capitalSocial_p4": "5000000",
+
+    "reservaCapital_p1": "300000",
+    "reservaCapital_p2": "300000",
+    "reservaCapital_p3": "300000",
+    "reservaCapital_p4": "300000",
+
+    "reservaLucros_p1": "1200000",
+    "reservaLucros_p2": "1450000",
+    "reservaLucros_p3": "1720000",
+    "reservaLucros_p4": "2010000",
+
+    "reservaLegal_p1": "250000",
+    "reservaLegal_p2": "275000",
+    "reservaLegal_p3": "303000",
+    "reservaLegal_p4": "334000",
+
+    "lucrosPrejuizosAcumulados_p1": "850000",
+    "lucrosPrejuizosAcumulados_p2": "523000",
+    "lucrosPrejuizosAcumulados_p3": "553000",
+    "lucrosPrejuizosAcumulados_p4": "566000",
+
+    "ajustesAvaliacaoPatrimonial_p1": "0",
+    "ajustesAvaliacaoPatrimonial_p2": "0",
+    "ajustesAvaliacaoPatrimonial_p3": "0",
+    "ajustesAvaliacaoPatrimonial_p4": "0",
+
+    "acoesTesouraria_p1": "-100000",
+    "acoesTesouraria_p2": "-100000",
+    "acoesTesouraria_p3": "-150000",
+    "acoesTesouraria_p4": "-150000",
+
+    "vendasProdutos_p1": "25000000",
+    "vendasProdutos_p2": "27500000",
+    "vendasProdutos_p3": "30250000",
+    "vendasProdutos_p4": "22687500",
+
+    "vendasServicos_p1": "2000000",
+    "vendasServicos_p2": "2200000",
+    "vendasServicos_p3": "2420000",
+    "vendasServicos_p4": "1815000",
+
+    "outrasReceitas_p1": "500000",
+    "outrasReceitas_p2": "550000",
+    "outrasReceitas_p3": "605000",
+    "outrasReceitas_p4": "453750",
+
+    "icms_p1": "-4500000",
+    "icms_p2": "-4950000",
+    "icms_p3": "-5445000",
+    "icms_p4": "-4083750",
+
+    "pis_p1": "-445000",
+    "pis_p2": "-489500",
+    "pis_p3": "-538450",
+    "pis_p4": "-403838",
+
+    "cofins_p1": "-2062500",
+    "cofins_p2": "-2268750",
+    "cofins_p3": "-2495625",
+    "cofins_p4": "-1871719",
+
+    "iss_p1": "-100000",
+    "iss_p2": "-110000",
+    "iss_p3": "-121000",
+    "iss_p4": "-90750",
+
+    "devolucoesVendas_p1": "-550000",
+    "devolucoesVendas_p2": "-605000",
+    "devolucoesVendas_p3": "-665500",
+    "devolucoesVendas_p4": "-499125",
+
+    "abatimentos_p1": "-275000",
+    "abatimentos_p2": "-302500",
+    "abatimentos_p3": "-332750",
+    "abatimentos_p4": "-249563",
+
+    "cmv_p1": "-8000000",
+    "cmv_p2": "-8800000",
+    "cmv_p3": "-9680000",
+    "cmv_p4": "-7260000",
+
+    "materiaPrima_p1": "-4000000",
+    "materiaPrima_p2": "-4400000",
+    "materiaPrima_p3": "-4840000",
+    "materiaPrima_p4": "-3630000",
+
+    "maoObraDireta_p1": "-3000000",
+    "maoObraDireta_p2": "-3300000",
+    "maoObraDireta_p3": "-3630000",
+    "maoObraDireta_p4": "-2722500",
+
+    "cif_p1": "-2000000",
+    "cif_p2": "-2200000",
+    "cif_p3": "-2420000",
+    "cif_p4": "-1815000",
+
+    "csp_p1": "-1000000",
+    "csp_p2": "-1100000",
+    "csp_p3": "-1210000",
+    "csp_p4": "-907500",
+
+    "comissoes_p1": "-900000",
+    "comissoes_p2": "-990000",
+    "comissoes_p3": "-1089000",
+    "comissoes_p4": "-816750",
+
+    "vendasMarketing_p1": "-600000",
+    "vendasMarketing_p2": "-660000",
+    "vendasMarketing_p3": "-726000",
+    "vendasMarketing_p4": "-544500",
+
+    "frete_p1": "-700000",
+    "frete_p2": "-770000",
+    "frete_p3": "-847000",
+    "frete_p4": "-635250",
+
+    "outrasDespVendas_p1": "-400000",
+    "outrasDespVendas_p2": "-440000",
+    "outrasDespVendas_p3": "-484000",
+    "outrasDespVendas_p4": "-363000",
+
+    "pessoal_p1": "-2400000",
+    "pessoal_p2": "-2640000",
+    "pessoal_p3": "-2904000",
+    "pessoal_p4": "-2178000",
+
+    "alugueis_p1": "-480000",
+    "alugueis_p2": "-504000",
+    "alugueis_p3": "-529200",
+    "alugueis_p4": "-396900",
+
+    "utilidades_p1": "-360000",
+    "utilidades_p2": "-378000",
+    "utilidades_p3": "-396900",
+    "utilidades_p4": "-297675",
+
+    "seguros_p1": "-240000",
+    "seguros_p2": "-252000",
+    "seguros_p3": "-264600",
+    "seguros_p4": "-198450",
+
+    "manutencao_p1": "-300000",
+    "manutencao_p2": "-330000",
+    "manutencao_p3": "-363000",
+    "manutencao_p4": "-272250",
+
+    "tecnologiaInformacao_p1": "-180000",
+    "tecnologiaInformacao_p2": "-198000",
+    "tecnologiaInformacao_p3": "-217800",
+    "tecnologiaInformacao_p4": "-163350",
+
+    "servicosProfissionais_p1": "-420000",
+    "servicosProfissionais_p2": "-462000",
+    "servicosProfissionais_p3": "-508200",
+    "servicosProfissionais_p4": "-381150",
+
+    "administrativas_p1": "-600000",
+    "administrativas_p2": "-660000",
+    "administrativas_p3": "-726000",
+    "administrativas_p4": "-544500",
+
+    "outrasDespesas_p1": "-200000",
+    "outrasDespesas_p2": "-220000",
+    "outrasDespesas_p3": "-242000",
+    "outrasDespesas_p4": "-181500",
+
+    "depreciacaoAmortizacao_p1": "-480000",
+    "depreciacaoAmortizacao_p2": "-480000",
+    "depreciacaoAmortizacao_p3": "-480000",
+    "depreciacaoAmortizacao_p4": "-360000",
+
+    "receitasFinanceiras_p1": "120000",
+    "receitasFinanceiras_p2": "135000",
+    "receitasFinanceiras_p3": "150000",
+    "receitasFinanceiras_p4": "112500",
+
+    "despesasFinanceiras_p1": "-650000",
+    "despesasFinanceiras_p2": "-620000",
+    "despesasFinanceiras_p3": "-590000",
+    "despesasFinanceiras_p4": "-442500",
+
+    "receitasNaoOperacionais_p1": "80000",
+    "receitasNaoOperacionais_p2": "90000",
+    "receitasNaoOperacionais_p3": "100000",
+    "receitasNaoOperacionais_p4": "75000",
+
+    "despesasNaoOperacionais_p1": "-50000",
+    "despesasNaoOperacionais_p2": "-55000",
+    "despesasNaoOperacionais_p3": "-60000",
+    "despesasNaoOperacionais_p4": "-45000",
+
+    "ir_p1": "-120000",
+    "ir_p2": "-132000",
+    "ir_p3": "-145200",
+    "ir_p4": "-108900",
+
+    "csll_p1": "-43200",
+    "csll_p2": "-47520",
+    "csll_p3": "-52272",
+    "csll_p4": "-39204"
+  }
+}
