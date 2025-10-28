@@ -1,0 +1,451 @@
+/* =====================================
+   ANALISE-DRE.CSS
+   Estilos para tabelas de análise de DRE
+   (Análise Horizontal, Vertical, Indicadores)
+   Expertzy Brand + Mobile-first
+   ===================================== */
+
+/* ----------------------------------
+   VARIABLES (Expertzy brand)
+   ---------------------------------- */
+:root {
+  --expertzy-red: #FF002D;
+  --expertzy-navy: #091A30;
+  --white: #FFFFFF;
+
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-900: #111827;
+
+  --green-50: #F0FDF4;
+  --green-500: #22C55E;
+  --green-700: #15803D;
+
+  --red-50: #FEF2F2;
+  --red-500: #EF4444;
+  --red-700: #B91C1C;
+
+  --yellow-50: #FEFCE8;
+  --yellow-500: #EAB308;
+  --yellow-700: #A16207;
+
+  --border-radius: 8px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+/* ----------------------------------
+   ANÁLISE CONTAINER
+   ---------------------------------- */
+.analise-container {
+  margin: 2rem 0;
+}
+
+/* ----------------------------------
+   ANÁLISE HEADER
+   ---------------------------------- */
+.analise-header {
+  display: block;
+  width: 100%;
+  clear: both;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--gray-200);
+}
+
+.analise-header h3 {
+  font-size: 1.5rem;
+  color: var(--expertzy-navy);
+  margin: 0 0 var(--spacing-sm) 0;
+  font-weight: 600;
+}
+
+.analise-descricao {
+  color: var(--gray-600);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ----------------------------------
+   TABLE RESPONSIVE CONTAINER
+   ---------------------------------- */
+.table-responsive {
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+/* ----------------------------------
+   TABLE ANALISE - BASE
+   ---------------------------------- */
+.table-analise {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 2px solid var(--expertzy-navy);
+  background: var(--white);
+  table-layout: fixed;
+}
+
+.table-analise thead {
+  background: var(--expertzy-navy);
+  color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-analise th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--expertzy-red);
+}
+
+.table-analise tbody tr {
+  border-bottom: 1px solid var(--gray-200);
+  transition: background-color 0.2s ease;
+}
+
+.table-analise tbody tr:hover {
+  background-color: var(--gray-50);
+}
+
+.table-analise td {
+  padding: 10px 16px;
+  vertical-align: middle;
+}
+
+/* ----------------------------------
+   COLUMN WIDTHS - ANÁLISE HORIZONTAL
+   ---------------------------------- */
+.table-ah-dre .col-conta {
+  width: 35%;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.table-ah-dre .col-variacao {
+  width: 16.25%;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.table-ah-dre .col-cagr {
+  width: 16.25%;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.table-ah-dre .col-tendencia {
+  width: 16.25%;
+  text-align: center;
+}
+
+/* ----------------------------------
+   COLUMN WIDTHS - ANÁLISE VERTICAL
+   ---------------------------------- */
+.table-av-dre .col-conta {
+  width: 35%;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.table-av-dre .col-percentual {
+  width: 16.25%;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.table-av-dre .col-media {
+  width: 16.25%;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: var(--gray-50);
+}
+
+/* ----------------------------------
+   COLUMN WIDTHS - INDICADORES
+   ---------------------------------- */
+.table-indicadores-dre .col-indicador {
+  width: 30%;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.table-indicadores-dre .col-valor {
+  width: 17.5%;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.table-indicadores-dre .col-classificacao {
+  width: 17.5%;
+  text-align: center;
+}
+
+/* ----------------------------------
+   VARIAÇÃO STYLES (Crescimento/Redução)
+   ---------------------------------- */
+.variacao-positiva {
+  color: var(--green-700);
+  font-weight: 600;
+}
+
+.variacao-negativa {
+  color: var(--red-700);
+  font-weight: 600;
+}
+
+.variacao-neutra {
+  color: var(--gray-600);
+}
+
+/* ----------------------------------
+   STATUS BADGES (↗ ↘ →)
+   ---------------------------------- */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-crescimento {
+  background-color: var(--green-50);
+  color: var(--green-700);
+}
+
+.status-reducao {
+  background-color: var(--red-50);
+  color: var(--red-700);
+}
+
+.status-estavel {
+  background-color: var(--gray-100);
+  color: var(--gray-600);
+}
+
+/* ----------------------------------
+   CLASSIFICAÇÃO BADGES (🟢 🟡 🔴)
+   ---------------------------------- */
+.classificacao-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.classificacao-bom {
+  background-color: var(--green-50);
+  color: var(--green-700);
+  border: 1px solid var(--green-500);
+}
+
+.classificacao-atencao {
+  background-color: var(--yellow-50);
+  color: var(--yellow-700);
+  border: 1px solid var(--yellow-500);
+}
+
+.classificacao-critico {
+  background-color: var(--red-50);
+  color: var(--red-700);
+  border: 1px solid var(--red-500);
+}
+
+/* ----------------------------------
+   MARGEM STYLES (Específico para DRE)
+   ---------------------------------- */
+.margem-positiva {
+  color: var(--green-700);
+  font-weight: 600;
+}
+
+.margem-negativa {
+  color: var(--red-700);
+  font-weight: 600;
+}
+
+.margem-critica {
+  background-color: var(--red-50);
+  color: var(--red-700);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+/* ----------------------------------
+   TENDÊNCIA ICONS
+   ---------------------------------- */
+.tendencia-icon {
+  font-size: 1.25rem;
+}
+
+.tendencia-crescimento {
+  color: var(--green-500);
+}
+
+.tendencia-reducao {
+  color: var(--red-500);
+}
+
+.tendencia-oscilante {
+  color: var(--yellow-500);
+}
+
+/* ----------------------------------
+   CHART CONTAINERS
+   ---------------------------------- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.chart-container {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h3 {
+  font-size: 1.1rem;
+  color: var(--expertzy-navy);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ----------------------------------
+   GRUPO SEPARATORS (Similar a grupos na tabela matricial)
+   ---------------------------------- */
+.grupo-separator {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ----------------------------------
+   SUBTOTAL ROWS (Similar a subtotais na tabela matricial)
+   ---------------------------------- */
+.subtotal-dre-row {
+  background-color: #bbdefb;
+  font-weight: 700;
+}
+
+.subtotal-dre-row td {
+  padding: 12px 16px;
+  color: var(--expertzy-navy);
+}
+
+/* ----------------------------------
+   RESPONSIVE
+   ---------------------------------- */
+@media (max-width: 768px) {
+  .table-analise {
+    font-size: 12px;
+  }
+
+  .table-analise th {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  .table-analise td {
+    padding: 8px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .chart-container {
+    padding: 1rem;
+  }
+
+  .classificacao-badge,
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+
+  .analise-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .col-conta {
+    width: 40% !important;
+  }
+
+  .col-variacao,
+  .col-percentual,
+  .col-valor {
+    width: 15% !important;
+  }
+}
+
+/* ----------------------------------
+   PRINT STYLES
+   ---------------------------------- */
+@media print {
+  .table-analise {
+    border: 1px solid black;
+  }
+
+  .table-analise thead {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    page-break-inside: avoid;
+  }
+
+  .chart-container {
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .classificacao-bom,
+  .classificacao-atencao,
+  .classificacao-critico {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

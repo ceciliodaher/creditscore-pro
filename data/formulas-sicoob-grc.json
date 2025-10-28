@@ -1,0 +1,302 @@
+{
+  "sistema": "GRC - Governance, Risk and Compliance",
+  "origem": "Sicoob - Sistema de Cooperativas de Crédito",
+  "fonte_dados": "grc-web.sql",
+  "data_extracao": "2025-10-23",
+  "versao_mysql": "8.3.0",
+  "total_indicadores": 30,
+  "descricao": "Fórmulas extraídas do sistema GRC do Sicoob para análise de cooperativas de crédito",
+  
+  "estrutura_avaliacao": {
+    "nota": {
+      "escala": "0-6",
+      "tipo": "decimal(1,0)",
+      "descricao": "Pontuação do indicador"
+    },
+    "alerta": {
+      "escala": "0-1",
+      "tipo": "decimal(1,0)",
+      "descricao": "Flag de alerta (0=Normal, 1=Atenção)"
+    }
+  },
+  
+  "formulas": {
+    "desempenho_financeiro": {
+      "sobras_ou_perdas_sobre_recursos_totais": {
+        "formula": "(Sobras ou Perdas / Recursos Totais) * 100",
+        "descricao": "Mede a lucratividade (sobras) ou prejuízo (perdas) em relação aos recursos totais da cooperativa",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica capacidade de gerar sobras",
+        "categoria": "rentabilidade",
+        "campos_necessarios": ["sobras", "perdas", "recursos_totais"]
+      },
+      "receita_financeira_sobre_total_recursos": {
+        "formula": "(Receita Financeira / Total de Recursos) * 100",
+        "descricao": "Eficiência na geração de receita financeira em relação ao total de recursos disponíveis",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica eficiência na aplicação dos recursos",
+        "categoria": "rentabilidade",
+        "campos_necessarios": ["receita_financeira", "total_recursos"]
+      },
+      "retorno_carteira_de_credito": {
+        "formula": "(Receita da Carteira de Crédito / Carteira de Crédito Total) * 100",
+        "descricao": "Rentabilidade da carteira de crédito, medindo o retorno obtido sobre o total emprestado",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica boa rentabilidade das operações de crédito",
+        "categoria": "rentabilidade",
+        "campos_necessarios": ["receita_carteira_credito", "carteira_credito_total"]
+      },
+      "despesas_financeiras_sobre_recursos_captados": {
+        "formula": "(Despesas Financeiras / Recursos Captados) * 100",
+        "descricao": "Custo da captação de recursos, medindo quanto se paga para captar recursos",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica custo eficiente de captação",
+        "categoria": "custo",
+        "campos_necessarios": ["despesas_financeiras", "recursos_captados"]
+      }
+    },
+    
+    "indicadores_risco": {
+      "inadimplencia": {
+        "formula": "(Créditos Vencidos > 90 dias / Carteira Total) * 100",
+        "descricao": "Percentual de créditos em atraso superior a 90 dias em relação à carteira total",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica qualidade da carteira de crédito",
+        "categoria": "risco",
+        "limite_bacen": "< 2.5%",
+        "campos_necessarios": ["creditos_vencidos_90d", "carteira_total"]
+      },
+      "resultado_PCLD_sobre_despesas_totais_mes": {
+        "formula": "(PCLD do Mês / Despesas Totais do Mês) * 100",
+        "descricao": "Provisão para Créditos de Liquidação Duvidosa sobre despesas totais mensais",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica menor necessidade de provisão",
+        "categoria": "risco",
+        "campos_necessarios": ["pcld_mes", "despesas_totais_mes"]
+      },
+      "resultado_PCLD_sobre_total_recursos": {
+        "formula": "(PCLD Acumulada / Total de Recursos) * 100",
+        "descricao": "Provisão para Créditos de Liquidação Duvidosa acumulada sobre recursos totais",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica menor risco da carteira",
+        "categoria": "risco",
+        "campos_necessarios": ["pcld_acumulada", "total_recursos"]
+      },
+      "limite_exposicao_por_cliente": {
+        "formula": "(Maior Exposição Individual / Patrimônio Líquido) * 100",
+        "descricao": "Concentração de risco em um único cliente ou grupo econômico",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica menor concentração de risco",
+        "categoria": "risco",
+        "limite_bacen": "< 25%",
+        "campos_necessarios": ["maior_exposicao_individual", "patrimonio_liquido"]
+      }
+    },
+    
+    "indicadores_liquidez": {
+      "liquidez_na_central": {
+        "formula": "(Recursos Disponíveis na Central / Obrigações de Curto Prazo) * 100",
+        "descricao": "Capacidade de honrar compromissos de curto prazo utilizando recursos mantidos na central",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica boa capacidade de pagamento imediato",
+        "categoria": "liquidez",
+        "campos_necessarios": ["recursos_disponiveis_central", "obrigacoes_curto_prazo"]
+      },
+      "liquidez_geral": {
+        "formula": "(Ativo Circulante + Realizável LP) / (Passivo Circulante + Exigível LP)",
+        "descricao": "Capacidade geral de pagamento de todas as obrigações (curto e longo prazo)",
+        "unidade": "índice",
+        "interpretacao": "Ideal > 1.0. Indica capacidade de honrar todas as obrigações",
+        "categoria": "liquidez",
+        "campos_necessarios": ["ativo_circulante", "realizavel_longo_prazo", "passivo_circulante", "exigivel_longo_prazo"]
+      },
+      "adto_depositante": {
+        "formula": "(Adiantamentos a Depositantes / Total de Depósitos) * 100",
+        "descricao": "Percentual de adiantamentos concedidos em relação ao total de depósitos",
+        "unidade": "percentual",
+        "interpretacao": "Deve ser controlado. Alto valor pode indicar problemas de liquidez",
+        "categoria": "liquidez",
+        "campos_necessarios": ["adiantamentos_depositantes", "total_depositos"]
+      }
+    },
+    
+    "indicadores_custo": {
+      "custo_fixo_sobre_total_recursos": {
+        "formula": "(Custos Fixos / Total de Recursos) * 100",
+        "descricao": "Peso dos custos fixos na estrutura operacional em relação aos recursos totais",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica eficiência operacional",
+        "categoria": "eficiencia",
+        "campos_necessarios": ["custos_fixos", "total_recursos"]
+      },
+      "tarifas_sobre_custo_fixo": {
+        "formula": "(Receita de Tarifas / Custo Fixo) * 100",
+        "descricao": "Capacidade das tarifas cobradas em cobrir os custos fixos operacionais",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica boa cobertura dos custos fixos",
+        "categoria": "eficiencia",
+        "campos_necessarios": ["receita_tarifas", "custo_fixo"]
+      },
+      "honorarios_e_cedula_sobre_custo_fixo": {
+        "formula": "(Honorários + Cédulas / Custo Fixo) * 100",
+        "descricao": "Participação de honorários e cédulas nos custos fixos",
+        "unidade": "percentual",
+        "interpretacao": "Deve ser controlado para não comprometer a estrutura de custos",
+        "categoria": "eficiencia",
+        "campos_necessarios": ["honorarios", "cedulas", "custo_fixo"]
+      },
+      "folha_encargos_sobre_total_recursos": {
+        "formula": "(Folha + Encargos / Total de Recursos) * 100",
+        "descricao": "Custo de pessoal (folha + encargos) sobre recursos totais",
+        "unidade": "percentual",
+        "interpretacao": "Deve ser mantido em níveis sustentáveis. Indica eficiência na gestão de pessoal",
+        "categoria": "eficiencia",
+        "campos_necessarios": ["folha_pagamento", "encargos", "total_recursos"]
+      }
+    },
+    
+    "indicadores_rentabilidade": {
+      "rentabilidade_sobras_sobre_receitas_brutas": {
+        "formula": "(Sobras / Receitas Brutas) * 100",
+        "descricao": "Margem líquida das operações - percentual de sobras em relação às receitas brutas",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica boa margem operacional",
+        "categoria": "rentabilidade",
+        "campos_necessarios": ["sobras", "receitas_brutas"]
+      },
+      "rentabilidade_sobre_capital_proprio": {
+        "formula": "(Sobras / Patrimônio Líquido) * 100",
+        "descricao": "ROE (Return on Equity) - Retorno sobre o capital próprio",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica eficiência no uso do capital próprio",
+        "categoria": "rentabilidade",
+        "campos_necessarios": ["sobras", "patrimonio_liquido"]
+      }
+    },
+    
+    "indicadores_estrutura": {
+      "participacao_capital_proprio": {
+        "formula": "(Patrimônio Líquido / Ativo Total) * 100",
+        "descricao": "Grau de independência financeira - participação do capital próprio no ativo total",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica menor dependência de recursos de terceiros",
+        "categoria": "estrutura",
+        "campos_necessarios": ["patrimonio_liquido", "ativo_total"]
+      },
+      "imobilizacao_capital_proprio": {
+        "formula": "(Ativo Permanente / Patrimônio Líquido) * 100",
+        "descricao": "Percentual do capital próprio imobilizado em ativos permanentes",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Alto valor indica baixa liquidez do capital próprio",
+        "categoria": "estrutura",
+        "campos_necessarios": ["ativo_permanente", "patrimonio_liquido"]
+      },
+      "evolucao_patrimonial": {
+        "formula": "((PL Atual - PL Anterior) / PL Anterior) * 100",
+        "descricao": "Crescimento patrimonial no período comparado ao período anterior",
+        "unidade": "percentual",
+        "interpretacao": "Quanto maior, melhor. Indica crescimento sustentável",
+        "categoria": "estrutura",
+        "campos_necessarios": ["patrimonio_liquido_atual", "patrimonio_liquido_anterior"]
+      }
+    },
+    
+    "indicadores_concentracao": {
+      "concentacao_carteira_credito": {
+        "formula": "(Top 10 Maiores Operações / Carteira Total) * 100",
+        "descricao": "Concentração nas 10 maiores operações de crédito",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Alta concentração indica maior risco",
+        "categoria": "risco",
+        "campos_necessarios": ["top10_operacoes", "carteira_total"]
+      },
+      "concentracao_depositos": {
+        "formula": "(Top 10 Maiores Depositantes / Total Depósitos) * 100",
+        "descricao": "Concentração nos 10 maiores depositantes",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Alta concentração indica risco de liquidez",
+        "categoria": "risco",
+        "campos_necessarios": ["top10_depositantes", "total_depositos"]
+      },
+      "enquadramento_PRE": {
+        "formula": "(Patrimônio de Referência Exigido / Patrimônio Líquido) * 100",
+        "descricao": "Adequação ao Patrimônio de Referência Exigido pelo Banco Central",
+        "unidade": "percentual",
+        "interpretacao": "Deve estar dentro dos limites regulatórios. Indica adequação regulatória",
+        "categoria": "compliance",
+        "limite_bacen": "Min 11%",
+        "campos_necessarios": ["patrimonio_referencia_exigido", "patrimonio_liquido"]
+      }
+    },
+    
+    "indicadores_operacionais": {
+      "evolucao_quadro_social": {
+        "formula": "((Cooperados Atual - Cooperados Anterior) / Cooperados Anterior) * 100",
+        "descricao": "Crescimento da base de cooperados no período",
+        "unidade": "percentual",
+        "interpretacao": "Positivo indica crescimento. Negativo indica perda de cooperados",
+        "categoria": "operacional",
+        "campos_necessarios": ["cooperados_atual", "cooperados_anterior"]
+      },
+      "despesas_captacao_sobre_dep_prazo": {
+        "formula": "(Despesas de Captação / Depósitos a Prazo) * 100",
+        "descricao": "Custo de captação de depósitos a prazo",
+        "unidade": "percentual",
+        "interpretacao": "Quanto menor, melhor. Indica custo eficiente de captação",
+        "categoria": "eficiencia",
+        "campos_necessarios": ["despesas_captacao", "depositos_prazo"]
+      }
+    }
+  },
+  
+  "escala_notas": {
+    "0": "Crítico",
+    "1": "Muito Ruim",
+    "2": "Ruim",
+    "3": "Regular",
+    "4": "Bom",
+    "5": "Muito Bom",
+    "6": "Excelente"
+  },
+  
+  "campos_auxiliares": {
+    "total": {
+      "tipo": "decimal(3,0)",
+      "descricao": "Somatório de todos os alertas"
+    },
+    "nu_justificativa": {
+      "tipo": "decimal(2,0)",
+      "descricao": "Número/ID da justificativa cadastrada"
+    },
+    "nu_plano": {
+      "tipo": "decimal(1,0)",
+      "descricao": "Número/ID do plano de ação"
+    },
+    "tx_justificativa": {
+      "tipo": "varchar(2024)",
+      "descricao": "Texto explicativo da justificativa para os alertas"
+    },
+    "tx_plano": {
+      "tipo": "varchar(512)",
+      "descricao": "Texto do plano de ação para corrigir os indicadores"
+    },
+    "st_justificativa": {
+      "tipo": "decimal(1,0)",
+      "descricao": "Status da justificativa (0=Pendente, 1=Aprovada, etc)"
+    },
+    "st_plano": {
+      "tipo": "decimal(1,0)",
+      "descricao": "Status do plano (0=Não iniciado, 1=Em andamento, etc)"
+    }
+  },
+  
+  "notas_implementacao": [
+    "Todos os indicadores possuem dois campos: nota (0-6) e alerta (0-1)",
+    "A nota indica a pontuação do indicador",
+    "O alerta é um flag binário que indica se o indicador está fora dos parâmetros aceitáveis",
+    "O campo 'total' soma todos os alertas ativos",
+    "Sistema permite justificativas e planos de ação para cada conjunto de alertas",
+    "Dados são armazenados mensalmente por cooperativa",
+    "A chave primária é composta: cd_sistema + cd_central + cd_cooperativa + ano + mes"
+  ]
+}

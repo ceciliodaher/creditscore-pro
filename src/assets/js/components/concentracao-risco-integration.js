@@ -240,7 +240,7 @@ class ConcentracaoRiscoIntegration {
      */
     traduzirTipoAlerta(tipo) {
         const key = `concentracaoRisco.alertas.tipos.${tipo}`;
-        return this.messages.get(key, tipo);
+        return MessageLoader.get(key, tipo);
     }
 
     /**

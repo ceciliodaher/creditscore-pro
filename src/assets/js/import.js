@@ -123,106 +123,113 @@ class ImportManager {
         // Helper: converte string para número
         const toNumber = (val) => {
             if (val === null || val === undefined || val === '') return 0;
+            // Para o balanço, sempre usamos o valor absoluto, pois as contas redutoras são subtraídas na fórmula.
+            // Para a DRE e contas como Lucros/Prejuízos, precisamos manter o sinal.
             const num = typeof val === 'string' ? parseFloat(val.replace(/[^0-9.-]/g, '')) : val;
             return isNaN(num) ? 0 : num;
+        };
+        const toPositiveNumber = (val) => {
+            if (val === null || val === undefined || val === '') return 0;
+            const num = typeof val === 'string' ? parseFloat(String(val).replace(/[^0-9.-]/g, '')) : val;
+            if (isNaN(num)) return 0;
+            return Math.abs(toNumber(val));
         };
 
         // Extrai dados dos 4 períodos
         const periodos = ['p1', 'p2', 'p3', 'p4'].map(p => {
             // ATIVO CIRCULANTE
-            const caixa = toNumber(formDataFlat[`caixa_${p}`]);
-            const bancos = toNumber(formDataFlat[`bancos_${p}`]);
-            const aplicacoes = toNumber(formDataFlat[`aplicacoes_${p}`]);
+            const caixa = toPositiveNumber(formDataFlat[`caixa_${p}`]);
+            const bancos = toPositiveNumber(formDataFlat[`bancos_${p}`]);
+            const aplicacoes = toPositiveNumber(formDataFlat[`aplicacoes_${p}`]);
             const disponibilidadesTotal = caixa + bancos + aplicacoes;
 
-            const contasReceber = toNumber(formDataFlat[`contasReceber_${p}`]);
-            const pdd = toNumber(formDataFlat[`pdd_${p}`]);
-            const contasReceberLiquido = contasReceber + pdd; // pdd é negativo
+            const contasReceber = toPositiveNumber(formDataFlat[`contasReceber_${p}`]);
+            const pdd = toPositiveNumber(formDataFlat[`pdd_${p}`]);
+            const contasReceberLiquido = contasReceber - pdd; // Correção: PDD é redutora
 
-            const estoqueMP = toNumber(formDataFlat[`estoqueMP_${p}`]);
-            const estoqueWIP = toNumber(formDataFlat[`estoqueWIP_${p}`]);
-            const estoqueProdAcabados = toNumber(formDataFlat[`estoqueProdAcabados_${p}`]);
-            const estoquePecasReposicao = toNumber(formDataFlat[`estoquePecasReposicao_${p}`]);
+            const estoqueMP = toPositiveNumber(formDataFlat[`estoqueMP_${p}`]);
+            const estoqueWIP = toPositiveNumber(formDataFlat[`estoqueWIP_${p}`]);
+            const estoqueProdAcabados = toPositiveNumber(formDataFlat[`estoqueProdAcabados_${p}`]);
+            const estoquePecasReposicao = toPositiveNumber(formDataFlat[`estoquePecasReposicao_${p}`]);
             const estoquesTotal = estoqueMP + estoqueWIP + estoqueProdAcabados + estoquePecasReposicao;
 
-            const impostosRecuperar = toNumber(formDataFlat[`impostosRecuperar_${p}`]);
-            const adiantamentosFornecedores = toNumber(formDataFlat[`adiantamentosFornecedores_${p}`]);
-            const outrosAC = toNumber(formDataFlat[`outrosAC_${p}`]);
+            const impostosRecuperar = toPositiveNumber(formDataFlat[`impostosRecuperar_${p}`]);
+            const adiantamentosFornecedores = toPositiveNumber(formDataFlat[`adiantamentosFornecedores_${p}`]);
+            const outrosAC = toPositiveNumber(formDataFlat[`outrosAC_${p}`]);
 
             const ativoCirculanteTotal = disponibilidadesTotal + contasReceberLiquido + estoquesTotal +
                                         impostosRecuperar + adiantamentosFornecedores + outrosAC;
 
             // ATIVO NÃO CIRCULANTE
-            const titulosReceberLP = toNumber(formDataFlat[`titulosReceberLP_${p}`]);
-            const depositosJudiciais = toNumber(formDataFlat[`depositosJudiciais_${p}`]);
-            const outrosCreditosLP = toNumber(formDataFlat[`outrosCreditosLP_${p}`]);
+            const titulosReceberLP = toPositiveNumber(formDataFlat[`titulosReceberLP_${p}`]);
+            const depositosJudiciais = toPositiveNumber(formDataFlat[`depositosJudiciais_${p}`]);
+            const outrosCreditosLP = toPositiveNumber(formDataFlat[`outrosCreditosLP_${p}`]);
             const realizavelLPTotal = titulosReceberLP + depositosJudiciais + outrosCreditosLP;
 
-            const participacoesSocietarias = toNumber(formDataFlat[`participacoesSocietarias_${p}`]);
-            const outrosInvestimentos = toNumber(formDataFlat[`outrosInvestimentos_${p}`]);
+            const participacoesSocietarias = toPositiveNumber(formDataFlat[`participacoesSocietarias_${p}`]);
+            const outrosInvestimentos = toPositiveNumber(formDataFlat[`outrosInvestimentos_${p}`]);
             const investimentosTotal = participacoesSocietarias + outrosInvestimentos;
 
-            const terrenos = toNumber(formDataFlat[`terrenos_${p}`]);
-            const edificacoes = toNumber(formDataFlat[`edificacoes_${p}`]);
-            const maquinasEquipamentos = toNumber(formDataFlat[`maquinasEquipamentos_${p}`]);
-            const veiculos = toNumber(formDataFlat[`veiculos_${p}`]);
-            const moveisUtensilios = toNumber(formDataFlat[`moveisUtensilios_${p}`]);
-            const equipamentosInformatica = toNumber(formDataFlat[`equipamentosInformatica_${p}`]);
-            const imobilizadoAndamento = toNumber(formDataFlat[`imobilizadoAndamento_${p}`]);
+            const terrenos = toPositiveNumber(formDataFlat[`terrenos_${p}`]);
+            const edificacoes = toPositiveNumber(formDataFlat[`edificacoes_${p}`]);
+            const maquinasEquipamentos = toPositiveNumber(formDataFlat[`maquinasEquipamentos_${p}`]);
+            const veiculos = toPositiveNumber(formDataFlat[`veiculos_${p}`]);
+            const moveisUtensilios = toPositiveNumber(formDataFlat[`moveisUtensilios_${p}`]);
+            const equipamentosInformatica = toPositiveNumber(formDataFlat[`equipamentosInformatica_${p}`]);
+            const imobilizadoAndamento = toPositiveNumber(formDataFlat[`imobilizadoAndamento_${p}`]);
             const imobilizadoBruto = terrenos + edificacoes + maquinasEquipamentos + veiculos +
                                    moveisUtensilios + equipamentosInformatica + imobilizadoAndamento;
-            const depreciacaoAcumulada = toNumber(formDataFlat[`depreciacaoAcumulada_${p}`]);
-            const imobilizadoLiquido = imobilizadoBruto + depreciacaoAcumulada; // depreciação é negativa
+            const depreciacaoAcumulada = toPositiveNumber(formDataFlat[`depreciacaoAcumulada_${p}`]);
+            const imobilizadoLiquido = imobilizadoBruto - depreciacaoAcumulada; // Correção: Depreciação é redutora
 
-            const software = toNumber(formDataFlat[`software_${p}`]);
-            const marcasPatentes = toNumber(formDataFlat[`marcasPatentes_${p}`]);
-            const goodwill = toNumber(formDataFlat[`goodwill_${p}`]);
+            const software = toPositiveNumber(formDataFlat[`software_${p}`]);
+            const marcasPatentes = toPositiveNumber(formDataFlat[`marcasPatentes_${p}`]);
+            const goodwill = toPositiveNumber(formDataFlat[`goodwill_${p}`]);
             const intangivelBruto = software + marcasPatentes + goodwill;
-            const amortizacaoAcumulada = toNumber(formDataFlat[`amortizacaoAcumulada_${p}`]);
-            const intangivelLiquido = intangivelBruto + amortizacaoAcumulada; // amortização é negativa
+            const amortizacaoAcumulada = toPositiveNumber(formDataFlat[`amortizacaoAcumulada_${p}`]);
+            const intangivelLiquido = intangivelBruto - amortizacaoAcumulada; // Correção: Amortização é redutora
 
             const ativoNaoCirculanteTotal = realizavelLPTotal + investimentosTotal + imobilizadoLiquido + intangivelLiquido;
 
             const ativoTotal = ativoCirculanteTotal + ativoNaoCirculanteTotal;
 
             // PASSIVO CIRCULANTE
-            const fornecedores = toNumber(formDataFlat[`fornecedores_${p}`]);
-            const emprestimosCP = toNumber(formDataFlat[`emprestimosCP_${p}`]);
-            const salariosPagar = toNumber(formDataFlat[`salariosPagar_${p}`]);
-            const encargosSociaisPagar = toNumber(formDataFlat[`encargosSociaisPagar_${p}`]);
-            const impostosRecolher = toNumber(formDataFlat[`impostosRecolher_${p}`]);
-            const dividendosPagar = toNumber(formDataFlat[`dividendosPagar_${p}`]);
-            const adiantamentosClientes = toNumber(formDataFlat[`adiantamentosClientes_${p}`]);
-            const obrigacoesFiscais = toNumber(formDataFlat[`obrigacoesFiscais_${p}`]);
-            const outrosPC = toNumber(formDataFlat[`outrosPC_${p}`]);
+            const fornecedores = toPositiveNumber(formDataFlat[`fornecedores_${p}`]);
+            const emprestimosCP = toPositiveNumber(formDataFlat[`emprestimosCP_${p}`]);
+            const salariosPagar = toPositiveNumber(formDataFlat[`salariosPagar_${p}`]);
+            const encargosSociaisPagar = toPositiveNumber(formDataFlat[`encargosSociaisPagar_${p}`]);
+            const impostosRecolher = toPositiveNumber(formDataFlat[`impostosRecolher_${p}`]);
+            const dividendosPagar = toPositiveNumber(formDataFlat[`dividendosPagar_${p}`]);
+            const adiantamentosClientes = toPositiveNumber(formDataFlat[`adiantamentosClientes_${p}`]);
+            const obrigacoesFiscais = toPositiveNumber(formDataFlat[`obrigacoesFiscais_${p}`]);
+            const outrosPC = toPositiveNumber(formDataFlat[`outrosPC_${p}`]);
 
             const passivoCirculanteTotal = fornecedores + emprestimosCP + salariosPagar +
                                           encargosSociaisPagar + impostosRecolher + dividendosPagar +
                                           adiantamentosClientes + obrigacoesFiscais + outrosPC;
 
             // PASSIVO NÃO CIRCULANTE
-            const emprestimosLP = toNumber(formDataFlat[`emprestimosLP_${p}`]);
-            const financiamentosImobiliarios = toNumber(formDataFlat[`financiamentosImobiliarios_${p}`]);
-            const debentures = toNumber(formDataFlat[`debentures_${p}`]);
-            const provisoesTrabalhistas = toNumber(formDataFlat[`provisoesTrabalhistas_${p}`]);
-            const provisoesFiscais = toNumber(formDataFlat[`provisoesFiscais_${p}`]);
-            const outrosPNC = toNumber(formDataFlat[`outrosPNC_${p}`]);
+            const emprestimosLP = toPositiveNumber(formDataFlat[`emprestimosLP_${p}`]);
+            const financiamentosImobiliarios = toPositiveNumber(formDataFlat[`financiamentosImobiliarios_${p}`]);
+            const debentures = toPositiveNumber(formDataFlat[`debentures_${p}`]);
+            const provisoesTrabalhistas = toPositiveNumber(formDataFlat[`provisoesTrabalhistas_${p}`]);
+            const provisoesFiscais = toPositiveNumber(formDataFlat[`provisoesFiscais_${p}`]);
+            const outrosPNC = toPositiveNumber(formDataFlat[`outrosPNC_${p}`]);
 
             const passivoNaoCirculanteTotal = emprestimosLP + financiamentosImobiliarios + debentures +
                                              provisoesTrabalhistas + provisoesFiscais + outrosPNC;
 
             // PATRIMÔNIO LÍQUIDO
-            const capitalSocial = toNumber(formDataFlat[`capitalSocial_${p}`]);
-            const reservaCapital = toNumber(formDataFlat[`reservaCapital_${p}`]);
-            const reservaLucros = toNumber(formDataFlat[`reservaLucros_${p}`]);
-            const reservaLegal = toNumber(formDataFlat[`reservaLegal_${p}`]);
-            const lucrosPrejuizosAcumulados = toNumber(formDataFlat[`lucrosPrejuizosAcumulados_${p}`]);
-            const ajustesAvaliacaoPatrimonial = toNumber(formDataFlat[`ajustesAvaliacaoPatrimonial_${p}`]);
-            const acoesTesouraria = toNumber(formDataFlat[`acoesTesouraria_${p}`]);
+            const capitalSocial = toPositiveNumber(formDataFlat[`capitalSocial_${p}`]);
+            const reservaCapital = toPositiveNumber(formDataFlat[`reservaCapital_${p}`]);
+            const reservaLucros = toPositiveNumber(formDataFlat[`reservaLucros_${p}`]);
+            const reservaLegal = toPositiveNumber(formDataFlat[`reservaLegal_${p}`]);
+            const lucrosPrejuizosAcumulados = lucrosPrejuizosAcumuladosInicial + lucroDoPeriodo;
 
-            const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros + reservaLegal +
-                                          lucrosPrejuizosAcumulados + ajustesAvaliacaoPatrimonial + acoesTesouraria;
+            const ajustesAvaliacaoPatrimonial = toPositiveNumber(formDataFlat[`ajustesAvaliacaoPatrimonial_${p}`]);
+            const acoesTesouraria = toPositiveNumber(formDataFlat[`acoesTesouraria_${p}`]);
 
+            const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros + reservaLegal + lucrosPrejuizosAcumulados + ajustesAvaliacaoPatrimonial - acoesTesouraria;
             const passivoTotal = passivoCirculanteTotal + passivoNaoCirculanteTotal;
             const passivoPLTotal = passivoTotal + patrimonioLiquidoTotal;
 
@@ -249,101 +256,152 @@ class ImportManager {
                     circulante: {
                         fornecedores
                     }
+                },
+                // Adiciona o objeto 'patrimonioLiquido' que estava faltando
+                patrimonioLiquido: {
+                    capitalSocial,
+                    reservaCapital,
+                    reservaLucros,
+                    reservaLegal,
+                    lucrosPrejuizosAcumulados,
+                    ajustesAvaliacaoPatrimonial,
+                    acoesTesouraria,
+                    total: patrimonioLiquidoTotal
                 }
             };
         });
 
-        // DRE (usando período mais recente - p4)
-        const p = 'p4';
-        const vendasProdutos = toNumber(formDataFlat[`vendasProdutos_${p}`]);
-        const vendasServicos = toNumber(formDataFlat[`vendasServicos_${p}`]);
-        const outrasReceitas = toNumber(formDataFlat[`outrasReceitas_${p}`]);
-        const icms = toNumber(formDataFlat[`icms_${p}`]);
-        const pis = toNumber(formDataFlat[`pis_${p}`]);
-        const cofins = toNumber(formDataFlat[`cofins_${p}`]);
-        const iss = toNumber(formDataFlat[`iss_${p}`]);
-        const devolucoesVendas = toNumber(formDataFlat[`devolucoesVendas_${p}`]);
-        const abatimentos = toNumber(formDataFlat[`abatimentos_${p}`]);
+        // DRE (4 períodos - mesma lógica do Balanço)
+        const periodosDRE = ['p1', 'p2', 'p3', 'p4'].map(p => {
+            // RECEITA BRUTA
+            const vendasProdutos = toNumber(formDataFlat[`vendasProdutos_${p}`]);
+            const vendasServicos = toNumber(formDataFlat[`vendasServicos_${p}`]);
+            const outrasReceitas = toNumber(formDataFlat[`outrasReceitas_${p}`]);
+            const receitaBruta = vendasProdutos + vendasServicos + outrasReceitas;
 
-        const receitaBruta = vendasProdutos + vendasServicos + outrasReceitas;
-        const deducoesReceita = icms + pis + cofins + iss + devolucoesVendas + abatimentos; // valores negativos
-        const receitaLiquida = receitaBruta + deducoesReceita;
+            // DEDUÇÕES DA RECEITA
+            const icms = toNumber(formDataFlat[`icms_${p}`]);
+            const pis = toNumber(formDataFlat[`pis_${p}`]);
+            const cofins = toNumber(formDataFlat[`cofins_${p}`]);
+            const iss = toNumber(formDataFlat[`iss_${p}`]);
+            const devolucoesVendas = toNumber(formDataFlat[`devolucoesVendas_${p}`]);
+            const abatimentos = toNumber(formDataFlat[`abatimentos_${p}`]);
+            const deducoesReceita = icms + pis + cofins + iss + devolucoesVendas + abatimentos; // valores negativos
 
-        const materiaPrima = toNumber(formDataFlat[`materiaPrima_${p}`]);
-        const embalagens = toNumber(formDataFlat[`embalagens_${p}`]);
-        const maoObraDireta = toNumber(formDataFlat[`maoObraDireta_${p}`]);
-        const terceirizacaoProducao = toNumber(formDataFlat[`terceirizacaoProducao_${p}`]);
-        const outrosCustosVariaveis = toNumber(formDataFlat[`outrosCustosVariaveis_${p}`]);
+            const receitaLiquida = receitaBruta + deducoesReceita;
 
-        const custosProdutos = materiaPrima + embalagens + maoObraDireta + terceirizacaoProducao + outrosCustosVariaveis;
-        const lucroBruto = receitaLiquida + custosProdutos; // custos são negativos
+            // CUSTOS DOS PRODUTOS/SERVIÇOS
+            // Lendo os novos IDs do HTML refatorado
+            const cmv = toNumber(formDataFlat[`cmv_${p}`]); // Custo da Mercadoria Vendida
+            const materiaPrima = toNumber(formDataFlat[`materiaPrima_${p}`]);
+            const maoObraDireta = toNumber(formDataFlat[`maoObraDireta_${p}`]);
+            const cif = toNumber(formDataFlat[`cif_${p}`]); // Custo Indireto de Fabricação
+            const csp = toNumber(formDataFlat[`csp_${p}`]); // Custo do Serviço Prestado
+            const cpvTotal = materiaPrima + maoObraDireta + cif;
+            const custosProdutos = cmv + cpvTotal + csp;
 
-        const comissoes = toNumber(formDataFlat[`comissoes_${p}`]);
-        const vendasMarketing = toNumber(formDataFlat[`vendasMarketing_${p}`]);
-        const frete = toNumber(formDataFlat[`frete_${p}`]);
-        const outrasDespVendas = toNumber(formDataFlat[`outrasDespVendas_${p}`]);
+            const lucroBruto = receitaLiquida + custosProdutos; // custos são negativos
 
-        const despesasVendas = comissoes + vendasMarketing + frete + outrasDespVendas;
+            // DESPESAS COMERCIAIS/VENDAS
+            const comissoes = toNumber(formDataFlat[`comissoes_${p}`]);
+            const vendasMarketing = toNumber(formDataFlat[`vendasMarketing_${p}`]);
+            const frete = toNumber(formDataFlat[`frete_${p}`]);
+            const outrasDespVendas = toNumber(formDataFlat[`outrasDespVendas_${p}`]);
+            const despesasVendas = comissoes + vendasMarketing + frete + outrasDespVendas;
 
-        const pessoal = toNumber(formDataFlat[`pessoal_${p}`]);
-        const alugueis = toNumber(formDataFlat[`alugueis_${p}`]);
-        const utilidades = toNumber(formDataFlat[`utilidades_${p}`]);
-        const seguros = toNumber(formDataFlat[`seguros_${p}`]);
-        const manutencao = toNumber(formDataFlat[`manutencao_${p}`]);
-        const tecnologiaInformacao = toNumber(formDataFlat[`tecnologiaInformacao_${p}`]);
-        const servicosProfissionais = toNumber(formDataFlat[`servicosProfissionais_${p}`]);
-        const administrativas = toNumber(formDataFlat[`administrativas_${p}`]);
-        const outrasDespesas = toNumber(formDataFlat[`outrasDespesas_${p}`]);
-        const depreciacaoAmortizacao = toNumber(formDataFlat[`depreciacaoAmortizacao_${p}`]);
+            // DESPESAS ADMINISTRATIVAS
+            const pessoal = toNumber(formDataFlat[`pessoal_${p}`]);
+            const alugueis = toNumber(formDataFlat[`alugueis_${p}`]);
+            const utilidades = toNumber(formDataFlat[`utilidades_${p}`]);
+            const seguros = toNumber(formDataFlat[`seguros_${p}`]);
+            const manutencao = toNumber(formDataFlat[`manutencao_${p}`] ?? '0');
+            const tecnologiaInformacao = toNumber(formDataFlat[`tecnologiaInformacao_${p}`] ?? '0');
+            const servicosProfissionais = toNumber(formDataFlat[`servicosProfissionais_${p}`] ?? '0');
+            const administrativas = toNumber(formDataFlat[`administrativas_${p}`] ?? '0');
+            const outrasDespesas = toNumber(formDataFlat[`outrasDespesas_${p}`] ?? '0');
+            const despesasAdministrativas = pessoal + alugueis + utilidades + seguros + manutencao +
+                                           tecnologiaInformacao + servicosProfissionais + administrativas +
+                                           outrasDespesas;
 
-        const despesasAdministrativas = pessoal + alugueis + utilidades + seguros + manutencao +
-                                       tecnologiaInformacao + servicosProfissionais + administrativas +
-                                       outrasDespesas + depreciacaoAmortizacao;
+            const lucroOperacional = lucroBruto + despesasVendas + despesasAdministrativas;
 
-        const lucroOperacional = lucroBruto + despesasVendas + despesasAdministrativas;
+            // RESULTADO FINANCEIRO E NÃO OPERACIONAL
+            const receitasFinanceiras = toNumber(formDataFlat[`receitasFinanceiras_${p}`]);
+            const despesasFinanceiras = toNumber(formDataFlat[`despesasFinanceiras_${p}`]);
+            const receitasNaoOperacionais = toNumber(formDataFlat[`receitasNaoOperacionais_${p}`]);
+            const despesasNaoOperacionais = toNumber(formDataFlat[`despesasNaoOperacionais_${p}`]);
+            const resultadoFinanceiro = receitasFinanceiras + despesasFinanceiras;
+            const resultadoNaoOperacional = receitasNaoOperacionais + despesasNaoOperacionais;
 
-        const receitasFinanceiras = toNumber(formDataFlat[`receitasFinanceiras_${p}`]);
-        const despesasFinanceiras = toNumber(formDataFlat[`despesasFinanceiras_${p}`]);
-        const receitasNaoOperacionais = toNumber(formDataFlat[`receitasNaoOperacionais_${p}`]);
-        const despesasNaoOperacionais = toNumber(formDataFlat[`despesasNaoOperacionais_${p}`]);
+            const lajir = lucroOperacional + resultadoFinanceiro + resultadoNaoOperacional;
 
-        const resultadoFinanceiro = receitasFinanceiras + despesasFinanceiras;
-        const resultadoNaoOperacional = receitasNaoOperacionais + despesasNaoOperacionais;
+            // IMPOSTOS
+            const ir = toNumber(formDataFlat[`ir_${p}`]);
+            const csll = toNumber(formDataFlat[`csll_${p}`]);
 
-        const lajir = lucroOperacional + resultadoFinanceiro + resultadoNaoOperacional;
+            const lucroLiquido = lajir + ir + csll;
 
-        const ir = toNumber(formDataFlat[`ir_${p}`]);
-        const csll = toNumber(formDataFlat[`csll_${p}`]);
-
-        const lucroLiquido = lajir + ir + csll;
-
-        const dre = {
-            receitaLiquida,
-            custosProdutos,
-            lucroBruto,
-            despesasVendas,
-            despesasAdministrativas,
-            lucroOperacional,
-            resultadoFinanceiro,
-            lajir,
-            lucroLiquido
-        };
+            // Retorna estrutura hierárquica do período
+            return {
+                receitaBruta,
+                deducoesReceita,
+                receitaLiquida,
+                custosProdutos,
+                lucroBruto,
+                despesasVendas,
+                despesasAdministrativas,
+                depreciacaoAmortizacao: toNumber(formDataFlat[`depreciacaoAmortizacao_${p}`] ?? '0'), // Lendo o campo separadamente
+                lucroOperacional,
+                resultadoFinanceiro,
+                lajir,
+                lucroLiquido
+            };
+        });
 
         console.log('✅ [Transformer] Transformação concluída');
-        console.log('   - Períodos processados: 4');
+        console.log('   - Períodos Balanço processados: 4');
+        console.log('   - Períodos DRE processados: 4');
+        console.log('   - Estrutura: HIERÁRQUICA (ativo.circulante, passivo.circulante)');
         console.log('   - Ativo Total (p4):', periodos[3].ativoTotal);
-        console.log('   - Receita Líquida:', dre.receitaLiquida);
+        console.log('   - Receita Líquida (p4):', periodosDRE[3].receitaLiquida);
 
-        // Estrutura de balanco semanticamente correta (SOLID/DRY)
+        // Estrutura de balanco hierárquica (compatível com IndicesFinanceirosCalculator)
         const balancoTransformado = {
-            // Períodos individuais
+            // Períodos individuais (estrutura flat para cada período)
             p1: periodos[0],
             p2: periodos[1],
             p3: periodos[2],
             p4: periodos[3],
 
-            // Valores do último período (p4) para uso direto
-            patrimonioLiquido: periodos[3].patrimonioLiquidoTotal,
+            // Estrutura hierárquica para cálculos (usa dados do p4 - último período)
+            ativo: {
+                circulante: {
+                    total: periodos[3].ativoCirculanteTotal,
+                    disponibilidades: periodos[3].disponibilidadesTotal,
+                    contasReceber: periodos[3].contasReceberLiquido,
+                    estoques: periodos[3].estoquesTotal
+                },
+                naoCirculante: {
+                    total: periodos[3].ativoNaoCirculanteTotal,
+                    realizavelLP: periodos[3].realizavelLPTotal,
+                    investimentos: periodos[3].investimentosTotal,
+                    imobilizado: periodos[3].imobilizadoLiquido,
+                    intangivel: periodos[3].intangivelLiquido
+                },
+                total: periodos[3].ativoTotal
+            },
+            passivo: {
+                circulante: {
+                    total: periodos[3].passivoCirculanteTotal
+                },
+                naoCirculante: {
+                    total: periodos[3].passivoNaoCirculanteTotal
+                },
+                total: periodos[3].passivoTotal
+            },
+            patrimonioLiquido: periodos[3].patrimonioLiquido, // Correção: Usar o objeto completo
+
+            // Valores diretos para retrocompatibilidade (flat)
             ativoTotal: periodos[3].ativoTotal,
             passivoTotal: periodos[3].passivoTotal,
             ativoCirculante: periodos[3].ativoCirculanteTotal,
@@ -354,15 +412,33 @@ class ImportManager {
             estoques: periodos[3].estoquesTotal
         };
 
+        // Estrutura de DRE semanticamente correta (SOLID/DRY)
+        const dreTransformada = {
+            // Períodos individuais
+            p1: periodosDRE[0],
+            p2: periodosDRE[1],
+            p3: periodosDRE[2],
+            p4: periodosDRE[3],
+
+            // Valores do último período (p4) para uso direto
+            receitaLiquida: periodosDRE[3].receitaLiquida,
+            lucroBruto: periodosDRE[3].lucroBruto,
+            lucroOperacional: periodosDRE[3].lucroOperacional,
+            lajir: periodosDRE[3].lajir,
+            lucroLiquido: periodosDRE[3].lucroLiquido,
+            // ✅ ADICIONADO: Garante compatibilidade com IndicesFinanceirosCalculator
+            custosProdutos: periodosDRE[3].custosProdutos
+        };
+
         // Retorna estrutura compatível com recalcularAnaliseCompleta
         return {
             cadastro: formDataFlat,
             demonstracoes: {
                 balanco: balancoTransformado,
-                dre: dre
+                dre: dreTransformada
             },
             balanco: balancoTransformado,
-            dre: dre,
+            dre: dreTransformada,
             endividamento: formDataFlat,
             compliance: formDataFlat,
             clientes: formDataFlat,

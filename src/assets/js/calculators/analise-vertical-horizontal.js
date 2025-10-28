@@ -87,7 +87,7 @@ export class AnaliseVerticalHorizontal {
      * @returns {Promise&lt;Object&gt;} Resultado da análise
      * @throws {Error} Se dados inválidos ou incompletos
      */
-    async calcularTodos(data) {
+    async analisar(data) {
         if (!this.initialized) {
             throw new Error('AnaliseVerticalHorizontal: calculador não inicializado - execute init() primeiro');
         }
@@ -219,14 +219,15 @@ export class AnaliseVerticalHorizontal {
             this.#validarEstruturaBalanco(balanco, ano);
 
             const ativoTotal = balanco.ativoTotal;
-            const passivoTotal = balanco.passivoTotal;
+            // ✅ CORREÇÃO: A validação deve ser contra Passivo Total + Patrimônio Líquido
+            const passivoMaisPL = balanco.passivoTotal + balanco.patrimonioLiquido.total;
 
             // Validar equação contábil
-            const diferenca = Math.abs(ativoTotal - passivoTotal);
+            const diferenca = Math.abs(ativoTotal - passivoMaisPL);
             if (diferenca > this.thresholds.inconsistenciaMaxima) {
                 throw new Error(
                     `AnaliseVerticalHorizontal: balanço ${ano} desbalanceado - ` +
-                    `Ativo Total (${ativoTotal}) ≠ Passivo Total (${passivoTotal}), diferença: ${diferenca.toFixed(2)}`
+                    `Ativo Total (${ativoTotal}) ≠ Passivo + PL (${passivoMaisPL}), diferença: ${diferenca.toFixed(2)}`
                 );
             }
 

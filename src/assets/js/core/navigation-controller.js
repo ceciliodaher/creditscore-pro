@@ -2,7 +2,12 @@
    NAVIGATION-CONTROLLER.JS
    Gerenciamento de navegação pelos 8 módulos com validações de negócio
    NO FALLBACKS - NO HARDCODED DATA
+   @version 2.0.0
+   @date 2025-01-26
+   @changes Migrado de localStorage para IndexedDB (NO FALLBACKS)
    ===================================== */
+
+import { retryIndexedDBOperation, validateIndexedDBAvailable } from '../utils/indexeddb-retry.js';
 
 /**
  * Controlador de navegação entre módulos com validação de progressão
@@ -20,9 +25,10 @@ export class NavigationController {
      * @param {Object} config - Configuração completa do sistema (creditscore-config.json)
      * @param {Object} messages - Mensagens do sistema (messages.json)
      * @param {HierarchicalNavigation} hierarchicalNav - Instância do HierarchicalNavigation (tabs.js)
-     * @throws {Error} Se config, messages ou hierarchicalNav ausentes ou inválidos
+     * @param {Object} dbManager - Instância do CreditscoreIndexedDB (obrigatório)
+     * @throws {Error} Se config, messages, hierarchicalNav ou dbManager ausentes ou inválidos
      */
-    constructor(config, messages, hierarchicalNav) {
+    constructor(config, messages, hierarchicalNav, dbManager) {
         // Validação obrigatória - NO FALLBACKS
         if (!config) {
             throw new Error('NavigationController: config obrigatória não fornecida');
@@ -34,6 +40,15 @@ export class NavigationController {
 
         if (!hierarchicalNav) {
             throw new Error('NavigationController: hierarchicalNav obrigatório não fornecido');
+        }
+
+        if (!dbManager) {
+            throw new Error('NavigationController: dbManager obrigatório não fornecido');
+        }
+
+        // Validar que dbManager tem a API esperada
+        if (typeof dbManager.save !== 'function' || typeof dbManager.get !== 'function') {
+            throw new Error('NavigationController: dbManager não possui API esperada (save, get)');
         }
 
         // Validar estrutura mínima da config
@@ -61,6 +76,10 @@ export class NavigationController {
         this.config = config;
         this.messages = messages;
         this.tabs = hierarchicalNav;
+        this.db = dbManager;
+
+        // Validar IndexedDB disponível
+        validateIndexedDBAvailable();
 
         // Estado de navegação
         this.currentModule = 1;
@@ -503,10 +522,11 @@ export class NavigationController {
     }
 
     /**
-     * Salva estado da navegação no localStorage
+     * Salva estado da navegação no IndexedDB
      */
-    saveNavigationState() {
+    async saveNavigationState() {
         const state = {
+            id: 'current_state',
             currentModule: this.currentModule,
             completedModules: Array.from(this.completedModules),
             lockedModules: Array.from(this.lockedModules),
@@ -516,27 +536,42 @@ export class NavigationController {
         };
 
         try {
-            localStorage.setItem('creditscore_navigation_state', JSON.stringify(state));
-            console.log('💾 Estado de navegação salvo');
+            await retryIndexedDBOperation(
+                () => this.db.save('navigation_state', state),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Salvar estado de navegação'
+                }
+            );
+
+            console.log('💾 Estado de navegação salvo no IndexedDB');
         } catch (error) {
-            console.error('❌ Erro ao salvar estado de navegação:', error);
+            console.error('❌ Erro ao salvar estado de navegação no IndexedDB:', error);
+            // NO FALLBACK - erro explícito
+            throw new Error(`Falha ao salvar estado de navegação: ${error.message}`);
         }
     }
 
     /**
-     * Restaura estado da navegação do localStorage
-     * @returns {boolean} true se restaurado com sucesso
+     * Restaura estado da navegação do IndexedDB
+     * @returns {Promise<boolean>} true se restaurado com sucesso
      */
-    restoreNavigationState() {
+    async restoreNavigationState() {
         try {
-            const saved = localStorage.getItem('creditscore_navigation_state');
+            const state = await retryIndexedDBOperation(
+                () => this.db.get('navigation_state', 'current_state'),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Restaurar estado de navegação'
+                }
+            );
 
-            if (!saved) {
-                console.log('ℹ️ Nenhum estado de navegação salvo encontrado');
+            if (!state) {
+                console.log('ℹ️ Nenhum estado de navegação salvo encontrado no IndexedDB');
                 return false;
             }
-
-            const state = JSON.parse(saved);
 
             // Validar estrutura
             if (!state || typeof state !== 'object') {
@@ -549,7 +584,7 @@ export class NavigationController {
 
             if (age > MAX_AGE) {
                 console.log('ℹ️ Estado de navegação muito antigo, descartando');
-                localStorage.removeItem('creditscore_navigation_state');
+                await this.clearNavigationState();
                 return false;
             }
 
@@ -581,10 +616,10 @@ export class NavigationController {
             this.blockedModules = new Map(state.blockedModules);
             this.navigationHistory = state.navigationHistory;
 
-            console.log('✅ Estado de navegação restaurado');
+            console.log('✅ Estado de navegação restaurado do IndexedDB');
             return true;
         } catch (error) {
-            console.error('❌ Erro ao restaurar estado de navegação:', error);
+            console.error('❌ Erro ao restaurar estado de navegação do IndexedDB:', error);
             return false;
         }
     }
@@ -592,9 +627,23 @@ export class NavigationController {
     /**
      * Limpa estado de navegação salvo
      */
-    clearNavigationState() {
-        localStorage.removeItem('creditscore_navigation_state');
-        console.log('🗑️ Estado de navegação limpo');
+    async clearNavigationState() {
+        try {
+            await retryIndexedDBOperation(
+                () => this.db.delete('navigation_state', 'current_state'),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Limpar estado de navegação'
+                }
+            );
+
+            console.log('🗑️ Estado de navegação limpo do IndexedDB');
+        } catch (error) {
+            console.error('❌ Erro ao limpar estado de navegação do IndexedDB:', error);
+            // NO FALLBACK - erro explícito
+            throw new Error(`Falha ao limpar estado de navegação: ${error.message}`);
+        }
     }
 
     // ============================================

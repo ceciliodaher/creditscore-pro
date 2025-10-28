@@ -140,10 +140,6 @@ class CreditScoreModule {
         }
 
         // 3. Validar que AutoSave foi injetado
-        if (!this.autoSave) {
-            throw new Error('CreditScoreModule: autoSave não foi injetado - obrigatório. Main app deve injetar via creditScore.autoSave = ...');
-        }
-
         // 4. Validar que dbManager foi injetado
         if (!this.dbManager) {
             throw new Error('CreditScoreModule: dbManager não foi injetado - obrigatório. Main app deve injetar via creditScore.dbManager = ...');
@@ -400,6 +396,14 @@ class CreditScoreModule {
             this.capitalGiroCalculator = new window.CapitalGiroCalculator(this.config, this.messages); // ✅ Passa messages
             if (typeof this.capitalGiroCalculator.init === 'function') {
                 await this.capitalGiroCalculator.init();
+            }
+        }
+
+        // Concentração de Risco Calculator
+        if (window.ConcentracaoRiscoCalculator) {
+            this.concentracaoCalculator = new window.ConcentracaoRiscoCalculator(this.config, this.messages); // ✅ Passa messages
+            if (typeof this.concentracaoCalculator.init === 'function') {
+                await this.concentracaoCalculator.init();
             }
         }
 
@@ -691,6 +695,54 @@ class CreditScoreModule {
         return descricoes[criterio] || `Critério ${criterio} atingido`;
     }
     
+    /**
+     * Recalcula a análise completa após uma mudança em massa (ex: importação)
+     * Coleta os dados atuais do formulário e re-executa a análise.
+     */
+    async recalcularAnaliseCompleta(dadosTransformados = null) {
+        try {
+            console.log('🔄 Recalculando análise completa...');
+
+            let dadosParaAnalise;
+
+            if (dadosTransformados) {
+                // Dados já vêm transformados do ImportManager (flat → hierárquico)
+                console.log('📦 Usando dados transformados do import');
+                dadosParaAnalise = dadosTransformados;
+            } else {
+                // Modo normal: coleta dados do formulário
+                console.log('📝 Coletando dados do formulário');
+                const dadosAtuais = this.coletarDadosFormulario();
+
+                // ✅ CORREÇÃO: Estrutura os dados corretamente para os calculadores.
+                // Os calculadores esperam um objeto com `balanco` e `dre`,
+                // não um objeto plano.
+                dadosParaAnalise = {
+                    cadastro: dadosAtuais,
+                    demonstracoes: {
+                        // Os dados do balanço e da DRE estão no mesmo nível em `dadosAtuais`
+                        balanco: dadosAtuais,
+                        dre: dadosAtuais
+                    },
+                    endividamento: dadosAtuais,
+                    compliance: dadosAtuais,
+                    // Adiciona outros dados que possam ser necessários
+                    clientes: dadosAtuais,
+                    fornecedores: dadosAtuais
+                };
+            }
+
+            const resultado = await this.executarAnaliseCompleta(dadosParaAnalise);
+
+            // Notificar a UI para se atualizar com os novos resultados
+            document.dispatchEvent(new CustomEvent('analiseRecalculada', { detail: resultado }));
+            console.log('✅ Análise recalculada e UI notificada.');
+
+        } catch (error) {
+            console.error('❌ Erro ao recalcular análise completa:', error);
+        }
+    }
+
     // ==========================================
     // UTILITÁRIOS
     // ==========================================

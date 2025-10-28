@@ -1,8 +1,13 @@
 /* =====================================
    AUTO-SAVE.JS
-   Sistema de salvamento automático com IndexedDB + localStorage
+   Sistema de salvamento automático com IndexedDB
    NO FALLBACKS - NO HARDCODED DATA
+   @version 2.0.0
+   @date 2025-01-26
+   @changes Removidos fallbacks localStorage (exceto forceSave para beforeunload)
    ===================================== */
+
+import { retryIndexedDBOperation, validateIndexedDBAvailable } from '../utils/indexeddb-retry.js';
 
 /**
  * Sistema de auto-save automático
@@ -58,6 +63,9 @@ export class AutoSave {
         this.config = config;
         this.messages = messages;
         this.db = dbManager;
+
+        // Validar IndexedDB disponível
+        validateIndexedDBAvailable();
 
         // Intervalo de auto-save (30s padrão da config)
         this.autoSaveInterval = config.autoSaveInterval;
@@ -182,29 +190,24 @@ export class AutoSave {
     async checkForSavedData() {
         let savedData = null;
 
-        // Tentar IndexedDB primeiro
+        // Buscar dados no IndexedDB com retry
         try {
-            savedData = await this.db.get('autosave', 'current_session');
-        } catch (error) {
-            console.warn('⚠️ Sem dados no IndexedDB, tentando localStorage');
-        }
-
-        // Fallback para localStorage (caso IndexedDB falhe)
-        if (!savedData) {
-            const localData = localStorage.getItem('creditscore_autosave');
-            if (localData) {
-                try {
-                    savedData = JSON.parse(localData);
-                } catch (error) {
-                    console.error('❌ Erro ao parsear dados do localStorage:', error);
-                    localStorage.removeItem('creditscore_autosave');
-                    return false;
+            savedData = await retryIndexedDBOperation(
+                () => this.db.get('autosave', 'current_session'),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Verificar dados salvos'
                 }
-            }
+            );
+        } catch (error) {
+            console.error('❌ Erro ao buscar dados salvos no IndexedDB:', error);
+            // NO FALLBACK - falhar explicitamente
+            throw new Error(`Falha ao verificar dados salvos: ${error.message}`);
         }
 
         if (!savedData) {
-            console.log('ℹ️ Nenhum dado salvo encontrado');
+            console.log('ℹ️ Nenhum dado salvo encontrado no IndexedDB');
             return false;
         }
 
@@ -247,37 +250,27 @@ export class AutoSave {
                 version: this.config.version
             };
 
-            // Tentar IndexedDB primeiro
-            try {
-                await this.db.save('autosave', saveData);
-                this.lastSaveTimestamp = saveData.timestamp;
-                this.isDirty = false;
-
-                // Marcar dados como alterados para recálculo automático
-                if (window.calculationState) {
-                    window.calculationState.markDirty();
+            // Salvar no IndexedDB com retry
+            await retryIndexedDBOperation(
+                () => this.db.save('autosave', saveData),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Salvar dados de auto-save'
                 }
+            );
 
-                this.#updateSaveStatus(this.messages.autosave.saved);
-                console.log('💾 AutoSave: dados salvos no IndexedDB');
-                return true;
-            } catch (dbError) {
-                console.warn('⚠️ IndexedDB falhou, usando localStorage:', dbError);
+            this.lastSaveTimestamp = saveData.timestamp;
+            this.isDirty = false;
 
-                // Fallback para localStorage
-                localStorage.setItem('creditscore_autosave', JSON.stringify(saveData));
-                this.lastSaveTimestamp = saveData.timestamp;
-                this.isDirty = false;
-
-                // Marcar dados como alterados para recálculo automático
-                if (window.calculationState) {
-                    window.calculationState.markDirty();
-                }
-
-                this.#updateSaveStatus(this.messages.autosave.saved);
-                console.log('💾 AutoSave: dados salvos no localStorage (fallback)');
-                return true;
+            // Marcar dados como alterados para recálculo automático
+            if (window.calculationState) {
+                window.calculationState.markDirty();
             }
+
+            this.#updateSaveStatus(this.messages.autosave.saved);
+            console.log('💾 AutoSave: dados salvos no IndexedDB');
+            return true;
         } catch (error) {
             console.error('❌ Erro ao salvar dados:', error);
             this.#updateSaveStatus(this.messages.autosave.error);
@@ -353,20 +346,29 @@ export class AutoSave {
      */
     async clearSavedData() {
         try {
-            // Limpar IndexedDB
-            await this.db.delete('autosave', 'current_session');
+            // Limpar IndexedDB com retry
+            await retryIndexedDBOperation(
+                () => this.db.delete('autosave', 'current_session'),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Limpar dados de auto-save'
+                }
+            );
+
+            console.log('🗑️ Dados de auto-save limpos do IndexedDB');
         } catch (error) {
-            console.warn('⚠️ Erro ao limpar IndexedDB:', error);
+            console.error('❌ Erro ao limpar dados do IndexedDB:', error);
+            // NO FALLBACK - erro explícito
+            throw new Error(`Falha ao limpar dados salvos: ${error.message}`);
         }
-
-        // Limpar localStorage
-        localStorage.removeItem('creditscore_autosave');
-
-        console.log('🗑️ Dados de auto-save limpos');
     }
 
     /**
      * Força salvamento imediato (usado em beforeunload)
+     * NOTA: Este método usa localStorage por ser síncrono.
+     * IndexedDB é assíncrono e não pode ser usado no beforeunload handler.
+     * Este é o ÚNICO local onde localStorage é permitido no sistema.
      */
     forceSave() {
         if (this.isDirty) {
@@ -382,7 +384,7 @@ export class AutoSave {
                     version: this.config.version
                 };
 
-                // localStorage é síncrono, ideal para beforeunload
+                // localStorage é síncrono, ideal para beforeunload (EXCEÇÃO justificada)
                 localStorage.setItem('creditscore_autosave', JSON.stringify(saveData));
 
                 // Marcar dados como alterados para recálculo automático

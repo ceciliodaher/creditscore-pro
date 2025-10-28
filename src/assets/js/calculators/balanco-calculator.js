@@ -494,7 +494,13 @@ class CalculadorAnaliseBalancos {
             // Estrutura (3 indicadores)
             participacaoCapitalTerceiros: [],
             imobilizacaoPatrimonio: [],
-            imobilizacaoRecursos: []
+            imobilizacaoRecursos: [],
+
+            // Novos Indicadores (Fase 1 - Melhorias)
+            inadimplenciaClientes: [],
+            inadimplenciaFornecedores: [],
+            evolucaoPatrimonial: [],
+
         };
 
         balancos.forEach((balanco, index) => {
@@ -588,6 +594,33 @@ class CalculadorAnaliseBalancos {
                     index === 3
                 )
             );
+
+            // NOVOS INDICADORES
+            indicadores.inadimplenciaClientes.push(
+                this.calcularIndicadorComStatus(
+                    'inadimplenciaClientes',
+                    this.calcularInadimplencia(balanco.contasReceber90d, balanco.contasReceber),
+                    index === 3
+                )
+            );
+
+            indicadores.inadimplenciaFornecedores.push(
+                this.calcularIndicadorComStatus(
+                    'inadimplenciaFornecedores',
+                    this.calcularInadimplencia(balanco.contasPagar90d, balanco.fornecedores),
+                    index === 3
+                )
+            );
+
+            if (index > 0) {
+                indicadores.evolucaoPatrimonial.push(
+                    this.calcularIndicadorComStatus(
+                        'evolucaoPatrimonial',
+                        this.calcularEvolucaoPatrimonial(balancos[index - 1].patrimonioLiquidoTotal, balanco.patrimonioLiquidoTotal),
+                        index === 3
+                    )
+                );
+            }
         });
 
         // Adicionar tendências ao último período
@@ -596,7 +629,7 @@ class CalculadorAnaliseBalancos {
             indicadores[tipo][3].tendencia = this.identificarTendencia(valores, tipo);
         });
 
-        console.log('✓ [Indicadores] 11 indicadores × 4 períodos = 44 valores calculados');
+        console.log('✓ [Indicadores] 14 indicadores × 4 períodos calculados');
         return indicadores;
     }
 
@@ -825,6 +858,37 @@ class CalculadorAnaliseBalancos {
     }
 
     // ========================================
+    // 4.3.1 NOVOS INDICADORES (FASE 1)
+    // ========================================
+
+    /**
+     * Calcula o percentual de inadimplência (> 90 dias).
+     * @param {number} valor90d - Valor vencido há mais de 90 dias.
+     * @param {number} valorTotal - Valor total da conta (Contas a Receber ou Fornecedores).
+     * @returns {number|null} Percentual de inadimplência.
+     */
+    calcularInadimplencia(valor90d, valorTotal) {
+        if (valorTotal === null || valorTotal === undefined || valorTotal === 0 || valor90d === null || valor90d === undefined) {
+            return null; // Retorna nulo se não houver dívida ou dados
+        }
+        return (valor90d / valorTotal) * 100;
+    }
+
+    /**
+     * Calcula a evolução percentual do Patrimônio Líquido.
+     * @param {number} plAnterior - Patrimônio Líquido do período anterior.
+     * @param {number} plAtual - Patrimônio Líquido do período atual.
+     * @returns {number|null} Variação percentual do PL.
+     */
+    calcularEvolucaoPatrimonial(plAnterior, plAtual) {
+        if (plAnterior === null || plAnterior === undefined || plAnterior === 0 || plAtual === null || plAtual === undefined) {
+            return null;
+        }
+
+        return ((plAtual / plAnterior) - 1) * 100;
+    }
+
+    // ========================================
     // 4.4 CLASSIFICAÇÃO E STATUS
     // ========================================
 
@@ -927,7 +991,8 @@ class CalculadorAnaliseBalancos {
         // Tipos onde crescimento é positivo
         const tiposLiquidez = [
             'liquidezCorrente', 'liquidezSeca', 'liquidezImediata',
-            'liquidezGeral', 'garantiaCapitalProprio'
+            'liquidezGeral', 'garantiaCapitalProprio',
+            'evolucaoPatrimonial'
         ];
 
         if (tiposLiquidez.includes(tipo)) {
@@ -1064,7 +1129,10 @@ class CalculadorAnaliseBalancos {
             garantiaCapitalProprio: 'Garantia do Capital Próprio',
             participacaoCapitalTerceiros: 'Participação de Capital de Terceiros',
             imobilizacaoPatrimonio: 'Imobilização do Patrimônio',
-            imobilizacaoRecursos: 'Imobilização de Recursos Não Correntes'
+            imobilizacaoRecursos: 'Imobilização de Recursos Não Correntes',
+            inadimplenciaClientes: 'Inadimplência de Clientes (> 90d)',
+            inadimplenciaFornecedores: 'Inadimplência com Fornecedores (> 90d)',
+            evolucaoPatrimonial: 'Evolução do Patrimônio Líquido',
         };
 
         return nomes[tipo] || tipo;
@@ -1084,7 +1152,10 @@ class CalculadorAnaliseBalancos {
             garantiaCapitalProprio: `Garantia do capital próprio frágil (${valor.toFixed(1)}%) no período ${periodo}. Patrimônio líquido representa menos de 30% do ativo.`,
             participacaoCapitalTerceiros: `Participação de capital de terceiros elevada (${valor.toFixed(1)}%) no período ${periodo}. Dependência excessiva de financiamento externo.`,
             imobilizacaoPatrimonio: `Imobilização do patrimônio elevada (${valor.toFixed(1)}%) no período ${periodo}. Mais de 150% do PL investido em ativos não circulantes.`,
-            imobilizacaoRecursos: `Imobilização de recursos não correntes elevada (${valor.toFixed(1)}%) no período ${periodo}. Mais de 85% dos recursos de longo prazo imobilizados.`
+            imobilizacaoRecursos: `Imobilização de recursos não correntes elevada (${valor.toFixed(1)}%) no período ${periodo}. Mais de 85% dos recursos de longo prazo imobilizados.`,
+            inadimplenciaClientes: `Inadimplência de clientes crítica (${valor.toFixed(1)}%) no período ${periodo}. Risco elevado de perdas.`,
+            inadimplenciaFornecedores: `Inadimplência com fornecedores crítica (${valor.toFixed(1)}%) no período ${periodo}. Risco de imagem e operacional.`,
+            evolucaoPatrimonial: `Evolução patrimonial negativa (${valor.toFixed(1)}%) no período ${periodo}. Empresa está destruindo valor.`,
         };
 
         return mensagens[tipo] || `Indicador ${this.getNomeIndicador(tipo)} em situação crítica no período ${periodo}.`;

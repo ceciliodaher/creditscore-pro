@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="../assets/css/tabs.css">
     <link rel="stylesheet" href="../assets/css/creditscore-styles.css">
 
+    <!-- Análise Financeira -->
+    <link rel="stylesheet" href="../assets/css/analise-balancos.css">
+    <link rel="stylesheet" href="../assets/css/analise-dre.css">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../assets/images/expertzy_logo.png">
     
@@ -41,7 +45,7 @@
                     <button type="button" class="btn btn-secondary" id="importBtnHeader">
                         📤 Importar
                     </button>
-                    <input type="file" id="importJsonFileHeader" accept=".json" style="display: none;">
+                    <input type="file" id="importJsonFileHeader" accept=".json" class="hidden">
                     
                     <button type="button" class="btn btn-secondary" id="exportJsonBtn">
                         💾 Exportar JSON
@@ -204,36 +208,54 @@
                             <p class="section-description">Balanço Patrimonial e DRE dos últimos 3 anos + 1 balancete</p>
                         </div>
 
-                        <!-- Configuração de Períodos -->
-                    <div class="periodos-config" style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
-                        <h3 style="color: #091A30; margin-bottom: 1rem;">📅 Configurar Períodos</h3>
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                        <!-- Configuração de Períodos (Compartilhada: Balanço + DRE) -->
+                    <div class="periodos-config" class="mb-8 p-6 bg-gray-100 rounded-lg">
+                        <h3 class="text-[#091A30] mb-2">📅 Configurar Períodos (Balanço Patrimonial + DRE)</h3>
+                        <p class="text-gray-600 mb-6 text-sm">
+                            ⚠️ Esta configuração será aplicada tanto para o <strong>Balanço Patrimonial</strong> quanto para a <strong>DRE</strong>.
+                        </p>
+                        <div class="grid grid-cols-4 gap-4">
                             <div class="form-group">
                                 <label for="periodo1Data"><strong>Período 1:</strong> Ano N-2</label>
-                                <input type="date" id="periodo1Data" name="periodo1Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                <small style="color: #666;">Ex: 31/12/2022</small>
+                                <input type="date" id="periodo1Data" name="periodo1Data" class="w-full p-2 border border-gray-300 rounded">
+                                <small class="text-gray-600">Ex: 31/12/2022</small>
                             </div>
                             <div class="form-group">
                                 <label for="periodo2Data"><strong>Período 2:</strong> Ano N-1</label>
-                                <input type="date" id="periodo2Data" name="periodo2Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                <small style="color: #666;">Ex: 31/12/2023</small>
+                                <input type="date" id="periodo2Data" name="periodo2Data" class="w-full p-2 border border-gray-300 rounded">
+                                <small class="text-gray-600">Ex: 31/12/2023</small>
                             </div>
                             <div class="form-group">
                                 <label for="periodo3Data"><strong>Período 3:</strong> Ano N</label>
-                                <input type="date" id="periodo3Data" name="periodo3Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                <small style="color: #666;">Ex: 31/12/2024</small>
+                                <input type="date" id="periodo3Data" name="periodo3Data" class="w-full p-2 border border-gray-300 rounded">
+                                <small class="text-gray-600">Ex: 31/12/2024</small>
                             </div>
                             <div class="form-group">
                                 <label for="periodo4Data"><strong>Período 4:</strong> Balancete Atual</label>
-                                <input type="date" id="periodo4Data" name="periodo4Data" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                <small style="color: #666;">Ex: 30/09/2025</small>
+                                <input type="date" id="periodo4Data" name="periodo4Data" class="w-full p-2 border border-gray-300 rounded">
+                                <small class="text-gray-600">Ex: 30/09/2025</small>
+                            </div>
+                        </div>
+                        <!-- Período Parcial (opcional para Período 4) -->
+                        <div class="grid grid-cols-4 gap-4 mt-4">
+                            <div class="form-group"></div>
+                            <div class="form-group"></div>
+                            <div class="form-group"></div>
+                            <div class="form-group">
+                                <label class="flex items-center mb-2">
+                                    <input type="checkbox" id="periodo4Parcial" name="periodo4Parcial" class="mr-2">
+                                    <span><strong>Período 4 é parcial</strong></span>
+                                </label>
+                                <label for="periodo4Meses" class="mt-2 text-[13px]">Meses Decorridos (1-11)</label>
+                                <input type="number" id="periodo4Meses" name="periodo4Meses" class="form-control" min="1" max="11" value="9" disabled class="w-full p-2 border border-gray-300 rounded">
+                                <small class="text-gray-600 text-xs">DRE será anualizada automaticamente</small>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tabela Matricial Cronológica COMPLETA (50 contas × 4 períodos = 200 inputs) -->
                     <div class="balanco-container">
-                        <table class="balanco-cronologico" >
+                        <table class="table-analise" >
                             <thead>
                                 <tr>
                                     <th rowspan="2">CONTA</th>
@@ -251,124 +273,151 @@
                                 <!-- ============================================ -->
                                 <!-- GRUPO: ATIVO -->
                                 <!-- ============================================ -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5">
                                         <strong>▼ ATIVO</strong>
                                     </td>
                                 </tr>
 
                                 <!-- ========== 1. ATIVO CIRCULANTE (12 contas) ========== -->
-                                <tr class="subcategoria-level1">
+                                <tr class="subcategoria-header">
                                     <td>1. ATIVO CIRCULANTE</td>
                                     <td colspan="4"></td>
                                 </tr>
 
                                 <!-- 1.1 Caixa e Equivalentes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.1 Caixa e Equivalentes de Caixa</td>
-                                    <td><input type="text" id="caixa_p1" class="input-valor"></td>
-                                    <td><input type="text" id="caixa_p2" class="input-valor"></td>
-                                    <td><input type="text" id="caixa_p3" class="input-valor"></td>
-                                    <td><input type="text" id="caixa_p4" class="input-valor"></td>
+                                    <td><input type="text" id="caixa_p1" name="caixa_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="caixa_p2" name="caixa_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="caixa_p3" name="caixa_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="caixa_p4" name="caixa_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.2 Bancos -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.2 Bancos</td>
-                                    <td><input type="text" id="bancos_p1" class="input-valor"></td>
-                                    <td><input type="text" id="bancos_p2" class="input-valor"></td>
-                                    <td><input type="text" id="bancos_p3" class="input-valor"></td>
-                                    <td><input type="text" id="bancos_p4" class="input-valor"></td>
+                                    <td><input type="text" id="bancos_p1" name="bancos_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="bancos_p2" name="bancos_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="bancos_p3" name="bancos_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="bancos_p4" name="bancos_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.3 Aplicações Financeiras -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.3 Aplicações Financeiras</td>
-                                    <td><input type="text" id="aplicacoes_p1" class="input-valor"></td>
-                                    <td><input type="text" id="aplicacoes_p2" class="input-valor"></td>
-                                    <td><input type="text" id="aplicacoes_p3" class="input-valor"></td>
-                                    <td><input type="text" id="aplicacoes_p4" class="input-valor"></td>
+                                    <td><input type="text" id="aplicacoes_p1" name="aplicacoes_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="aplicacoes_p2" name="aplicacoes_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="aplicacoes_p3" name="aplicacoes_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="aplicacoes_p4" name="aplicacoes_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL DISPONIBILIDADES -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL DISPONIBILIDADES</td>
+                                    <td class="subtotal-valor" id="disponibilidadesTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="disponibilidadesTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="disponibilidadesTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="disponibilidadesTotal_p4">-</td>
                                 </tr>
 
                                 <!-- 1.4 Contas a Receber -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.4 Contas a Receber</td>
-                                    <td><input type="text" id="contasReceber_p1" class="input-valor"></td>
-                                    <td><input type="text" id="contasReceber_p2" class="input-valor"></td>
-                                    <td><input type="text" id="contasReceber_p3" class="input-valor"></td>
-                                    <td><input type="text" id="contasReceber_p4" class="input-valor"></td>
+                                    <td><input type="text" id="contasReceber_p1" name="contasReceber_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="contasReceber_p2" name="contasReceber_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="contasReceber_p3" name="contasReceber_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="contasReceber_p4" name="contasReceber_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.5 (-) PDD - Provisão Devedores Duvidosos -->
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>1.5 (-) PDD - Provisão Devedores Duvidosos</td>
-                                    <td><input type="text" id="pdd_p1" class="input-valor"></td>
-                                    <td><input type="text" id="pdd_p2" class="input-valor"></td>
-                                    <td><input type="text" id="pdd_p3" class="input-valor"></td>
-                                    <td><input type="text" id="pdd_p4" class="input-valor"></td>
+                                    <td><input type="text" id="pdd_p1" name="pdd_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="pdd_p2" name="pdd_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="pdd_p3" name="pdd_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="pdd_p4" name="pdd_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL CONTAS A RECEBER LÍQUIDO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL CONTAS A RECEBER LÍQUIDO</td>
+                                    <td class="subtotal-valor" id="contasReceberLiquido_p1">-</td>
+                                    <td class="subtotal-valor" id="contasReceberLiquido_p2">-</td>
+                                    <td class="subtotal-valor" id="contasReceberLiquido_p3">-</td>
+                                    <td class="subtotal-valor" id="contasReceberLiquido_p4">-</td>
                                 </tr>
 
                                 <!-- 1.6 Estoques - Matéria-Prima -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.6 Estoques - Matéria-Prima</td>
-                                    <td><input type="text" id="estoqueMP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueMP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueMP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueMP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueMP_p1" name="estoqueMP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueMP_p2" name="estoqueMP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueMP_p3" name="estoqueMP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueMP_p4" name="estoqueMP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.7 Estoques - Produtos em Processo -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.7 Estoques - Produtos em Processo (WIP)</td>
-                                    <td><input type="text" id="estoqueWIP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueWIP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueWIP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueWIP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueWIP_p1" name="estoqueWIP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueWIP_p2" name="estoqueWIP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueWIP_p3" name="estoqueWIP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueWIP_p4" name="estoqueWIP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.8 Estoques - Produtos Acabados -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.8 Estoques - Produtos Acabados</td>
-                                    <td><input type="text" id="estoqueProdAcabados_p1" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueProdAcabados_p2" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueProdAcabados_p3" class="input-valor"></td>
-                                    <td><input type="text" id="estoqueProdAcabados_p4" class="input-valor"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p1" name="estoqueProdAcabados_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p2" name="estoqueProdAcabados_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p3" name="estoqueProdAcabados_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoqueProdAcabados_p4" name="estoqueProdAcabados_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.9 Estoques - Peças de Reposição -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.9 Estoques - Peças de Reposição</td>
-                                    <td><input type="text" id="estoquePecasReposicao_p1" class="input-valor"></td>
-                                    <td><input type="text" id="estoquePecasReposicao_p2" class="input-valor"></td>
-                                    <td><input type="text" id="estoquePecasReposicao_p3" class="input-valor"></td>
-                                    <td><input type="text" id="estoquePecasReposicao_p4" class="input-valor"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p1" name="estoquePecasReposicao_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p2" name="estoquePecasReposicao_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p3" name="estoquePecasReposicao_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="estoquePecasReposicao_p4" name="estoquePecasReposicao_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL ESTOQUES -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL ESTOQUES</td>
+                                    <td class="subtotal-valor" id="estoquesTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="estoquesTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="estoquesTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="estoquesTotal_p4">-</td>
                                 </tr>
 
                                 <!-- 1.10 Impostos a Recuperar -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.10 Impostos a Recuperar</td>
-                                    <td><input type="text" id="impostosRecuperar_p1" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecuperar_p2" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecuperar_p3" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecuperar_p4" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecuperar_p1" name="impostosRecuperar_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecuperar_p2" name="impostosRecuperar_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecuperar_p3" name="impostosRecuperar_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecuperar_p4" name="impostosRecuperar_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.11 Adiantamentos a Fornecedores -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.11 Adiantamentos a Fornecedores</td>
-                                    <td><input type="text" id="adiantamentosFornecedores_p1" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosFornecedores_p2" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosFornecedores_p3" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosFornecedores_p4" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p1" name="adiantamentosFornecedores_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p2" name="adiantamentosFornecedores_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p3" name="adiantamentosFornecedores_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosFornecedores_p4" name="adiantamentosFornecedores_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 1.12 Outros Ativos Circulantes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>1.12 Outros Ativos Circulantes</td>
-                                    <td><input type="text" id="outrosAC_p1" class="input-valor"></td>
-                                    <td><input type="text" id="outrosAC_p2" class="input-valor"></td>
-                                    <td><input type="text" id="outrosAC_p3" class="input-valor"></td>
-                                    <td><input type="text" id="outrosAC_p4" class="input-valor"></td>
+                                    <td><input type="text" id="outrosAC_p1" name="outrosAC_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosAC_p2" name="outrosAC_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosAC_p3" name="outrosAC_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosAC_p4" name="outrosAC_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- SUBTOTAL ATIVO CIRCULANTE -->
@@ -393,30 +442,39 @@
                                 </tr>
 
                                 <!-- 2.1.1 Títulos a Receber LP -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.1.1 Títulos a Receber LP</td>
-                                    <td><input type="text" id="titulosReceberLP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="titulosReceberLP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="titulosReceberLP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="titulosReceberLP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="titulosReceberLP_p1" name="titulosReceberLP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="titulosReceberLP_p2" name="titulosReceberLP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="titulosReceberLP_p3" name="titulosReceberLP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="titulosReceberLP_p4" name="titulosReceberLP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.1.2 Depósitos Judiciais -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.1.2 Depósitos Judiciais</td>
-                                    <td><input type="text" id="depositosJudiciais_p1" class="input-valor"></td>
-                                    <td><input type="text" id="depositosJudiciais_p2" class="input-valor"></td>
-                                    <td><input type="text" id="depositosJudiciais_p3" class="input-valor"></td>
-                                    <td><input type="text" id="depositosJudiciais_p4" class="input-valor"></td>
+                                    <td><input type="text" id="depositosJudiciais_p1" name="depositosJudiciais_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depositosJudiciais_p2" name="depositosJudiciais_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depositosJudiciais_p3" name="depositosJudiciais_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depositosJudiciais_p4" name="depositosJudiciais_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.1.3 Outros Créditos LP -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.1.3 Outros Créditos LP</td>
-                                    <td><input type="text" id="outrosCreditosLP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="outrosCreditosLP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="outrosCreditosLP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="outrosCreditosLP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p1" name="outrosCreditosLP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p2" name="outrosCreditosLP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p3" name="outrosCreditosLP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosCreditosLP_p4" name="outrosCreditosLP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL REALIZÁVEL LONGO PRAZO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL REALIZÁVEL LONGO PRAZO</td>
+                                    <td class="subtotal-valor" id="realizavelLPTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="realizavelLPTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="realizavelLPTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="realizavelLPTotal_p4">-</td>
                                 </tr>
 
                                 <!-- Investimentos -->
@@ -426,21 +484,30 @@
                                 </tr>
 
                                 <!-- 2.2.1 Participações Societárias -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.2.1 Participações Societárias</td>
-                                    <td><input type="text" id="participacoesSocietarias_p1" class="input-valor"></td>
-                                    <td><input type="text" id="participacoesSocietarias_p2" class="input-valor"></td>
-                                    <td><input type="text" id="participacoesSocietarias_p3" class="input-valor"></td>
-                                    <td><input type="text" id="participacoesSocietarias_p4" class="input-valor"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p1" name="participacoesSocietarias_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p2" name="participacoesSocietarias_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p3" name="participacoesSocietarias_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="participacoesSocietarias_p4" name="participacoesSocietarias_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.2.2 Outros Investimentos -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.2.2 Outros Investimentos</td>
-                                    <td><input type="text" id="outrosInvestimentos_p1" class="input-valor"></td>
-                                    <td><input type="text" id="outrosInvestimentos_p2" class="input-valor"></td>
-                                    <td><input type="text" id="outrosInvestimentos_p3" class="input-valor"></td>
-                                    <td><input type="text" id="outrosInvestimentos_p4" class="input-valor"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p1" name="outrosInvestimentos_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p2" name="outrosInvestimentos_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p3" name="outrosInvestimentos_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosInvestimentos_p4" name="outrosInvestimentos_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL INVESTIMENTOS -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL INVESTIMENTOS</td>
+                                    <td class="subtotal-valor" id="investimentosTotal_p1">-</td>
+                                    <td class="subtotal-valor" id="investimentosTotal_p2">-</td>
+                                    <td class="subtotal-valor" id="investimentosTotal_p3">-</td>
+                                    <td class="subtotal-valor" id="investimentosTotal_p4">-</td>
                                 </tr>
 
                                 <!-- Imobilizado -->
@@ -450,75 +517,93 @@
                                 </tr>
 
                                 <!-- 2.3.1 Terrenos -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.1 Terrenos</td>
-                                    <td><input type="text" id="terrenos_p1" class="input-valor"></td>
-                                    <td><input type="text" id="terrenos_p2" class="input-valor"></td>
-                                    <td><input type="text" id="terrenos_p3" class="input-valor"></td>
-                                    <td><input type="text" id="terrenos_p4" class="input-valor"></td>
+                                    <td><input type="text" id="terrenos_p1" name="terrenos_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="terrenos_p2" name="terrenos_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="terrenos_p3" name="terrenos_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="terrenos_p4" name="terrenos_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.2 Edificações -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.2 Edificações</td>
-                                    <td><input type="text" id="edificacoes_p1" class="input-valor"></td>
-                                    <td><input type="text" id="edificacoes_p2" class="input-valor"></td>
-                                    <td><input type="text" id="edificacoes_p3" class="input-valor"></td>
-                                    <td><input type="text" id="edificacoes_p4" class="input-valor"></td>
+                                    <td><input type="text" id="edificacoes_p1" name="edificacoes_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="edificacoes_p2" name="edificacoes_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="edificacoes_p3" name="edificacoes_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="edificacoes_p4" name="edificacoes_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.3 Máquinas e Equipamentos -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.3 Máquinas e Equipamentos</td>
-                                    <td><input type="text" id="maquinasEquipamentos_p1" class="input-valor"></td>
-                                    <td><input type="text" id="maquinasEquipamentos_p2" class="input-valor"></td>
-                                    <td><input type="text" id="maquinasEquipamentos_p3" class="input-valor"></td>
-                                    <td><input type="text" id="maquinasEquipamentos_p4" class="input-valor"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p1" name="maquinasEquipamentos_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p2" name="maquinasEquipamentos_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p3" name="maquinasEquipamentos_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="maquinasEquipamentos_p4" name="maquinasEquipamentos_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.4 Veículos -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.4 Veículos</td>
-                                    <td><input type="text" id="veiculos_p1" class="input-valor"></td>
-                                    <td><input type="text" id="veiculos_p2" class="input-valor"></td>
-                                    <td><input type="text" id="veiculos_p3" class="input-valor"></td>
-                                    <td><input type="text" id="veiculos_p4" class="input-valor"></td>
+                                    <td><input type="text" id="veiculos_p1" name="veiculos_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="veiculos_p2" name="veiculos_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="veiculos_p3" name="veiculos_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="veiculos_p4" name="veiculos_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.5 Móveis e Utensílios -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.5 Móveis e Utensílios</td>
-                                    <td><input type="text" id="moveisUtensilios_p1" class="input-valor"></td>
-                                    <td><input type="text" id="moveisUtensilios_p2" class="input-valor"></td>
-                                    <td><input type="text" id="moveisUtensilios_p3" class="input-valor"></td>
-                                    <td><input type="text" id="moveisUtensilios_p4" class="input-valor"></td>
+                                    <td><input type="text" id="moveisUtensilios_p1" name="moveisUtensilios_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="moveisUtensilios_p2" name="moveisUtensilios_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="moveisUtensilios_p3" name="moveisUtensilios_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="moveisUtensilios_p4" name="moveisUtensilios_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.6 Equipamentos de Informática -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.6 Equipamentos de Informática</td>
-                                    <td><input type="text" id="equipamentosInformatica_p1" class="input-valor"></td>
-                                    <td><input type="text" id="equipamentosInformatica_p2" class="input-valor"></td>
-                                    <td><input type="text" id="equipamentosInformatica_p3" class="input-valor"></td>
-                                    <td><input type="text" id="equipamentosInformatica_p4" class="input-valor"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p1" name="equipamentosInformatica_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p2" name="equipamentosInformatica_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p3" name="equipamentosInformatica_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="equipamentosInformatica_p4" name="equipamentosInformatica_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.3.7 Imobilizado em Andamento -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.3.7 Imobilizado em Andamento</td>
-                                    <td><input type="text" id="imobilizadoAndamento_p1" class="input-valor"></td>
-                                    <td><input type="text" id="imobilizadoAndamento_p2" class="input-valor"></td>
-                                    <td><input type="text" id="imobilizadoAndamento_p3" class="input-valor"></td>
-                                    <td><input type="text" id="imobilizadoAndamento_p4" class="input-valor"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p1" name="imobilizadoAndamento_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p2" name="imobilizadoAndamento_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p3" name="imobilizadoAndamento_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="imobilizadoAndamento_p4" name="imobilizadoAndamento_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL IMOBILIZADO BRUTO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL IMOBILIZADO BRUTO</td>
+                                    <td class="subtotal-valor" id="imobilizadoBruto_p1">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoBruto_p2">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoBruto_p3">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoBruto_p4">-</td>
                                 </tr>
 
                                 <!-- 2.3.8 (-) Depreciação Acumulada -->
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>2.3.8 (-) Depreciação Acumulada</td>
-                                    <td><input type="text" id="depreciacaoAcumulada_p1" class="input-valor"></td>
-                                    <td><input type="text" id="depreciacaoAcumulada_p2" class="input-valor"></td>
-                                    <td><input type="text" id="depreciacaoAcumulada_p3" class="input-valor"></td>
-                                    <td><input type="text" id="depreciacaoAcumulada_p4" class="input-valor"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p1" name="depreciacaoAcumulada_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p2" name="depreciacaoAcumulada_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p3" name="depreciacaoAcumulada_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="depreciacaoAcumulada_p4" name="depreciacaoAcumulada_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL IMOBILIZADO LÍQUIDO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL IMOBILIZADO LÍQUIDO</td>
+                                    <td class="subtotal-valor" id="imobilizadoLiquido_p1">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoLiquido_p2">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoLiquido_p3">-</td>
+                                    <td class="subtotal-valor" id="imobilizadoLiquido_p4">-</td>
                                 </tr>
 
                                 <!-- Intangível -->
@@ -528,39 +613,57 @@
                                 </tr>
 
                                 <!-- 2.4.1 Software -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.4.1 Software</td>
-                                    <td><input type="text" id="software_p1" class="input-valor"></td>
-                                    <td><input type="text" id="software_p2" class="input-valor"></td>
-                                    <td><input type="text" id="software_p3" class="input-valor"></td>
-                                    <td><input type="text" id="software_p4" class="input-valor"></td>
+                                    <td><input type="text" id="software_p1" name="software_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="software_p2" name="software_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="software_p3" name="software_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="software_p4" name="software_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.4.2 Marcas e Patentes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.4.2 Marcas e Patentes</td>
-                                    <td><input type="text" id="marcasPatentes_p1" class="input-valor"></td>
-                                    <td><input type="text" id="marcasPatentes_p2" class="input-valor"></td>
-                                    <td><input type="text" id="marcasPatentes_p3" class="input-valor"></td>
-                                    <td><input type="text" id="marcasPatentes_p4" class="input-valor"></td>
+                                    <td><input type="text" id="marcasPatentes_p1" name="marcasPatentes_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="marcasPatentes_p2" name="marcasPatentes_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="marcasPatentes_p3" name="marcasPatentes_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="marcasPatentes_p4" name="marcasPatentes_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 2.4.3 Fundo de Comércio (Goodwill) -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>2.4.3 Fundo de Comércio (Goodwill)</td>
-                                    <td><input type="text" id="goodwill_p1" class="input-valor"></td>
-                                    <td><input type="text" id="goodwill_p2" class="input-valor"></td>
-                                    <td><input type="text" id="goodwill_p3" class="input-valor"></td>
-                                    <td><input type="text" id="goodwill_p4" class="input-valor"></td>
+                                    <td><input type="text" id="goodwill_p1" name="goodwill_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="goodwill_p2" name="goodwill_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="goodwill_p3" name="goodwill_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="goodwill_p4" name="goodwill_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL INTANGÍVEL BRUTO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL INTANGÍVEL BRUTO</td>
+                                    <td class="subtotal-valor" id="intangivelBruto_p1">-</td>
+                                    <td class="subtotal-valor" id="intangivelBruto_p2">-</td>
+                                    <td class="subtotal-valor" id="intangivelBruto_p3">-</td>
+                                    <td class="subtotal-valor" id="intangivelBruto_p4">-</td>
                                 </tr>
 
                                 <!-- 2.4.4 (-) Amortização Acumulada -->
-                                <tr class="conta-row last-in-group negative-account">
+                                <tr class="conta-detalhe last-in-group negative-account">
                                     <td>2.4.4 (-) Amortização Acumulada</td>
-                                    <td><input type="text" id="amortizacaoAcumulada_p1" class="input-valor"></td>
-                                    <td><input type="text" id="amortizacaoAcumulada_p2" class="input-valor"></td>
-                                    <td><input type="text" id="amortizacaoAcumulada_p3" class="input-valor"></td>
-                                    <td><input type="text" id="amortizacaoAcumulada_p4" class="input-valor"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p1" name="amortizacaoAcumulada_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p2" name="amortizacaoAcumulada_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p3" name="amortizacaoAcumulada_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="amortizacaoAcumulada_p4" name="amortizacaoAcumulada_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                </tr>
+
+                                <!-- SUBTOTAL INTANGÍVEL LÍQUIDO -->
+                                <tr class="subtotal-row">
+                                    <td>SUBTOTAL INTANGÍVEL LÍQUIDO</td>
+                                    <td class="subtotal-valor" id="intangivelLiquido_p1">-</td>
+                                    <td class="subtotal-valor" id="intangivelLiquido_p2">-</td>
+                                    <td class="subtotal-valor" id="intangivelLiquido_p3">-</td>
+                                    <td class="subtotal-valor" id="intangivelLiquido_p4">-</td>
                                 </tr>
 
                                 <!-- SUBTOTAL ATIVO NÃO CIRCULANTE -->
@@ -598,7 +701,7 @@
                                 <!-- ============================================ -->
                                 <!-- GRUPO: PASSIVO E PATRIMÔNIO LÍQUIDO -->
                                 <!-- ============================================ -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5">
                                         <strong>▼ PASSIVO E PATRIMÔNIO LÍQUIDO</strong>
                                     </td>
@@ -611,84 +714,84 @@
                                 </tr>
 
                                 <!-- 3.1 Fornecedores -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.1 Fornecedores</td>
-                                    <td><input type="text" id="fornecedores_p1" class="input-valor"></td>
-                                    <td><input type="text" id="fornecedores_p2" class="input-valor"></td>
-                                    <td><input type="text" id="fornecedores_p3" class="input-valor"></td>
-                                    <td><input type="text" id="fornecedores_p4" class="input-valor"></td>
+                                    <td><input type="text" id="fornecedores_p1" name="fornecedores_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="fornecedores_p2" name="fornecedores_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="fornecedores_p3" name="fornecedores_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="fornecedores_p4" name="fornecedores_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.2 Empréstimos e Financiamentos CP -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.2 Empréstimos e Financiamentos CP</td>
-                                    <td><input type="text" id="emprestimosCP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosCP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosCP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosCP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosCP_p1" name="emprestimosCP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosCP_p2" name="emprestimosCP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosCP_p3" name="emprestimosCP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosCP_p4" name="emprestimosCP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.3 Salários a Pagar -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.3 Salários a Pagar</td>
-                                    <td><input type="text" id="salariosPagar_p1" class="input-valor"></td>
-                                    <td><input type="text" id="salariosPagar_p2" class="input-valor"></td>
-                                    <td><input type="text" id="salariosPagar_p3" class="input-valor"></td>
-                                    <td><input type="text" id="salariosPagar_p4" class="input-valor"></td>
+                                    <td><input type="text" id="salariosPagar_p1" name="salariosPagar_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="salariosPagar_p2" name="salariosPagar_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="salariosPagar_p3" name="salariosPagar_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="salariosPagar_p4" name="salariosPagar_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.4 Encargos Sociais a Pagar -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.4 Encargos Sociais a Pagar</td>
-                                    <td><input type="text" id="encargosSociaisPagar_p1" class="input-valor"></td>
-                                    <td><input type="text" id="encargosSociaisPagar_p2" class="input-valor"></td>
-                                    <td><input type="text" id="encargosSociaisPagar_p3" class="input-valor"></td>
-                                    <td><input type="text" id="encargosSociaisPagar_p4" class="input-valor"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p1" name="encargosSociaisPagar_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p2" name="encargosSociaisPagar_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p3" name="encargosSociaisPagar_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="encargosSociaisPagar_p4" name="encargosSociaisPagar_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.5 Impostos a Recolher -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.5 Impostos a Recolher</td>
-                                    <td><input type="text" id="impostosRecolher_p1" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecolher_p2" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecolher_p3" class="input-valor"></td>
-                                    <td><input type="text" id="impostosRecolher_p4" class="input-valor"></td>
+                                    <td><input type="text" id="impostosRecolher_p1" name="impostosRecolher_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecolher_p2" name="impostosRecolher_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecolher_p3" name="impostosRecolher_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="impostosRecolher_p4" name="impostosRecolher_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.6 Dividendos a Pagar -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.6 Dividendos a Pagar</td>
-                                    <td><input type="text" id="dividendosPagar_p1" class="input-valor"></td>
-                                    <td><input type="text" id="dividendosPagar_p2" class="input-valor"></td>
-                                    <td><input type="text" id="dividendosPagar_p3" class="input-valor"></td>
-                                    <td><input type="text" id="dividendosPagar_p4" class="input-valor"></td>
+                                    <td><input type="text" id="dividendosPagar_p1" name="dividendosPagar_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="dividendosPagar_p2" name="dividendosPagar_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="dividendosPagar_p3" name="dividendosPagar_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="dividendosPagar_p4" name="dividendosPagar_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.7 Adiantamentos de Clientes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.7 Adiantamentos de Clientes</td>
-                                    <td><input type="text" id="adiantamentosClientes_p1" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosClientes_p2" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosClientes_p3" class="input-valor"></td>
-                                    <td><input type="text" id="adiantamentosClientes_p4" class="input-valor"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p1" name="adiantamentosClientes_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p2" name="adiantamentosClientes_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p3" name="adiantamentosClientes_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="adiantamentosClientes_p4" name="adiantamentosClientes_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.8 Obrigações Fiscais -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.8 Obrigações Fiscais</td>
-                                    <td><input type="text" id="obrigacoesFiscais_p1" class="input-valor"></td>
-                                    <td><input type="text" id="obrigacoesFiscais_p2" class="input-valor"></td>
-                                    <td><input type="text" id="obrigacoesFiscais_p3" class="input-valor"></td>
-                                    <td><input type="text" id="obrigacoesFiscais_p4" class="input-valor"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p1" name="obrigacoesFiscais_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p2" name="obrigacoesFiscais_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p3" name="obrigacoesFiscais_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="obrigacoesFiscais_p4" name="obrigacoesFiscais_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 3.9 Outros Passivos Circulantes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>3.9 Outros Passivos Circulantes</td>
-                                    <td><input type="text" id="outrosPC_p1" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPC_p2" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPC_p3" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPC_p4" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPC_p1" name="outrosPC_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPC_p2" name="outrosPC_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPC_p3" name="outrosPC_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPC_p4" name="outrosPC_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- SUBTOTAL PASSIVO CIRCULANTE -->
@@ -707,57 +810,57 @@
                                 </tr>
 
                                 <!-- 4.1 Empréstimos e Financiamentos LP -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.1 Empréstimos e Financiamentos LP</td>
-                                    <td><input type="text" id="emprestimosLP_p1" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosLP_p2" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosLP_p3" class="input-valor"></td>
-                                    <td><input type="text" id="emprestimosLP_p4" class="input-valor"></td>
+                                    <td><input type="text" id="emprestimosLP_p1" name="emprestimosLP_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosLP_p2" name="emprestimosLP_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosLP_p3" name="emprestimosLP_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="emprestimosLP_p4" name="emprestimosLP_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 4.2 Financiamentos Imobiliários -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.2 Financiamentos Imobiliários</td>
-                                    <td><input type="text" id="financiamentosImobiliarios_p1" class="input-valor"></td>
-                                    <td><input type="text" id="financiamentosImobiliarios_p2" class="input-valor"></td>
-                                    <td><input type="text" id="financiamentosImobiliarios_p3" class="input-valor"></td>
-                                    <td><input type="text" id="financiamentosImobiliarios_p4" class="input-valor"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p1" name="financiamentosImobiliarios_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p2" name="financiamentosImobiliarios_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p3" name="financiamentosImobiliarios_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="financiamentosImobiliarios_p4" name="financiamentosImobiliarios_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 4.3 Debêntures -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.3 Debêntures</td>
-                                    <td><input type="text" id="debentures_p1" class="input-valor"></td>
-                                    <td><input type="text" id="debentures_p2" class="input-valor"></td>
-                                    <td><input type="text" id="debentures_p3" class="input-valor"></td>
-                                    <td><input type="text" id="debentures_p4" class="input-valor"></td>
+                                    <td><input type="text" id="debentures_p1" name="debentures_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="debentures_p2" name="debentures_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="debentures_p3" name="debentures_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="debentures_p4" name="debentures_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 4.4 Provisões Trabalhistas -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.4 Provisões Trabalhistas</td>
-                                    <td><input type="text" id="provisoesTrabalhistas_p1" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesTrabalhistas_p2" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesTrabalhistas_p3" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesTrabalhistas_p4" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p1" name="provisoesTrabalhistas_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p2" name="provisoesTrabalhistas_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p3" name="provisoesTrabalhistas_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesTrabalhistas_p4" name="provisoesTrabalhistas_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 4.5 Provisões Fiscais -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.5 Provisões Fiscais</td>
-                                    <td><input type="text" id="provisoesFiscais_p1" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesFiscais_p2" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesFiscais_p3" class="input-valor"></td>
-                                    <td><input type="text" id="provisoesFiscais_p4" class="input-valor"></td>
+                                    <td><input type="text" id="provisoesFiscais_p1" name="provisoesFiscais_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesFiscais_p2" name="provisoesFiscais_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesFiscais_p3" name="provisoesFiscais_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="provisoesFiscais_p4" name="provisoesFiscais_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 4.6 Outros Passivos Não Circulantes -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>4.6 Outros Passivos Não Circulantes</td>
-                                    <td><input type="text" id="outrosPNC_p1" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPNC_p2" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPNC_p3" class="input-valor"></td>
-                                    <td><input type="text" id="outrosPNC_p4" class="input-valor"></td>
+                                    <td><input type="text" id="outrosPNC_p1" name="outrosPNC_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPNC_p2" name="outrosPNC_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPNC_p3" name="outrosPNC_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="outrosPNC_p4" name="outrosPNC_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- SUBTOTAL PASSIVO NÃO CIRCULANTE -->
@@ -769,6 +872,15 @@
                                     <td class="subtotal-valor" id="passivoNaoCirculanteTotal_p4">-</td>
                                 </tr>
 
+                                <!-- TOTAL PASSIVO -->
+                                <tr class="total-grupo">
+                                    <td>TOTAL PASSIVO</td>
+                                    <td class="total-valor" id="passivoTotal_p1">-</td>
+                                    <td class="total-valor" id="passivoTotal_p2">-</td>
+                                    <td class="total-valor" id="passivoTotal_p3">-</td>
+                                    <td class="total-valor" id="passivoTotal_p4">-</td>
+                                </tr>
+
                                 <!-- ========== 5. PATRIMÔNIO LÍQUIDO (6 contas) ========== -->
                                 <tr class="subcategoria-level1 patrimonio">
                                     <td>5. PATRIMÔNIO LÍQUIDO</td>
@@ -776,66 +888,66 @@
                                 </tr>
 
                                 <!-- 5.1 Capital Social -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.1 Capital Social</td>
-                                    <td><input type="text" id="capitalSocial_p1" class="input-valor"></td>
-                                    <td><input type="text" id="capitalSocial_p2" class="input-valor"></td>
-                                    <td><input type="text" id="capitalSocial_p3" class="input-valor"></td>
-                                    <td><input type="text" id="capitalSocial_p4" class="input-valor"></td>
+                                    <td><input type="text" id="capitalSocial_p1" name="capitalSocial_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="capitalSocial_p2" name="capitalSocial_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="capitalSocial_p3" name="capitalSocial_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="capitalSocial_p4" name="capitalSocial_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.2 Reserva de Capital -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.2 Reserva de Capital</td>
-                                    <td><input type="text" id="reservaCapital_p1" class="input-valor"></td>
-                                    <td><input type="text" id="reservaCapital_p2" class="input-valor"></td>
-                                    <td><input type="text" id="reservaCapital_p3" class="input-valor"></td>
-                                    <td><input type="text" id="reservaCapital_p4" class="input-valor"></td>
+                                    <td><input type="text" id="reservaCapital_p1" name="reservaCapital_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaCapital_p2" name="reservaCapital_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaCapital_p3" name="reservaCapital_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaCapital_p4" name="reservaCapital_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.3 Reserva de Lucros -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.3 Reserva de Lucros</td>
-                                    <td><input type="text" id="reservaLucros_p1" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLucros_p2" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLucros_p3" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLucros_p4" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLucros_p1" name="reservaLucros_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLucros_p2" name="reservaLucros_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLucros_p3" name="reservaLucros_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLucros_p4" name="reservaLucros_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.4 Reserva Legal -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.4 Reserva Legal</td>
-                                    <td><input type="text" id="reservaLegal_p1" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLegal_p2" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLegal_p3" class="input-valor"></td>
-                                    <td><input type="text" id="reservaLegal_p4" class="input-valor"></td>
+                                    <td><input type="text" id="reservaLegal_p1" name="reservaLegal_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLegal_p2" name="reservaLegal_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLegal_p3" name="reservaLegal_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="reservaLegal_p4" name="reservaLegal_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.5 Lucros/Prejuízos Acumulados -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.5 Lucros/Prejuízos Acumulados</td>
-                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p1" class="input-valor"></td>
-                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p2" class="input-valor"></td>
-                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p3" class="input-valor"></td>
-                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p4" class="input-valor"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p1" name="lucrosPrejuizosAcumulados_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p2" name="lucrosPrejuizosAcumulados_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p3" name="lucrosPrejuizosAcumulados_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="lucrosPrejuizosAcumulados_p4" name="lucrosPrejuizosAcumulados_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.6 Ajustes de Avaliação Patrimonial -->
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>5.6 Ajustes de Avaliação Patrimonial</td>
-                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p1" class="input-valor"></td>
-                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p2" class="input-valor"></td>
-                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p3" class="input-valor"></td>
-                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p4" class="input-valor"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p1" name="ajustesAvaliacaoPatrimonial_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p2" name="ajustesAvaliacaoPatrimonial_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p3" name="ajustesAvaliacaoPatrimonial_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="ajustesAvaliacaoPatrimonial_p4" name="ajustesAvaliacaoPatrimonial_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- 5.7 (-) Ações em Tesouraria -->
-                                <tr class="conta-row last-in-group negative-account">
+                                <tr class="conta-detalhe last-in-group negative-account">
                                     <td>5.7 (-) Ações em Tesouraria</td>
-                                    <td><input type="text" id="acoesTesouraria_p1" class="input-valor"></td>
-                                    <td><input type="text" id="acoesTesouraria_p2" class="input-valor"></td>
-                                    <td><input type="text" id="acoesTesouraria_p3" class="input-valor"></td>
-                                    <td><input type="text" id="acoesTesouraria_p4" class="input-valor"></td>
+                                    <td><input type="text" id="acoesTesouraria_p1" name="acoesTesouraria_p1" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="acoesTesouraria_p2" name="acoesTesouraria_p2" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="acoesTesouraria_p3" name="acoesTesouraria_p3" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
+                                    <td><input type="text" id="acoesTesouraria_p4" name="acoesTesouraria_p4" class="input-valor" data-mask="currency" data-demonstrativo="balanco"></td>
                                 </tr>
 
                                 <!-- SUBTOTAL PATRIMÔNIO LÍQUIDO -->
@@ -860,8 +972,8 @@
                     </div>
 
                     <!-- Legenda de Validação -->
-                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
-                        <p style="margin: 0; color: #666; font-size: 0.875rem;">
+                    <div class="bg-gray-100 p-4 rounded mb-8">
+                        <p class="m-0 text-gray-600 text-sm">
                             <strong>Legenda de Validação:</strong>
                             ✅ Equilibrado (Ativo = Passivo + PL) |
                             ❌ Desbalanceado |
@@ -936,7 +1048,7 @@
                     <!-- =========================================== -->
                     <!-- DRE - DEMONSTRAÇÃO DO RESULTADO             -->
                     <!-- =========================================== -->
-                    <h3 style="color: #091A30; margin-bottom: 1.5rem;">📈 Demonstração do Resultado do Exercício (DRE)</h3>
+                    <h3 class="text-[#091A30] mb-6">📈 Demonstração do Resultado do Exercício (DRE)</h3>
 
                     <!-- INSTRUÇÕES -->
                     <div class="alert alert-info" style="margin-bottom: 2rem; padding: 1rem; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
@@ -945,39 +1057,7 @@
                         Marque o checkbox "Período Parcial" e informe os meses decorridos (1-11) caso aplicável.
                     </div>
 
-                    <!-- CONFIGURAÇÃO DOS PERÍODOS -->
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
-                        <div class="form-group">
-                            <label for="dre-periodo1-data">Período 1 - Data (AAAA-MM-DD)</label>
-                            <input type="date" id="dre-periodo1-data" class="form-control" value="2022-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div class="form-group">
-                            <label for="dre-periodo2-data">Período 2 - Data (AAAA-MM-DD)</label>
-                            <input type="date" id="dre-periodo2-data" class="form-control" value="2023-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div class="form-group">
-                            <label for="dre-periodo3-data">Período 3 - Data (AAAA-MM-DD)</label>
-                            <input type="date" id="dre-periodo3-data" class="form-control" value="2024-12-31" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div class="form-group">
-                            <label for="dre-periodo4-data">Período 4 - Data (AAAA-MM-DD)</label>
-                            <input type="date" id="dre-periodo4-data" class="form-control" value="2025-09-30" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
-                        <div class="form-group"></div>
-                        <div class="form-group"></div>
-                        <div class="form-group"></div>
-                        <div class="form-group">
-                            <label style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                <input type="checkbox" id="dre-periodo4-parcial" style="margin-right: 0.5rem;">
-                                <span>Período 4 é parcial</span>
-                            </label>
-                            <label for="dre-periodo4-meses" style="margin-top: 0.5rem;">Meses Decorridos (1-11)</label>
-                            <input type="number" id="dre-periodo4-meses" class="form-control" min="1" max="11" value="9" disabled style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                    </div>
+                    <!-- CONFIGURAÇÃO DE PERÍODOS: Compartilhada com Balanço no topo do módulo -->
 
                     <!-- TABELA MATRICIAL DRE (30 contas × 4 períodos) -->
                     <div class="dre-container">
@@ -993,29 +1073,29 @@
                             </thead>
                             <tbody>
                                 <!-- GRUPO: RECEITA BRUTA -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>RECEITA BRUTA</strong></td>
                                 </tr>
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>Vendas de Produtos</td>
-                                    <td><input type="text" id="vendasProdutos_p1" name="vendasProdutos_p1" class="input-valor" data-conta="vendasProdutos" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasProdutos_p2" name="vendasProdutos_p2" class="input-valor" data-conta="vendasProdutos" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasProdutos_p3" name="vendasProdutos_p3" class="input-valor" data-conta="vendasProdutos" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasProdutos_p4" name="vendasProdutos_p4" class="input-valor" data-conta="vendasProdutos" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasProdutos_p1" name="vendasProdutos_p1" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="1"></td>
+                                    <td><input type="text" id="vendasProdutos_p2" name="vendasProdutos_p2" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="2"></td>
+                                    <td><input type="text" id="vendasProdutos_p3" name="vendasProdutos_p3" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="3"></td>
+                                    <td><input type="text" id="vendasProdutos_p4" name="vendasProdutos_p4" class="input-valor" data-mask="currency" data-conta="vendasProdutos" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>Vendas de Serviços</td>
-                                    <td><input type="text" id="vendasServicos_p1" name="vendasServicos_p1" class="input-valor" data-conta="vendasServicos" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasServicos_p2" name="vendasServicos_p2" class="input-valor" data-conta="vendasServicos" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasServicos_p3" name="vendasServicos_p3" class="input-valor" data-conta="vendasServicos" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasServicos_p4" name="vendasServicos_p4" class="input-valor" data-conta="vendasServicos" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasServicos_p1" name="vendasServicos_p1" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="1"></td>
+                                    <td><input type="text" id="vendasServicos_p2" name="vendasServicos_p2" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="2"></td>
+                                    <td><input type="text" id="vendasServicos_p3" name="vendasServicos_p3" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="3"></td>
+                                    <td><input type="text" id="vendasServicos_p4" name="vendasServicos_p4" class="input-valor" data-mask="currency" data-conta="vendasServicos" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row last-in-group">
+                                <tr class="conta-detalhe last-in-group">
                                     <td>Outras Receitas Operacionais</td>
-                                    <td><input type="text" id="outrasReceitas_p1" name="outrasReceitas_p1" class="input-valor" data-conta="outrasReceitas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasReceitas_p2" name="outrasReceitas_p2" class="input-valor" data-conta="outrasReceitas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasReceitas_p3" name="outrasReceitas_p3" class="input-valor" data-conta="outrasReceitas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasReceitas_p4" name="outrasReceitas_p4" class="input-valor" data-conta="outrasReceitas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasReceitas_p1" name="outrasReceitas_p1" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="1"></td>
+                                    <td><input type="text" id="outrasReceitas_p2" name="outrasReceitas_p2" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="2"></td>
+                                    <td><input type="text" id="outrasReceitas_p3" name="outrasReceitas_p3" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="3"></td>
+                                    <td><input type="text" id="outrasReceitas_p4" name="outrasReceitas_p4" class="input-valor" data-mask="currency" data-conta="outrasReceitas" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL RECEITA BRUTA</td>
@@ -1026,50 +1106,50 @@
                                 </tr>
 
                                 <!-- GRUPO: DEDUÇÕES DA RECEITA -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>DEDUÇÕES DA RECEITA</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) ICMS sobre Vendas</td>
-                                    <td><input type="text" id="icms_p1" name="icms_p1" class="input-valor" data-conta="icms" data-periodo="1"></td>
-                                    <td><input type="text" id="icms_p2" name="icms_p2" class="input-valor" data-conta="icms" data-periodo="2"></td>
-                                    <td><input type="text" id="icms_p3" name="icms_p3" class="input-valor" data-conta="icms" data-periodo="3"></td>
-                                    <td><input type="text" id="icms_p4" name="icms_p4" class="input-valor" data-conta="icms" data-periodo="4"></td>
+                                    <td><input type="text" id="icms_p1" name="icms_p1" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="1"></td>
+                                    <td><input type="text" id="icms_p2" name="icms_p2" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="2"></td>
+                                    <td><input type="text" id="icms_p3" name="icms_p3" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="3"></td>
+                                    <td><input type="text" id="icms_p4" name="icms_p4" class="input-valor" data-mask="currency" data-conta="icms" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) PIS sobre Vendas</td>
-                                    <td><input type="text" id="pis_p1" name="pis_p1" class="input-valor" data-conta="pis" data-periodo="1"></td>
-                                    <td><input type="text" id="pis_p2" name="pis_p2" class="input-valor" data-conta="pis" data-periodo="2"></td>
-                                    <td><input type="text" id="pis_p3" name="pis_p3" class="input-valor" data-conta="pis" data-periodo="3"></td>
-                                    <td><input type="text" id="pis_p4" name="pis_p4" class="input-valor" data-conta="pis" data-periodo="4"></td>
+                                    <td><input type="text" id="pis_p1" name="pis_p1" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="1"></td>
+                                    <td><input type="text" id="pis_p2" name="pis_p2" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="2"></td>
+                                    <td><input type="text" id="pis_p3" name="pis_p3" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="3"></td>
+                                    <td><input type="text" id="pis_p4" name="pis_p4" class="input-valor" data-mask="currency" data-conta="pis" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) COFINS sobre Vendas</td>
-                                    <td><input type="text" id="cofins_p1" name="cofins_p1" class="input-valor" data-conta="cofins" data-periodo="1"></td>
-                                    <td><input type="text" id="cofins_p2" name="cofins_p2" class="input-valor" data-conta="cofins" data-periodo="2"></td>
-                                    <td><input type="text" id="cofins_p3" name="cofins_p3" class="input-valor" data-conta="cofins" data-periodo="3"></td>
-                                    <td><input type="text" id="cofins_p4" name="cofins_p4" class="input-valor" data-conta="cofins" data-periodo="4"></td>
+                                    <td><input type="text" id="cofins_p1" name="cofins_p1" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="1"></td>
+                                    <td><input type="text" id="cofins_p2" name="cofins_p2" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="2"></td>
+                                    <td><input type="text" id="cofins_p3" name="cofins_p3" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="3"></td>
+                                    <td><input type="text" id="cofins_p4" name="cofins_p4" class="input-valor" data-mask="currency" data-conta="cofins" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) ISS sobre Serviços</td>
-                                    <td><input type="text" id="iss_p1" name="iss_p1" class="input-valor" data-conta="iss" data-periodo="1"></td>
-                                    <td><input type="text" id="iss_p2" name="iss_p2" class="input-valor" data-conta="iss" data-periodo="2"></td>
-                                    <td><input type="text" id="iss_p3" name="iss_p3" class="input-valor" data-conta="iss" data-periodo="3"></td>
-                                    <td><input type="text" id="iss_p4" name="iss_p4" class="input-valor" data-conta="iss" data-periodo="4"></td>
+                                    <td><input type="text" id="iss_p1" name="iss_p1" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="1"></td>
+                                    <td><input type="text" id="iss_p2" name="iss_p2" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="2"></td>
+                                    <td><input type="text" id="iss_p3" name="iss_p3" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="3"></td>
+                                    <td><input type="text" id="iss_p4" name="iss_p4" class="input-valor" data-mask="currency" data-conta="iss" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Devoluções e Cancelamentos</td>
-                                    <td><input type="text" id="devolucoesVendas_p1" name="devolucoesVendas_p1" class="input-valor" data-conta="devolucoesVendas" data-periodo="1"></td>
-                                    <td><input type="text" id="devolucoesVendas_p2" name="devolucoesVendas_p2" class="input-valor" data-conta="devolucoesVendas" data-periodo="2"></td>
-                                    <td><input type="text" id="devolucoesVendas_p3" name="devolucoesVendas_p3" class="input-valor" data-conta="devolucoesVendas" data-periodo="3"></td>
-                                    <td><input type="text" id="devolucoesVendas_p4" name="devolucoesVendas_p4" class="input-valor" data-conta="devolucoesVendas" data-periodo="4"></td>
+                                    <td><input type="text" id="devolucoesVendas_p1" name="devolucoesVendas_p1" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="1"></td>
+                                    <td><input type="text" id="devolucoesVendas_p2" name="devolucoesVendas_p2" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="2"></td>
+                                    <td><input type="text" id="devolucoesVendas_p3" name="devolucoesVendas_p3" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="3"></td>
+                                    <td><input type="text" id="devolucoesVendas_p4" name="devolucoesVendas_p4" class="input-valor" data-mask="currency" data-conta="devolucoesVendas" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Abatimentos Concedidos</td>
-                                    <td><input type="text" id="abatimentos_p1" name="abatimentos_p1" class="input-valor" data-conta="abatimentos" data-periodo="1"></td>
-                                    <td><input type="text" id="abatimentos_p2" name="abatimentos_p2" class="input-valor" data-conta="abatimentos" data-periodo="2"></td>
-                                    <td><input type="text" id="abatimentos_p3" name="abatimentos_p3" class="input-valor" data-conta="abatimentos" data-periodo="3"></td>
-                                    <td><input type="text" id="abatimentos_p4" name="abatimentos_p4" class="input-valor" data-conta="abatimentos" data-periodo="4"></td>
+                                    <td><input type="text" id="abatimentos_p1" name="abatimentos_p1" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="1"></td>
+                                    <td><input type="text" id="abatimentos_p2" name="abatimentos_p2" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="2"></td>
+                                    <td><input type="text" id="abatimentos_p3" name="abatimentos_p3" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="3"></td>
+                                    <td><input type="text" id="abatimentos_p4" name="abatimentos_p4" class="input-valor" data-mask="currency" data-conta="abatimentos" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL DEDUÇÕES</td>
@@ -1089,43 +1169,49 @@
                                 </tr>
 
                                 <!-- GRUPO: CUSTOS OPERACIONAIS -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>CUSTOS OPERACIONAIS</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
-                                    <td>(-) CMV / CPV</td>
-                                    <td><input type="text" id="materiaPrima_p1" name="materiaPrima_p1" class="input-valor" data-conta="materiaPrima" data-periodo="1"></td>
-                                    <td><input type="text" id="materiaPrima_p2" name="materiaPrima_p2" class="input-valor" data-conta="materiaPrima" data-periodo="2"></td>
-                                    <td><input type="text" id="materiaPrima_p3" name="materiaPrima_p3" class="input-valor" data-conta="materiaPrima" data-periodo="3"></td>
-                                    <td><input type="text" id="materiaPrima_p4" name="materiaPrima_p4" class="input-valor" data-conta="materiaPrima" data-periodo="4"></td>
+                                <!-- CUSTO DA MERCADORIA VENDIDA (CMV) - para Comércio -->
+                                <tr class="conta-detalhe negative-account">
+                                    <td>(-) Custo da Mercadoria Vendida (CMV)</td>
+                                    <td><input type="text" id="cmv_p1" name="cmv_p1" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="1"></td>
+                                    <td><input type="text" id="cmv_p2" name="cmv_p2" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="2"></td>
+                                    <td><input type="text" id="cmv_p3" name="cmv_p3" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="3"></td>
+                                    <td><input type="text" id="cmv_p4" name="cmv_p4" class="input-valor" data-mask="currency" data-conta="cmv" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
-                                    <td>(-) Custos dos Serviços Prestados</td>
-                                    <td><input type="text" id="embalagens_p1" name="embalagens_p1" class="input-valor" data-conta="embalagens" data-periodo="1"></td>
-                                    <td><input type="text" id="embalagens_p2" name="embalagens_p2" class="input-valor" data-conta="embalagens" data-periodo="2"></td>
-                                    <td><input type="text" id="embalagens_p3" name="embalagens_p3" class="input-valor" data-conta="embalagens" data-periodo="3"></td>
-                                    <td><input type="text" id="embalagens_p4" name="embalagens_p4" class="input-valor" data-conta="embalagens" data-periodo="4"></td>
+                                <!-- CUSTO DO PRODUTO VENDIDO (CPV) - para Indústria -->
+                                <tr class="subcategoria-level2 negative-account">
+                                    <td colspan="5">(-) Custo do Produto Vendido (CPV)</td>
                                 </tr>
-                                <tr class="conta-row negative-account">
-                                    <td>(-) Mão-de-Obra de Produção</td>
-                                    <td><input type="text" id="maoObraDireta_p1" name="maoObraDireta_p1" class="input-valor" data-conta="maoObraDireta" data-periodo="1"></td>
-                                    <td><input type="text" id="maoObraDireta_p2" name="maoObraDireta_p2" class="input-valor" data-conta="maoObraDireta" data-periodo="2"></td>
-                                    <td><input type="text" id="maoObraDireta_p3" name="maoObraDireta_p3" class="input-valor" data-conta="maoObraDireta" data-periodo="3"></td>
-                                    <td><input type="text" id="maoObraDireta_p4" name="maoObraDireta_p4" class="input-valor" data-conta="maoObraDireta" data-periodo="4"></td>
+                                <tr class="conta-detalhe negative-account">
+                                    <td class="pl-4">(-) Matéria-Prima</td>
+                                    <td><input type="text" id="materiaPrima_p1" name="materiaPrima_p1" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="1"></td>
+                                    <td><input type="text" id="materiaPrima_p2" name="materiaPrima_p2" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="2"></td>
+                                    <td><input type="text" id="materiaPrima_p3" name="materiaPrima_p3" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="3"></td>
+                                    <td><input type="text" id="materiaPrima_p4" name="materiaPrima_p4" class="input-valor" data-mask="currency" data-conta="materiaPrima" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
-                                    <td>(-) Terceirização de Produção</td>
-                                    <td><input type="text" id="terceirizacaoProducao_p1" name="terceirizacaoProducao_p1" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="1"></td>
-                                    <td><input type="text" id="terceirizacaoProducao_p2" name="terceirizacaoProducao_p2" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="2"></td>
-                                    <td><input type="text" id="terceirizacaoProducao_p3" name="terceirizacaoProducao_p3" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="3"></td>
-                                    <td><input type="text" id="terceirizacaoProducao_p4" name="terceirizacaoProducao_p4" class="input-valor" data-conta="terceirizacaoProducao" data-periodo="4"></td>
+                                <tr class="conta-detalhe negative-account">
+                                    <td class="pl-4">(-) Mão de Obra Direta (Produção)</td>
+                                    <td><input type="text" id="maoObraDireta_p1" name="maoObraDireta_p1" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="1"></td>
+                                    <td><input type="text" id="maoObraDireta_p2" name="maoObraDireta_p2" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="2"></td>
+                                    <td><input type="text" id="maoObraDireta_p3" name="maoObraDireta_p3" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="3"></td>
+                                    <td><input type="text" id="maoObraDireta_p4" name="maoObraDireta_p4" class="input-valor" data-mask="currency" data-conta="maoObraDireta" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
-                                    <td>(-) Outros Custos Variáveis</td>
-                                    <td><input type="text" id="outrosCustosVariaveis_p1" name="outrosCustosVariaveis_p1" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="1"></td>
-                                    <td><input type="text" id="outrosCustosVariaveis_p2" name="outrosCustosVariaveis_p2" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="2"></td>
-                                    <td><input type="text" id="outrosCustosVariaveis_p3" name="outrosCustosVariaveis_p3" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="3"></td>
-                                    <td><input type="text" id="outrosCustosVariaveis_p4" name="outrosCustosVariaveis_p4" class="input-valor" data-conta="outrosCustosVariaveis" data-periodo="4"></td>
+                                <tr class="conta-detalhe negative-account">
+                                    <td class="pl-4">(-) Custos Indiretos de Fabricação (CIF)</td>
+                                    <td><input type="text" id="cif_p1" name="cif_p1" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="1"></td>
+                                    <td><input type="text" id="cif_p2" name="cif_p2" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="2"></td>
+                                    <td><input type="text" id="cif_p3" name="cif_p3" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="3"></td>
+                                    <td><input type="text" id="cif_p4" name="cif_p4" class="input-valor" data-mask="currency" data-conta="cif" data-periodo="4"></td>
+                                </tr>
+                                <!-- CUSTO DO SERVIÇO PRESTADO (CSP) - para Serviços -->
+                                <tr class="conta-detalhe negative-account last-in-group">
+                                    <td>(-) Custo do Serviço Prestado (CSP)</td>
+                                    <td><input type="text" id="csp_p1" name="csp_p1" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="1"></td>
+                                    <td><input type="text" id="csp_p2" name="csp_p2" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="2"></td>
+                                    <td><input type="text" id="csp_p3" name="csp_p3" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="3"></td>
+                                    <td><input type="text" id="csp_p4" name="csp_p4" class="input-valor" data-mask="currency" data-conta="csp" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL CUSTOS OPERACIONAIS</td>
@@ -1152,36 +1238,36 @@
                                 </tr>
 
                                 <!-- GRUPO: DESPESAS DE VENDAS -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>DESPESAS COM VENDAS</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Comissões sobre Vendas</td>
-                                    <td><input type="text" id="comissoes_p1" name="comissoes_p1" class="input-valor" data-conta="comissoes" data-periodo="1"></td>
-                                    <td><input type="text" id="comissoes_p2" name="comissoes_p2" class="input-valor" data-conta="comissoes" data-periodo="2"></td>
-                                    <td><input type="text" id="comissoes_p3" name="comissoes_p3" class="input-valor" data-conta="comissoes" data-periodo="3"></td>
-                                    <td><input type="text" id="comissoes_p4" name="comissoes_p4" class="input-valor" data-conta="comissoes" data-periodo="4"></td>
+                                    <td><input type="text" id="comissoes_p1" name="comissoes_p1" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="1"></td>
+                                    <td><input type="text" id="comissoes_p2" name="comissoes_p2" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="2"></td>
+                                    <td><input type="text" id="comissoes_p3" name="comissoes_p3" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="3"></td>
+                                    <td><input type="text" id="comissoes_p4" name="comissoes_p4" class="input-valor" data-mask="currency" data-conta="comissoes" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Marketing e Publicidade</td>
-                                    <td><input type="text" id="vendasMarketing_p1" name="vendasMarketing_p1" class="input-valor" data-conta="vendasMarketing" data-periodo="1"></td>
-                                    <td><input type="text" id="vendasMarketing_p2" name="vendasMarketing_p2" class="input-valor" data-conta="vendasMarketing" data-periodo="2"></td>
-                                    <td><input type="text" id="vendasMarketing_p3" name="vendasMarketing_p3" class="input-valor" data-conta="vendasMarketing" data-periodo="3"></td>
-                                    <td><input type="text" id="vendasMarketing_p4" name="vendasMarketing_p4" class="input-valor" data-conta="vendasMarketing" data-periodo="4"></td>
+                                    <td><input type="text" id="vendasMarketing_p1" name="vendasMarketing_p1" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="1"></td>
+                                    <td><input type="text" id="vendasMarketing_p2" name="vendasMarketing_p2" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="2"></td>
+                                    <td><input type="text" id="vendasMarketing_p3" name="vendasMarketing_p3" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="3"></td>
+                                    <td><input type="text" id="vendasMarketing_p4" name="vendasMarketing_p4" class="input-valor" data-mask="currency" data-conta="vendasMarketing" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Fretes e Entregas</td>
-                                    <td><input type="text" id="frete_p1" name="frete_p1" class="input-valor" data-conta="frete" data-periodo="1"></td>
-                                    <td><input type="text" id="frete_p2" name="frete_p2" class="input-valor" data-conta="frete" data-periodo="2"></td>
-                                    <td><input type="text" id="frete_p3" name="frete_p3" class="input-valor" data-conta="frete" data-periodo="3"></td>
-                                    <td><input type="text" id="frete_p4" name="frete_p4" class="input-valor" data-conta="frete" data-periodo="4"></td>
+                                    <td><input type="text" id="frete_p1" name="frete_p1" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="1"></td>
+                                    <td><input type="text" id="frete_p2" name="frete_p2" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="2"></td>
+                                    <td><input type="text" id="frete_p3" name="frete_p3" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="3"></td>
+                                    <td><input type="text" id="frete_p4" name="frete_p4" class="input-valor" data-mask="currency" data-conta="frete" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas de Vendas</td>
-                                    <td><input type="text" id="outrasDespVendas_p1" name="outrasDespVendas_p1" class="input-valor" data-conta="outrasDespVendas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasDespVendas_p2" name="outrasDespVendas_p2" class="input-valor" data-conta="outrasDespVendas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasDespVendas_p3" name="outrasDespVendas_p3" class="input-valor" data-conta="outrasDespVendas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasDespVendas_p4" name="outrasDespVendas_p4" class="input-valor" data-conta="outrasDespVendas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasDespVendas_p1" name="outrasDespVendas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="1"></td>
+                                    <td><input type="text" id="outrasDespVendas_p2" name="outrasDespVendas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="2"></td>
+                                    <td><input type="text" id="outrasDespVendas_p3" name="outrasDespVendas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="3"></td>
+                                    <td><input type="text" id="outrasDespVendas_p4" name="outrasDespVendas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespVendas" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Subtotal Despesas de Vendas</td>
@@ -1192,64 +1278,64 @@
                                 </tr>
 
                                 <!-- GRUPO: DESPESAS ADMINISTRATIVAS -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>DESPESAS ADMINISTRATIVAS</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Salários Administrativos</td>
-                                    <td><input type="text" id="pessoal_p1" name="pessoal_p1" class="input-valor" data-conta="pessoal" data-periodo="1"></td>
-                                    <td><input type="text" id="pessoal_p2" name="pessoal_p2" class="input-valor" data-conta="pessoal" data-periodo="2"></td>
-                                    <td><input type="text" id="pessoal_p3" name="pessoal_p3" class="input-valor" data-conta="pessoal" data-periodo="3"></td>
-                                    <td><input type="text" id="pessoal_p4" name="pessoal_p4" class="input-valor" data-conta="pessoal" data-periodo="4"></td>
+                                    <td><input type="text" id="pessoal_p1" name="pessoal_p1" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="1"></td>
+                                    <td><input type="text" id="pessoal_p2" name="pessoal_p2" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="2"></td>
+                                    <td><input type="text" id="pessoal_p3" name="pessoal_p3" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="3"></td>
+                                    <td><input type="text" id="pessoal_p4" name="pessoal_p4" class="input-valor" data-mask="currency" data-conta="pessoal" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Aluguéis e Condomínios</td>
-                                    <td><input type="text" id="alugueis_p1" name="alugueis_p1" class="input-valor" data-conta="alugueis" data-periodo="1"></td>
-                                    <td><input type="text" id="alugueis_p2" name="alugueis_p2" class="input-valor" data-conta="alugueis" data-periodo="2"></td>
-                                    <td><input type="text" id="alugueis_p3" name="alugueis_p3" class="input-valor" data-conta="alugueis" data-periodo="3"></td>
-                                    <td><input type="text" id="alugueis_p4" name="alugueis_p4" class="input-valor" data-conta="alugueis" data-periodo="4"></td>
+                                    <td><input type="text" id="alugueis_p1" name="alugueis_p1" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="1"></td>
+                                    <td><input type="text" id="alugueis_p2" name="alugueis_p2" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="2"></td>
+                                    <td><input type="text" id="alugueis_p3" name="alugueis_p3" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="3"></td>
+                                    <td><input type="text" id="alugueis_p4" name="alugueis_p4" class="input-valor" data-mask="currency" data-conta="alugueis" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Utilidades (Água, Luz, Telecom)</td>
-                                    <td><input type="text" id="utilidades_p1" name="utilidades_p1" class="input-valor" data-conta="utilidades" data-periodo="1"></td>
-                                    <td><input type="text" id="utilidades_p2" name="utilidades_p2" class="input-valor" data-conta="utilidades" data-periodo="2"></td>
-                                    <td><input type="text" id="utilidades_p3" name="utilidades_p3" class="input-valor" data-conta="utilidades" data-periodo="3"></td>
-                                    <td><input type="text" id="utilidades_p4" name="utilidades_p4" class="input-valor" data-conta="utilidades" data-periodo="4"></td>
+                                    <td><input type="text" id="utilidades_p1" name="utilidades_p1" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="1"></td>
+                                    <td><input type="text" id="utilidades_p2" name="utilidades_p2" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="2"></td>
+                                    <td><input type="text" id="utilidades_p3" name="utilidades_p3" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="3"></td>
+                                    <td><input type="text" id="utilidades_p4" name="utilidades_p4" class="input-valor" data-mask="currency" data-conta="utilidades" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Seguros</td>
-                                    <td><input type="text" id="seguros_p1" name="seguros_p1" class="input-valor" data-conta="seguros" data-periodo="1"></td>
-                                    <td><input type="text" id="seguros_p2" name="seguros_p2" class="input-valor" data-conta="seguros" data-periodo="2"></td>
-                                    <td><input type="text" id="seguros_p3" name="seguros_p3" class="input-valor" data-conta="seguros" data-periodo="3"></td>
-                                    <td><input type="text" id="seguros_p4" name="seguros_p4" class="input-valor" data-conta="seguros" data-periodo="4"></td>
+                                    <td><input type="text" id="seguros_p1" name="seguros_p1" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="1"></td>
+                                    <td><input type="text" id="seguros_p2" name="seguros_p2" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="2"></td>
+                                    <td><input type="text" id="seguros_p3" name="seguros_p3" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="3"></td>
+                                    <td><input type="text" id="seguros_p4" name="seguros_p4" class="input-valor" data-mask="currency" data-conta="seguros" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Manutenção e Reparos</td>
-                                    <td><input type="text" id="manutencao_p1" name="manutencao_p1" class="input-valor" data-conta="manutencao" data-periodo="1"></td>
-                                    <td><input type="text" id="manutencao_p2" name="manutencao_p2" class="input-valor" data-conta="manutencao" data-periodo="2"></td>
-                                    <td><input type="text" id="manutencao_p3" name="manutencao_p3" class="input-valor" data-conta="manutencao" data-periodo="3"></td>
-                                    <td><input type="text" id="manutencao_p4" name="manutencao_p4" class="input-valor" data-conta="manutencao" data-periodo="4"></td>
+                                    <td><input type="text" id="manutencao_p1" name="manutencao_p1" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="1"></td>
+                                    <td><input type="text" id="manutencao_p2" name="manutencao_p2" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="2"></td>
+                                    <td><input type="text" id="manutencao_p3" name="manutencao_p3" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="3"></td>
+                                    <td><input type="text" id="manutencao_p4" name="manutencao_p4" class="input-valor" data-mask="currency" data-conta="manutencao" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Tecnologia da Informação</td>
-                                    <td><input type="text" id="tecnologiaInformacao_p1" name="tecnologiaInformacao_p1" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="1"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p2" name="tecnologiaInformacao_p2" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="2"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p3" name="tecnologiaInformacao_p3" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="3"></td>
-                                    <td><input type="text" id="tecnologiaInformacao_p4" name="tecnologiaInformacao_p4" class="input-valor" data-conta="tecnologiaInformacao" data-periodo="4"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p1" name="tecnologiaInformacao_p1" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="1"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p2" name="tecnologiaInformacao_p2" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="2"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p3" name="tecnologiaInformacao_p3" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="3"></td>
+                                    <td><input type="text" id="tecnologiaInformacao_p4" name="tecnologiaInformacao_p4" class="input-valor" data-mask="currency" data-conta="tecnologiaInformacao" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) Serviços de Terceiros</td>
-                                    <td><input type="text" id="servicosProfissionais_p1" name="servicosProfissionais_p1" class="input-valor" data-conta="servicosProfissionais" data-periodo="1"></td>
-                                    <td><input type="text" id="servicosProfissionais_p2" name="servicosProfissionais_p2" class="input-valor" data-conta="servicosProfissionais" data-periodo="2"></td>
-                                    <td><input type="text" id="servicosProfissionais_p3" name="servicosProfissionais_p3" class="input-valor" data-conta="servicosProfissionais" data-periodo="3"></td>
-                                    <td><input type="text" id="servicosProfissionais_p4" name="servicosProfissionais_p4" class="input-valor" data-conta="servicosProfissionais" data-periodo="4"></td>
+                                    <td><input type="text" id="servicosProfissionais_p1" name="servicosProfissionais_p1" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="1"></td>
+                                    <td><input type="text" id="servicosProfissionais_p2" name="servicosProfissionais_p2" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="2"></td>
+                                    <td><input type="text" id="servicosProfissionais_p3" name="servicosProfissionais_p3" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="3"></td>
+                                    <td><input type="text" id="servicosProfissionais_p4" name="servicosProfissionais_p4" class="input-valor" data-mask="currency" data-conta="servicosProfissionais" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Administrativas</td>
-                                    <td><input type="text" id="administrativas_p1" name="administrativas_p1" class="input-valor" data-conta="administrativas" data-periodo="1"></td>
-                                    <td><input type="text" id="administrativas_p2" name="administrativas_p2" class="input-valor" data-conta="administrativas" data-periodo="2"></td>
-                                    <td><input type="text" id="administrativas_p3" name="administrativas_p3" class="input-valor" data-conta="administrativas" data-periodo="3"></td>
-                                    <td><input type="text" id="administrativas_p4" name="administrativas_p4" class="input-valor" data-conta="administrativas" data-periodo="4"></td>
+                                    <td><input type="text" id="administrativas_p1" name="administrativas_p1" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="1"></td>
+                                    <td><input type="text" id="administrativas_p2" name="administrativas_p2" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="2"></td>
+                                    <td><input type="text" id="administrativas_p3" name="administrativas_p3" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="3"></td>
+                                    <td><input type="text" id="administrativas_p4" name="administrativas_p4" class="input-valor" data-mask="currency" data-conta="administrativas" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Subtotal Despesas Administrativas</td>
@@ -1260,12 +1346,12 @@
                                 </tr>
 
                                 <!-- OUTRAS DESPESAS OPERACIONAIS -->
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Operacionais</td>
-                                    <td><input type="text" id="outrasDespesas_p1" name="outrasDespesas_p1" class="input-valor" data-conta="outrasDespesas" data-periodo="1"></td>
-                                    <td><input type="text" id="outrasDespesas_p2" name="outrasDespesas_p2" class="input-valor" data-conta="outrasDespesas" data-periodo="2"></td>
-                                    <td><input type="text" id="outrasDespesas_p3" name="outrasDespesas_p3" class="input-valor" data-conta="outrasDespesas" data-periodo="3"></td>
-                                    <td><input type="text" id="outrasDespesas_p4" name="outrasDespesas_p4" class="input-valor" data-conta="outrasDespesas" data-periodo="4"></td>
+                                    <td><input type="text" id="outrasDespesas_p1" name="outrasDespesas_p1" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="1"></td>
+                                    <td><input type="text" id="outrasDespesas_p2" name="outrasDespesas_p2" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="2"></td>
+                                    <td><input type="text" id="outrasDespesas_p3" name="outrasDespesas_p3" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="3"></td>
+                                    <td><input type="text" id="outrasDespesas_p4" name="outrasDespesas_p4" class="input-valor" data-mask="currency" data-conta="outrasDespesas" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>TOTAL DESPESAS OPERACIONAIS</td>
@@ -1292,15 +1378,15 @@
                                 </tr>
 
                                 <!-- GRUPO: DEPRECIAÇÃO E AMORTIZAÇÃO -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>DEPRECIAÇÃO E AMORTIZAÇÃO</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Depreciação e Amortização</td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p1" name="depreciacaoAmortizacao_p1" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="1"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p2" name="depreciacaoAmortizacao_p2" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="2"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p3" name="depreciacaoAmortizacao_p3" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="3"></td>
-                                    <td><input type="text" id="depreciacaoAmortizacao_p4" name="depreciacaoAmortizacao_p4" class="input-valor" data-conta="depreciacaoAmortizacao" data-periodo="4"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p1" name="depreciacaoAmortizacao_p1" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="1"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p2" name="depreciacaoAmortizacao_p2" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="2"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p3" name="depreciacaoAmortizacao_p3" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="3"></td>
+                                    <td><input type="text" id="depreciacaoAmortizacao_p4" name="depreciacaoAmortizacao_p4" class="input-valor" data-mask="currency" data-conta="depreciacaoAmortizacao" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Total Deprec. e Amortiz.</td>
@@ -1327,22 +1413,22 @@
                                 </tr>
 
                                 <!-- GRUPO: RESULTADO FINANCEIRO -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>RESULTADO FINANCEIRO</strong></td>
                                 </tr>
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>(+) Receitas Financeiras</td>
-                                    <td><input type="text" id="receitasFinanceiras_p1" name="receitasFinanceiras_p1" class="input-valor" data-conta="receitasFinanceiras" data-periodo="1"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p2" name="receitasFinanceiras_p2" class="input-valor" data-conta="receitasFinanceiras" data-periodo="2"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p3" name="receitasFinanceiras_p3" class="input-valor" data-conta="receitasFinanceiras" data-periodo="3"></td>
-                                    <td><input type="text" id="receitasFinanceiras_p4" name="receitasFinanceiras_p4" class="input-valor" data-conta="receitasFinanceiras" data-periodo="4"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p1" name="receitasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="1"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p2" name="receitasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="2"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p3" name="receitasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="3"></td>
+                                    <td><input type="text" id="receitasFinanceiras_p4" name="receitasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="receitasFinanceiras" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Despesas Financeiras</td>
-                                    <td><input type="text" id="despesasFinanceiras_p1" name="despesasFinanceiras_p1" class="input-valor" data-conta="despesasFinanceiras" data-periodo="1"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p2" name="despesasFinanceiras_p2" class="input-valor" data-conta="despesasFinanceiras" data-periodo="2"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p3" name="despesasFinanceiras_p3" class="input-valor" data-conta="despesasFinanceiras" data-periodo="3"></td>
-                                    <td><input type="text" id="despesasFinanceiras_p4" name="despesasFinanceiras_p4" class="input-valor" data-conta="despesasFinanceiras" data-periodo="4"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p1" name="despesasFinanceiras_p1" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="1"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p2" name="despesasFinanceiras_p2" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="2"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p3" name="despesasFinanceiras_p3" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="3"></td>
+                                    <td><input type="text" id="despesasFinanceiras_p4" name="despesasFinanceiras_p4" class="input-valor" data-mask="currency" data-conta="despesasFinanceiras" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Resultado Financeiro Líquido</td>
@@ -1353,22 +1439,22 @@
                                 </tr>
 
                                 <!-- GRUPO: OUTRAS RECEITAS/DESPESAS -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>OUTRAS RECEITAS/DESPESAS</strong></td>
                                 </tr>
-                                <tr class="conta-row">
+                                <tr class="conta-detalhe">
                                     <td>(+) Outras Receitas Não-Operacionais</td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p1" name="receitasNaoOperacionais_p1" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="1"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p2" name="receitasNaoOperacionais_p2" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="2"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p3" name="receitasNaoOperacionais_p3" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="3"></td>
-                                    <td><input type="text" id="receitasNaoOperacionais_p4" name="receitasNaoOperacionais_p4" class="input-valor" data-conta="receitasNaoOperacionais" data-periodo="4"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p1" name="receitasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="1"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p2" name="receitasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="2"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p3" name="receitasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="3"></td>
+                                    <td><input type="text" id="receitasNaoOperacionais_p4" name="receitasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="receitasNaoOperacionais" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) Outras Despesas Não-Operacionais</td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p1" name="despesasNaoOperacionais_p1" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="1"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p2" name="despesasNaoOperacionais_p2" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="2"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p3" name="despesasNaoOperacionais_p3" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="3"></td>
-                                    <td><input type="text" id="despesasNaoOperacionais_p4" name="despesasNaoOperacionais_p4" class="input-valor" data-conta="despesasNaoOperacionais" data-periodo="4"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p1" name="despesasNaoOperacionais_p1" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="1"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p2" name="despesasNaoOperacionais_p2" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="2"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p3" name="despesasNaoOperacionais_p3" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="3"></td>
+                                    <td><input type="text" id="despesasNaoOperacionais_p4" name="despesasNaoOperacionais_p4" class="input-valor" data-mask="currency" data-conta="despesasNaoOperacionais" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Outras Receitas/Despesas Líquidas</td>
@@ -1388,22 +1474,22 @@
                                 </tr>
 
                                 <!-- GRUPO: IMPOSTOS SOBRE LUCRO -->
-                                <tr class="grupo-header">
+                                <tr class="categoria-header">
                                     <td colspan="5"><strong>IMPOSTOS SOBRE LUCRO</strong></td>
                                 </tr>
-                                <tr class="conta-row negative-account">
+                                <tr class="conta-detalhe negative-account">
                                     <td>(-) IRPJ</td>
-                                    <td><input type="text" id="ir_p1" name="ir_p1" class="input-valor" data-conta="ir" data-periodo="1"></td>
-                                    <td><input type="text" id="ir_p2" name="ir_p2" class="input-valor" data-conta="ir" data-periodo="2"></td>
-                                    <td><input type="text" id="ir_p3" name="ir_p3" class="input-valor" data-conta="ir" data-periodo="3"></td>
-                                    <td><input type="text" id="ir_p4" name="ir_p4" class="input-valor" data-conta="ir" data-periodo="4"></td>
+                                    <td><input type="text" id="ir_p1" name="ir_p1" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="1"></td>
+                                    <td><input type="text" id="ir_p2" name="ir_p2" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="2"></td>
+                                    <td><input type="text" id="ir_p3" name="ir_p3" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="3"></td>
+                                    <td><input type="text" id="ir_p4" name="ir_p4" class="input-valor" data-mask="currency" data-conta="ir" data-periodo="4"></td>
                                 </tr>
-                                <tr class="conta-row negative-account last-in-group">
+                                <tr class="conta-detalhe negative-account last-in-group">
                                     <td>(-) CSLL</td>
-                                    <td><input type="text" id="csll_p1" name="csll_p1" class="input-valor" data-conta="csll" data-periodo="1"></td>
-                                    <td><input type="text" id="csll_p2" name="csll_p2" class="input-valor" data-conta="csll" data-periodo="2"></td>
-                                    <td><input type="text" id="csll_p3" name="csll_p3" class="input-valor" data-conta="csll" data-periodo="3"></td>
-                                    <td><input type="text" id="csll_p4" name="csll_p4" class="input-valor" data-conta="csll" data-periodo="4"></td>
+                                    <td><input type="text" id="csll_p1" name="csll_p1" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="1"></td>
+                                    <td><input type="text" id="csll_p2" name="csll_p2" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="2"></td>
+                                    <td><input type="text" id="csll_p3" name="csll_p3" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="3"></td>
+                                    <td><input type="text" id="csll_p4" name="csll_p4" class="input-valor" data-mask="currency" data-conta="csll" data-periodo="4"></td>
                                 </tr>
                                 <tr class="subtotal-row">
                                     <td>Total Impostos sobre Lucro</td>
@@ -1456,7 +1542,7 @@
                         </div>
 
                         <!-- Tabela de Dívidas -->
-                        <div class="endividamento-container" style="overflow-x: auto; margin-bottom: 2rem;">
+                        <div class="endividamento-container" class="overflow-x-auto mb-8">
                             <table class="endividamento-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                 <thead>
                                     <tr style="background: #091A30; color: white;">
@@ -1485,23 +1571,23 @@
                         <!-- Resumo Consolidado -->
                         <div class="resumo-endividamento" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
                             <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #FF002D;">
-                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">DÍVIDA TOTAL</h4>
+                                <h4 class="text-gray-600 text-sm mb-2 font-semibold">DÍVIDA TOTAL</h4>
                                 <span id="dividaTotal" class="valor-destaque" style="font-size: 1.8rem; font-weight: 700; color: #091A30;">R$ 0,00</span>
                             </div>
                             <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #FF9800;">
-                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">CURTO PRAZO (&lt; 12 meses)</h4>
-                                <span id="dividaCurtoPrazo" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">R$ 0,00</span>
-                                <small id="percentualCP" style="color: #666; display: block; margin-top: 0.5rem;">0%</small>
+                                <h4 class="text-gray-600 text-sm mb-2 font-semibold">CURTO PRAZO (&lt; 12 meses)</h4>
+                                <span id="dividaCurtoPrazo" class="text-2xl font-semibold text-[#091A30]">R$ 0,00</span>
+                                <small id="percentualCP" class="text-gray-600 block mt-2">0%</small>
                             </div>
                             <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #4CAF50;">
-                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">LONGO PRAZO (&gt; 12 meses)</h4>
-                                <span id="dividaLongoPrazo" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">R$ 0,00</span>
-                                <small id="percentualLP" style="color: #666; display: block; margin-top: 0.5rem;">0%</small>
+                                <h4 class="text-gray-600 text-sm mb-2 font-semibold">LONGO PRAZO (&gt; 12 meses)</h4>
+                                <span id="dividaLongoPrazo" class="text-2xl font-semibold text-[#091A30]">R$ 0,00</span>
+                                <small id="percentualLP" class="text-gray-600 block mt-2">0%</small>
                             </div>
                             <div class="card-metrica" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2196F3;">
-                                <h4 style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">NÚMERO DE DÍVIDAS</h4>
-                                <span id="numeroDividas" style="font-size: 1.5rem; font-weight: 600; color: #091A30;">0</span>
-                                <small id="statusGeral" style="color: #666; display: block; margin-top: 0.5rem;">-</small>
+                                <h4 class="text-gray-600 text-sm mb-2 font-semibold">NÚMERO DE DÍVIDAS</h4>
+                                <span id="numeroDividas" class="text-2xl font-semibold text-[#091A30]">0</span>
+                                <small id="statusGeral" class="text-gray-600 block mt-2">-</small>
                             </div>
                         </div>
 
@@ -1517,7 +1603,7 @@
                             </div>
 
                             <!-- Tabela de Índices -->
-                            <div style="overflow-x: auto;">
+                            <div class="overflow-x-auto">
                                 <table class="tabela-indices" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                     <thead>
                                         <tr style="background: #f8f9fa; border-bottom: 2px solid #ddd;">
@@ -1918,7 +2004,7 @@
                 </div>
 
                 <!-- Form Actions -->
-                <div class="form-actions" id="formActions" style="display: none;">
+                <div class="form-actions" id="formActions" class="hidden">
                     <div class="action-buttons">
                         <button type="button" class="btn btn-secondary" id="prevBtn" disabled>
                             ← Anterior
@@ -1932,7 +2018,7 @@
                             Próximo →
                         </button>
                         
-                        <button type="button" class="btn btn-success" id="finishBtn" style="display: none;">
+                        <button type="button" class="btn btn-success" id="finishBtn" class="hidden">
                             ✓ Finalizar Análise
                         </button>
                     </div>
@@ -1989,6 +2075,7 @@
     <script type="module" src="../assets/js/calculators/scoring-engine.js"></script>
     <script type="module" src="../assets/js/calculators/analise-vertical-horizontal.js"></script>
     <script type="module" src="../assets/js/calculators/balanco-calculator.js"></script>
+    <script type="module" src="../assets/js/utils/balanco-totalizador.js"></script>
     <script type="module" src="../assets/js/calculators/capital-giro.js"></script>
     <script type="module" src="../assets/js/calculators/concentracao-risco.js"></script>
     <script type="module" src="../assets/js/components/concentracao-risco-integration.js"></script>
@@ -2154,6 +2241,14 @@
                     this.dbManager = this.#createDBManagerProxy();
                     console.log('✅ Database inicializado');
 
+                    // 2.4. CalculationOrchestrator Singleton (precisa de dbManager)
+                    if (window.CalculationOrchestrator) {
+                        window.CalculationOrchestrator.initializeSingleton(this.dbManager);
+                        console.log('✅ CalculationOrchestrator singleton inicializado');
+                    } else {
+                        console.error('❌ CalculationOrchestrator não carregado');
+                    }
+
                     // ========================================
                     // FASE 3: GERAÇÃO DO DOM
                     // ========================================
@@ -2170,11 +2265,12 @@
                     window.hierarchicalNavigation = this.hierarchicalNav;
                     console.log('✅ SimpleTabNavigation inicializado');
 
-                    // 4.2. NavigationController (precisa de hierarchicalNav)
+                    // 4.2. NavigationController (precisa de hierarchicalNav e dbManager)
                     const navigationController = new window.NavigationController(
                         this.config,
                         this.messages,
-                        this.hierarchicalNav
+                        this.hierarchicalNav,
+                        this.dbManager
                     );
                     await navigationController.init();
                     this.modules.set('navigation', navigationController);
@@ -2491,7 +2587,7 @@
                         return formGenerator.generateModuleHTML(module.id);
                     } catch (error) {
                         console.error(`Erro ao gerar módulo ${module.id}:`, error);
-                        return `<div class="module-content error-state" data-module="${module.id}" style="display:none;">
+                        return `<div class="module-content error-state" data-module="${module.id}" class="hidden">
                             <h2>⚠️ Erro ao carregar módulo ${module.title}</h2>
                             <p>${error.message}</p>
                         </div>`;

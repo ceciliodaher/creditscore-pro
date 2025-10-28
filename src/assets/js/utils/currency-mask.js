@@ -81,8 +81,8 @@ class CurrencyMask {
   format(value) {
     if (!value) return '';
 
-    // Remover tudo exceto dígitos
-    let digits = value.toString().replace(/\D/g, '');
+    // Remover tudo exceto dígitos (garante que o sinal de menos seja removido)
+    let digits = value.toString().replace(/[^0-9]/g, '');
 
     if (digits === '') return '';
 

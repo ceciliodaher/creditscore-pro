@@ -1,0 +1,405 @@
+{
+  "metadata": {
+    "programType": "CreditScore Pro",
+    "version": "1.0.0",
+    "exportedAt": "2025-10-23T19:37:00.000Z",
+    "companyName": "Empresa Exemplo Ltda",
+    "currentStep": 1
+  },
+  "formData": {
+    "_metadata": {
+      "currentStep": 1,
+      "lastSaved": "2025-10-23T19:37:00.000Z"
+    },
+    
+    "razaoSocial": "Empresa Exemplo Ltda",
+    "nomeFantasia": "Exemplo Corp",
+    "cnpj": "12.345.678/0001-90",
+    "inscricaoEstadual": "123.456.789.000",
+    "inscricaoMunicipal": "987654321",
+    "dataConstituicao": "2015-03-15",
+    "regimeTributario": "Lucro Real",
+    "ramoAtividade": "Comércio Varejista",
+    "cnae": "47.11-3-01",
+    
+    "endereco": "Rua das Flores, 1234",
+    "complemento": "Sala 501",
+    "bairro": "Centro",
+    "cidade": "Goiânia",
+    "estado": "GO",
+    "cep": "74000-000",
+    "telefone": "(62) 3333-4444",
+    "email": "contato@exemploempresa.com.br",
+    "website": "www.exemploempresa.com.br",
+    
+    "composicaoSocietaria": [
+      {
+        "nome": "João da Silva",
+        "cpf": "123.456.789-00",
+        "participacao": "60",
+        "cargo": "Sócio Administrador"
+      },
+      {
+        "nome": "Maria Santos",
+        "cpf": "987.654.321-00",
+        "participacao": "40",
+        "cargo": "Sócia"
+      }
+    ],
+    
+    "balancoPatrimonial": {
+      "periodo1": {
+        "ano": "2024",
+        "ativoCirculante": {
+          "caixaBancos": "500000",
+          "aplicacoesFinanceiras": "300000",
+          "contasReceber": "1200000",
+          "estoques": "800000",
+          "despesasAntecipadas": "50000",
+          "outrosAtivosCirculantes": "150000",
+          "total": "3000000"
+        },
+        "ativoNaoCirculante": {
+          "realizavelLongoPrazo": "400000",
+          "investimentos": "200000",
+          "imobilizado": "2500000",
+          "intangivel": "100000",
+          "total": "3200000"
+        },
+        "ativoTotal": "6200000",
+        
+        "passivoCirculante": {
+          "fornecedores": "600000",
+          "emprestimosFinanciamentos": "400000",
+          "obrigacoesTrabalhistas": "200000",
+          "obrigacoesFiscais": "150000",
+          "outrasObrigacoes": "150000",
+          "total": "1500000"
+        },
+        "passivoNaoCirculante": {
+          "emprestimosLongoPrazo": "1200000",
+          "provisoes": "100000",
+          "outrasObrigacoesLP": "200000",
+          "total": "1500000"
+        },
+        "patrimonioLiquido": {
+          "capitalSocial": "2000000",
+          "reservas": "500000",
+          "lucrosAcumulados": "700000",
+          "total": "3200000"
+        },
+        "passivoTotal": "6200000"
+      },
+      
+      "periodo2": {
+        "ano": "2023",
+        "ativoCirculante": {
+          "caixaBancos": "400000",
+          "aplicacoesFinanceiras": "250000",
+          "contasReceber": "1000000",
+          "estoques": "700000",
+          "despesasAntecipadas": "45000",
+          "outrosAtivosCirculantes": "105000",
+          "total": "2500000"
+        },
+        "ativoNaoCirculante": {
+          "realizavelLongoPrazo": "350000",
+          "investimentos": "180000",
+          "imobilizado": "2300000",
+          "intangivel": "90000",
+          "total": "2920000"
+        },
+        "ativoTotal": "5420000",
+        
+        "passivoCirculante": {
+          "fornecedores": "500000",
+          "emprestimosFinanciamentos": "350000",
+          "obrigacoesTrabalhistas": "180000",
+          "obrigacoesFiscais": "130000",
+          "outrasObrigacoes": "140000",
+          "total": "1300000"
+        },
+        "passivoNaoCirculante": {
+          "emprestimosLongoPrazo": "1100000",
+          "provisoes": "90000",
+          "outrasObrigacoesLP": "180000",
+          "total": "1370000"
+        },
+        "patrimonioLiquido": {
+          "capitalSocial": "2000000",
+          "reservas": "400000",
+          "lucrosAcumulados": "350000",
+          "total": "2750000"
+        },
+        "passivoTotal": "5420000"
+      },
+      
+      "periodo3": {
+        "ano": "2022",
+        "ativoCirculante": {
+          "caixaBancos": "350000",
+          "aplicacoesFinanceiras": "200000",
+          "contasReceber": "900000",
+          "estoques": "650000",
+          "despesasAntecipadas": "40000",
+          "outrosAtivosCirculantes": "90000",
+          "total": "2230000"
+        },
+        "ativoNaoCirculante": {
+          "realizavelLongoPrazo": "300000",
+          "investimentos": "150000",
+          "imobilizado": "2100000",
+          "intangivel": "80000",
+          "total": "2630000"
+        },
+        "ativoTotal": "4860000",
+        
+        "passivoCirculante": {
+          "fornecedores": "450000",
+          "emprestimosFinanciamentos": "300000",
+          "obrigacoesTrabalhistas": "160000",
+          "obrigacoesFiscais": "110000",
+          "outrasObrigacoes": "120000",
+          "total": "1140000"
+        },
+        "passivoNaoCirculante": {
+          "emprestimosLongoPrazo": "1000000",
+          "provisoes": "80000",
+          "outrasObrigacoesLP": "160000",
+          "total": "1240000"
+        },
+        "patrimonioLiquido": {
+          "capitalSocial": "2000000",
+          "reservas": "300000",
+          "lucrosAcumulados": "180000",
+          "total": "2480000"
+        },
+        "passivoTotal": "4860000"
+      },
+      
+      "periodo4": {
+        "ano": "2021",
+        "ativoCirculante": {
+          "caixaBancos": "300000",
+          "aplicacoesFinanceiras": "150000",
+          "contasReceber": "800000",
+          "estoques": "600000",
+          "despesasAntecipadas": "35000",
+          "outrosAtivosCirculantes": "80000",
+          "total": "1965000"
+        },
+        "ativoNaoCirculante": {
+          "realizavelLongoPrazo": "250000",
+          "investimentos": "120000",
+          "imobilizado": "1900000",
+          "intangivel": "70000",
+          "total": "2340000"
+        },
+        "ativoTotal": "4305000",
+        
+        "passivoCirculante": {
+          "fornecedores": "400000",
+          "emprestimosFinanciamentos": "250000",
+          "obrigacoesTrabalhistas": "140000",
+          "obrigacoesFiscais": "95000",
+          "outrasObrigacoes": "100000",
+          "total": "985000"
+        },
+        "passivoNaoCirculante": {
+          "emprestimosLongoPrazo": "900000",
+          "provisoes": "70000",
+          "outrasObrigacoesLP": "150000",
+          "total": "1120000"
+        },
+        "patrimonioLiquido": {
+          "capitalSocial": "2000000",
+          "reservas": "200000",
+          "lucrosAcumulados": "0",
+          "total": "2200000"
+        },
+        "passivoTotal": "4305000"
+      }
+    },
+    
+    "dre": {
+      "periodo1": {
+        "ano": "2024",
+        "receitaBruta": "8000000",
+        "deducoes": "1200000",
+        "receitaLiquida": "6800000",
+        "custosProdutos": "4080000",
+        "lucroBruto": "2720000",
+        "despesasOperacionais": {
+          "vendas": "680000",
+          "administrativas": "544000",
+          "financeiras": "272000",
+          "total": "1496000"
+        },
+        "lucroOperacional": "1224000",
+        "outrasReceitasDespesas": "68000",
+        "lucroAntesImposto": "1292000",
+        "impostoRenda": "258400",
+        "lucroLiquido": "1033600"
+      },
+      
+      "periodo2": {
+        "ano": "2023",
+        "receitaBruta": "7000000",
+        "deducoes": "1050000",
+        "receitaLiquida": "5950000",
+        "custosProdutos": "3570000",
+        "lucroBruto": "2380000",
+        "despesasOperacionais": {
+          "vendas": "595000",
+          "administrativas": "476000",
+          "financeiras": "238000",
+          "total": "1309000"
+        },
+        "lucroOperacional": "1071000",
+        "outrasReceitasDespesas": "59500",
+        "lucroAntesImposto": "1130500",
+        "impostoRenda": "226100",
+        "lucroLiquido": "904400"
+      },
+      
+      "periodo3": {
+        "ano": "2022",
+        "receitaBruta": "6000000",
+        "deducoes": "900000",
+        "receitaLiquida": "5100000",
+        "custosProdutos": "3060000",
+        "lucroBruto": "2040000",
+        "despesasOperacionais": {
+          "vendas": "510000",
+          "administrativas": "408000",
+          "financeiras": "204000",
+          "total": "1122000"
+        },
+        "lucroOperacional": "918000",
+        "outrasReceitasDespesas": "51000",
+        "lucroAntesImposto": "969000",
+        "impostoRenda": "193800",
+        "lucroLiquido": "775200"
+      },
+      
+      "periodo4": {
+        "ano": "2021",
+        "receitaBruta": "5000000",
+        "deducoes": "750000",
+        "receitaLiquida": "4250000",
+        "custosProdutos": "2550000",
+        "lucroBruto": "1700000",
+        "despesasOperacionais": {
+          "vendas": "425000",
+          "administrativas": "340000",
+          "financeiras": "170000",
+          "total": "935000"
+        },
+        "lucroOperacional": "765000",
+        "outrasReceitasDespesas": "42500",
+        "lucroAntesImposto": "807500",
+        "impostoRenda": "161500",
+        "lucroLiquido": "646000"
+      }
+    },
+    
+    "dividasBancarias": [
+      {
+        "instituicao": "Banco do Brasil",
+        "tipoOperacao": "Capital de Giro",
+        "numeroContrato": "12345678",
+        "dataContratacao": "2023-01-15",
+        "valorOriginal": "500000",
+        "saldoDevedor": "380000",
+        "taxaJuros": "1.5",
+        "prazoMeses": "24",
+        "valorParcela": "22500",
+        "dataVencimento": "2025-01-15",
+        "garantias": "Duplicatas",
+        "status": "Adimplente"
+      },
+      {
+        "instituicao": "Caixa Econômica Federal",
+        "tipoOperacao": "FINAME",
+        "numeroContrato": "87654321",
+        "dataContratacao": "2022-06-10",
+        "valorOriginal": "800000",
+        "saldoDevedor": "520000",
+        "taxaJuros": "1.2",
+        "prazoMeses": "60",
+        "valorParcela": "15000",
+        "dataVencimento": "2027-06-10",
+        "garantias": "Máquinas e Equipamentos",
+        "status": "Adimplente"
+      }
+    ],
+    
+    "outrasObrigacoes": [
+      {
+        "tipo": "Fornecedores",
+        "descricao": "Compras a prazo",
+        "valor": "600000",
+        "vencimento": "2025-02-28"
+      },
+      {
+        "tipo": "Tributos",
+        "descricao": "ICMS parcelado",
+        "valor": "150000",
+        "vencimento": "2025-12-31"
+      }
+    ],
+    
+    "situacaoCadastral": "Ativa",
+    "certidoesNegativas": {
+      "receitaFederal": {
+        "situacao": "Regular",
+        "dataEmissao": "2025-10-01",
+        "validade": "2026-04-01"
+      },
+      "fgts": {
+        "situacao": "Regular",
+        "dataEmissao": "2025-09-15",
+        "validade": "2026-03-15"
+      },
+      "trabalhista": {
+        "situacao": "Regular",
+        "dataEmissao": "2025-09-20",
+        "validade": "2026-03-20"
+      },
+      "estadual": {
+        "situacao": "Regular",
+        "dataEmissao": "2025-10-05",
+        "validade": "2026-04-05"
+      },
+      "municipal": {
+        "situacao": "Regular",
+        "dataEmissao": "2025-10-10",
+        "validade": "2026-04-10"
+      }
+    },
+    
+    "protestos": "Não há protestos registrados",
+    "acoesCiveis": "Não há ações cíveis em andamento",
+    "recuperacaoJudicial": "Não",
+    "falencia": "Não",
+    
+    "totalFuncionarios": "45",
+    "empregosDiretos": "45",
+    "empregosIndiretos": "15",
+    "folhaPagamento": "180000",
+    "encargos": "72000",
+    "beneficios": "27000",
+    
+    "estruturaPessoal": {
+      "diretoria": "3",
+      "gerencia": "5",
+      "administrativo": "12",
+      "operacional": "25"
+    },
+    
+    "observacoes": "Empresa em crescimento consistente nos últimos 4 anos, com aumento de receita e lucratividade. Boa estrutura patrimonial e índices de liquidez adequados.",
+    
+    "analista": "Nome do Analista",
+    "dataAnalise": "2025-10-23"
+  }
+}

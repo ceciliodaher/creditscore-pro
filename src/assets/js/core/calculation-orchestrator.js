@@ -7,12 +7,14 @@
  * DRY: Lógica de coordenação centralizada
  * NO FALLBACKS: Validação rigorosa, exceções explícitas
  *
- * @version 1.0.0
- * @date 2025-01-25
+ * @version 2.0.0
+ * @date 2025-01-26
+ * @changes Migrado de localStorage para IndexedDB (NO FALLBACKS)
  */
 
 import { calculationState } from './calculation-state.js';
 import { validationEngine, ValidationError } from './validation-engine.js';
+import { retryIndexedDBOperation, validateIndexedDBAvailable } from '../utils/indexeddb-retry.js';
 
 /**
  * Orquestrador de cálculos
@@ -21,9 +23,29 @@ export class CalculationOrchestrator {
     #calculators = new Map();
     #history = [];
     #maxHistorySize = 10; // PRD requirement: últimos 10 cálculos
+    #dbManager = null;
 
-    constructor() {
-        console.log('🎯 [CalculationOrchestrator] Inicializado');
+    /**
+     * @param {Object} dbManager - Instância do CreditscoreIndexedDB (obrigatório)
+     * @throws {Error} Se dbManager não fornecido
+     */
+    constructor(dbManager) {
+        // NO FALLBACKS - dbManager é obrigatório
+        if (!dbManager) {
+            throw new Error('CalculationOrchestrator: dbManager obrigatório não fornecido');
+        }
+
+        // Validar que dbManager tem a API esperada
+        if (typeof dbManager.save !== 'function' || typeof dbManager.get !== 'function') {
+            throw new Error('CalculationOrchestrator: dbManager não possui API esperada (save, get)');
+        }
+
+        this.#dbManager = dbManager;
+
+        // Validar IndexedDB disponível
+        validateIndexedDBAvailable();
+
+        console.log('🎯 [CalculationOrchestrator] Inicializado com IndexedDB');
         this.loadHistory();
     }
 
@@ -138,13 +160,13 @@ export class CalculationOrchestrator {
     // ====================================================================
 
     /**
-     * Coleta dados do localStorage
+     * Coleta dados do IndexedDB
      * @private
-     * @returns {Object}
+     * @returns {Promise<Object>}
      * @throws {Error} Se dados obrigatórios faltarem
      */
-    #collectData() {
-        console.log('📥 [CalculationOrchestrator] Coletando dados...');
+    async #collectData() {
+        console.log('📥 [CalculationOrchestrator] Coletando dados do IndexedDB...');
 
         const required = [
             'balanco',
@@ -158,29 +180,38 @@ export class CalculationOrchestrator {
         const missing = [];
 
         for (const key of required) {
-            const value = localStorage.getItem(key);
+            try {
+                // Usar retry mechanism para cada operação de leitura
+                const value = await retryIndexedDBOperation(
+                    () => this.#dbManager.get('calculation_data', key),
+                    {
+                        maxAttempts: 3,
+                        baseDelay: 500,
+                        operationName: `Leitura de '${key}'`
+                    }
+                );
 
-            if (!value) {
-                missing.push(key);
-            } else {
-                try {
-                    data[key] = JSON.parse(value);
-                } catch (error) {
-                    throw new Error(
-                        `Dados corrompidos em '${key}': ${error.message}`
-                    );
+                if (!value) {
+                    missing.push(key);
+                } else {
+                    data[key] = value;
                 }
+            } catch (error) {
+                console.error(`❌ Erro ao ler '${key}' do IndexedDB:`, error.message);
+                throw new Error(
+                    `Falha ao acessar dados de '${key}' no IndexedDB: ${error.message}`
+                );
             }
         }
 
         // NO FALLBACKS - fail explicitly
         if (missing.length > 0) {
             throw new Error(
-                `Dados obrigatórios não fornecidos: ${missing.join(', ')}`
+                `Dados obrigatórios não encontrados no IndexedDB: ${missing.join(', ')}`
             );
         }
 
-        console.log('✓ Dados coletados:', Object.keys(data));
+        console.log('✅ Dados coletados do IndexedDB:', Object.keys(data));
 
         return data;
     }
@@ -300,31 +331,58 @@ export class CalculationOrchestrator {
     }
 
     /**
-     * Salva histórico no localStorage
+     * Salva histórico no IndexedDB
      */
-    saveHistory() {
+    async saveHistory() {
         try {
-            localStorage.setItem('calculationHistory', JSON.stringify(this.#history));
+            await retryIndexedDBOperation(
+                () => this.#dbManager.save('calculation_history', {
+                    timestamp: Date.now(),
+                    entries: this.#history
+                }),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Salvar histórico'
+                }
+            );
+
+            console.log('💾 Histórico salvo no IndexedDB');
         } catch (error) {
-            console.error('[CalculationOrchestrator] Falha ao salvar histórico:', error);
-            // NO FALLBACK - erro visível
+            console.error('❌ [CalculationOrchestrator] Falha ao salvar histórico no IndexedDB:', error);
+            // NO FALLBACK - erro explícito
+            throw new Error(`Falha ao salvar histórico: ${error.message}`);
         }
     }
 
     /**
-     * Carrega histórico do localStorage
+     * Carrega histórico do IndexedDB
      */
-    loadHistory() {
+    async loadHistory() {
         try {
-            const saved = localStorage.getItem('calculationHistory');
+            const saved = await retryIndexedDBOperation(
+                () => this.#dbManager.getAll('calculation_history'),
+                {
+                    maxAttempts: 3,
+                    baseDelay: 500,
+                    operationName: 'Carregar histórico'
+                }
+            );
 
-            if (saved) {
-                this.#history = JSON.parse(saved);
-                console.log(`📥 Histórico carregado (${this.#history.length} entradas)`);
+            if (saved && saved.length > 0) {
+                // Pegar a entrada mais recente
+                const latestEntry = saved.sort((a, b) => b.timestamp - a.timestamp)[0];
+                this.#history = latestEntry.entries || [];
+                console.log(`📥 Histórico carregado do IndexedDB (${this.#history.length} entradas)`);
+            } else {
+                console.log('ℹ️ Nenhum histórico encontrado no IndexedDB');
+                this.#history = [];
             }
         } catch (error) {
-            console.error('[CalculationOrchestrator] Falha ao carregar histórico:', error);
+            console.error('❌ [CalculationOrchestrator] Falha ao carregar histórico do IndexedDB:', error);
+            // NO FALLBACK - inicializar vazio mas logar erro
             this.#history = [];
+            throw new Error(`Falha ao carregar histórico: ${error.message}`);
         }
     }
 
@@ -379,12 +437,43 @@ export class CalculationOrchestrator {
 
 // ====================================================================
 // Singleton Instance
+// NOTA: O singleton agora precisa ser inicializado externamente com dbManager
+// Exemplo: await CalculationOrchestrator.initializeSingleton(dbManager);
 // ====================================================================
 
-export const orchestrator = new CalculationOrchestrator();
+let singletonInstance = null;
+
+/**
+ * Inicializa o singleton do CalculationOrchestrator
+ * @param {Object} dbManager - Instância do CreditscoreIndexedDB
+ * @returns {CalculationOrchestrator}
+ */
+CalculationOrchestrator.initializeSingleton = function(dbManager) {
+    if (!singletonInstance) {
+        singletonInstance = new CalculationOrchestrator(dbManager);
+        console.log('✅ CalculationOrchestrator singleton inicializado');
+    }
+    return singletonInstance;
+};
+
+/**
+ * Retorna a instância singleton (se já inicializada)
+ * @returns {CalculationOrchestrator|null}
+ */
+CalculationOrchestrator.getInstance = function() {
+    return singletonInstance;
+};
+
+// Export do getter do singleton (retrocompatibilidade)
+export const getOrchestrator = () => {
+    if (!singletonInstance) {
+        throw new Error('CalculationOrchestrator: Singleton não foi inicializado. Execute CalculationOrchestrator.initializeSingleton(dbManager) primeiro.');
+    }
+    return singletonInstance;
+};
 
 // Disponibilizar globalmente
 if (typeof window !== 'undefined') {
     window.CalculationOrchestrator = CalculationOrchestrator;
-    window.calculationOrchestrator = orchestrator;
+    window.getCalculationOrchestrator = getOrchestrator;
 }
