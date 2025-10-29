@@ -46,12 +46,6 @@ class BalancoTotalizador {
                 if (match) {
                     const periodo = match[1];
                     this.calcularTotaisPeriodo(periodo);
-
-                    // ✅ MARCAR ESTADO COMO DIRTY: Notifica o sistema que os dados mudaram.
-                    // Evita recálculos desnecessários ao navegar entre abas.
-                    if (window.calculationState) {
-                        window.calculationState.markDirty();
-                    }
                 }
             });
         });
@@ -83,7 +77,7 @@ class BalancoTotalizador {
         // 2. Contas a Receber Líquido
         const contasReceber = this.getValor(`contasReceber_p${p}`);
         const pdd = this.getValor(`pdd_p${p}`);
-        const contasReceberLiquido = contasReceber + pdd;  // PDD já é negativo, somar é correto
+        const contasReceberLiquido = contasReceber - pdd;
         this.setValor(`contasReceberLiquido_p${p}`, contasReceberLiquido);
 
         // 3. Estoques Total
@@ -136,7 +130,7 @@ class BalancoTotalizador {
         this.setValor(`imobilizadoBruto_p${p}`, imobilizadoBruto);
 
         const depreciacaoAcumulada = this.getValor(`depreciacaoAcumulada_p${p}`);
-        const imobilizadoLiquido = imobilizadoBruto + depreciacaoAcumulada;  // Deprec já é negativa, somar é correto
+        const imobilizadoLiquido = imobilizadoBruto - depreciacaoAcumulada;
         this.setValor(`imobilizadoLiquido_p${p}`, imobilizadoLiquido);
 
         // 8. Intangível
@@ -148,7 +142,7 @@ class BalancoTotalizador {
         this.setValor(`intangivelBruto_p${p}`, intangivelBruto);
 
         const amortizacaoAcumulada = this.getValor(`amortizacaoAcumulada_p${p}`);
-        const intangivelLiquido = intangivelBruto + amortizacaoAcumulada;  // Amort já é negativa, somar é correto
+        const intangivelLiquido = intangivelBruto - amortizacaoAcumulada;
         this.setValor(`intangivelLiquido_p${p}`, intangivelLiquido);
 
         // 9. Ativo Não Circulante Total
@@ -233,7 +227,7 @@ class BalancoTotalizador {
 
         const patrimonioLiquidoTotal = capitalSocial + reservaCapital + reservaLucros +
                                         reservaLegal + lucrosPrejuizosAcumulados +
-                                        ajustesAvaliacaoPatrimonial + acoesTesouraria;  // Ações já são negativas, somar é correto
+                                        ajustesAvaliacaoPatrimonial - acoesTesouraria;
         this.setValor(`patrimonioLiquidoTotal_p${p}`, patrimonioLiquidoTotal);
 
         // ========================================
@@ -258,11 +252,17 @@ class BalancoTotalizador {
      * @returns {number} Valor numérico
      */
     getValor(inputId) {
-        const input = document.getElementById(inputId);        
-        // Reutiliza o unformatter global do currency-mask.js
-        // que é mais robusto e centralizado.
-        // A função unformatCurrency já retorna 0 para valores inválidos/vazios.
-        return window.unformatCurrency(input?.value);
+        const input = document.getElementById(inputId);
+        if (!input || !input.value || input.value.trim() === '') {
+            return 0;
+        }
+
+        // Remover formatação BRL: "R$ 1.234,56" → 1234.56
+        const valorLimpo = input.value
+            .replace(/[^\d,\-]/g, '')  // Remove tudo exceto dígitos, vírgula e hífen
+            .replace(',', '.');         // Vírgula → ponto decimal
+
+        return parseFloat(valorLimpo) || 0;
     }
 
     /**
@@ -273,9 +273,22 @@ class BalancoTotalizador {
     setValor(elementId, valor) {
         const element = document.getElementById(elementId);
         if (element) {
-            // Reutiliza o formatter global do currency-mask.js
-            element.textContent = window.formatCurrency(valor);
+            element.textContent = this.formatarMoeda(valor);
         }
+    }
+
+    /**
+     * Formata número como moeda BRL
+     * @param {number} valor - Valor numérico
+     * @returns {string} Valor formatado
+     */
+    formatarMoeda(valor) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(valor);
     }
 
     /**
@@ -295,7 +308,7 @@ class BalancoTotalizador {
                 icone.style.color = '#22C55E';  // green-500
             } else {
                 icone.textContent = '⚠️';
-                icone.title = `Diferença: ${window.formatCurrency(diferenca)}`;
+                icone.title = `Diferença: ${this.formatarMoeda(diferenca)}`;
                 icone.style.color = '#EF4444';  // red-500
             }
         }
