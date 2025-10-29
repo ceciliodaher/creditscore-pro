@@ -77,3 +77,10 @@ npm run test:report
 - **Scoring System:** The application uses a proprietary 100-point scoring algorithm.
 - **IndexedDB:** The application uses IndexedDB for data persistence with a defined schema.
 - **Validation:** The application has a robust validation system for CNPJ, email, and financial statements.
+
+## Recent UI/UX Improvements
+
+### Financial Periods Configuration
+
+- **UI Refactoring:** The layout for configuring financial statement periods in the "Demonstrações Financeiras" module was refactored to perfectly match the original clean and harmonic design, ensuring visual consistency.
+- **Logic Simplification:** Removed the manual input for "Meses Decorridos" (Elapsed Months). The system now automatically calculates this value based on the closing date of the 4th period (Balancete). This improves user experience by reducing input fields and automating the logic for partial period detection and DRE annualization.

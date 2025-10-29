@@ -208,50 +208,45 @@
                             <p class="section-description">Balanço Patrimonial e DRE dos últimos 3 anos + 1 balancete</p>
                         </div>
 
-                        <!-- Configuração de Períodos (Compartilhada: Balanço + DRE) -->
-                    <div class="periodos-config" class="mb-8 p-6 bg-gray-100 rounded-lg">
-                        <h3 class="text-[#091A30] mb-2">📅 Configurar Períodos (Balanço Patrimonial + DRE)</h3>
-                        <p class="text-gray-600 mb-6 text-sm">
-                            ⚠️ Esta configuração será aplicada tanto para o <strong>Balanço Patrimonial</strong> quanto para a <strong>DRE</strong>.
-                        </p>
-                        <div class="grid grid-cols-4 gap-4">
-                            <div class="form-group">
-                                <label for="periodo1Data"><strong>Período 1:</strong> Ano N-2</label>
-                                <input type="date" id="periodo1Data" name="periodo1Data" class="w-full p-2 border border-gray-300 rounded">
-                                <small class="text-gray-600">Ex: 31/12/2022</small>
+                        <!-- Configuração de Períodos (Layout Original Leve) -->
+                        <div class="periodos-config p-6 bg-white rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">📅 Configurar Períodos (Balanço Patrimonial + DRE)</h3>
+                            <p class="text-gray-500 mb-6 text-sm">
+                                ⚠️ Esta configuração será aplicada tanto para o <strong>Balanço Patrimonial</strong> quanto para a <strong>DRE</strong>.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <!-- Período 1 -->
+                                <div class="form-group">
+                                    <label for="periodo1Data" class="text-sm font-medium text-gray-700"><strong>Período 1:</strong> Ano N-2</label>
+                                    <input type="date" id="periodo1Data" name="periodo1Data" class="form-input-date mt-1">
+                                    <small class="text-gray-500 text-xs mt-1">Ex: 31/12/2022</small>
+                                </div>
+                                <!-- Período 2 -->
+                                <div class="form-group">
+                                    <label for="periodo2Data" class="text-sm font-medium text-gray-700"><strong>Período 2:</strong> Ano N-1</label>
+                                    <input type="date" id="periodo2Data" name="periodo2Data" class="form-input-date mt-1">
+                                    <small class="text-gray-500 text-xs mt-1">Ex: 31/12/2023</small>
+                                </div>
+                                <!-- Período 3 -->
+                                <div class="form-group">
+                                    <label for="periodo3Data" class="text-sm font-medium text-gray-700"><strong>Período 3:</strong> Ano N</label>
+                                    <input type="date" id="periodo3Data" name="periodo3Data" class="form-input-date mt-1">
+                                    <small class="text-gray-500 text-xs mt-1">Ex: 31/12/2024</small>
+                                </div>
+                                <!-- Período 4 -->
+                                <div class="form-group">
+                                    <label for="periodo4Data" class="text-sm font-medium text-gray-700"><strong>Período 4:</strong> Balancete Atual</label>
+                                    <input type="date" id="periodo4Data" name="periodo4Data" class="form-input-date mt-1">
+                                    <small class="text-gray-500 text-xs mt-1">Ex: 30/09/2025</small>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="periodo2Data"><strong>Período 2:</strong> Ano N-1</label>
-                                <input type="date" id="periodo2Data" name="periodo2Data" class="w-full p-2 border border-gray-300 rounded">
-                                <small class="text-gray-600">Ex: 31/12/2023</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="periodo3Data"><strong>Período 3:</strong> Ano N</label>
-                                <input type="date" id="periodo3Data" name="periodo3Data" class="w-full p-2 border border-gray-300 rounded">
-                                <small class="text-gray-600">Ex: 31/12/2024</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="periodo4Data"><strong>Período 4:</strong> Balancete Atual</label>
-                                <input type="date" id="periodo4Data" name="periodo4Data" class="w-full p-2 border border-gray-300 rounded">
-                                <small class="text-gray-600">Ex: 30/09/2025</small>
-                            </div>
-                        </div>
-                        <!-- Período Parcial (opcional para Período 4) -->
-                        <div class="grid grid-cols-4 gap-4 mt-4">
-                            <div class="form-group"></div>
-                            <div class="form-group"></div>
-                            <div class="form-group"></div>
-                            <div class="form-group">
-                                <label class="flex items-center mb-2">
-                                    <input type="checkbox" id="periodo4Parcial" name="periodo4Parcial" class="mr-2">
-                                    <span><strong>Período 4 é parcial</strong></span>
-                                </label>
-                                <label for="periodo4Meses" class="mt-2 text-[13px]">Meses Decorridos (1-11)</label>
-                                <input type="number" id="periodo4Meses" name="periodo4Meses" class="form-control" min="1" max="11" value="9" disabled class="w-full p-2 border border-gray-300 rounded">
-                                <small class="text-gray-600 text-xs">DRE será anualizada automaticamente</small>
+                            <!-- Controles do Período 4 (Meses Decorridos removido) -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
+                                <div class="md:col-start-4 md:col-span-1">
+                                    <!-- O campo Meses Decorridos foi removido. O cálculo agora é automático via JS. -->
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     <!-- Tabs para Demonstrativos: Balanço Patrimonial e DRE -->
                     <div class="demonstrativos-tabs-container" style="margin-top: 2rem;">

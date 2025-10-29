@@ -188,17 +188,36 @@ export class FormDataAdapter {
     }
 
     /**
-     * Extrai metadados do período 4 (balancete parcial)
+     * Extrai metadados do período 4 (balancete parcial).
+     * O número de meses é extraído diretamente da data do período 4,
+     * eliminando a necessidade de um campo de input separado.
      * @returns {Object} { parcial: boolean, meses: number|null }
      */
     static extractPeriodo4Metadata() {
-        const checkbox = document.getElementById('periodo4Parcial');
-        const input = document.getElementById('periodo4Meses');
+        const dataInput = document.getElementById('periodo4Data');
+        const dataValor = dataInput ? dataInput.value : null;
 
-        return {
-            parcial: checkbox ? checkbox.checked : false,
-            meses: checkbox?.checked && input ? parseInt(input.value) : null
-        };
+        if (!dataValor) {
+            // Se não há data para o período 4, não é parcial e não há meses.
+            return { parcial: false, meses: null };
+        }
+
+        try {
+            // A data vem no formato 'YYYY-MM-DD'.
+            // Usar UTC para evitar problemas de fuso horário.
+            const date = new Date(dataValor);
+            const meses = date.getUTCMonth() + 1;
+
+            // Se uma data para o período 4 existe, ele é considerado 'potencialmente parcial'.
+            // A lógica de anualização usará o número de meses para decidir.
+            return {
+                parcial: true, // Indica que o período 4 está ativo.
+                meses: meses
+            };
+        } catch (error) {
+            console.warn(`[FormDataAdapter] Data inválida para o Período 4: "${dataValor}"`, error);
+            return { parcial: false, meses: null };
+        }
     }
 
     /**
