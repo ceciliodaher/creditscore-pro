@@ -81,8 +81,30 @@ class CurrencyMask {
   format(value) {
     if (!value) return '';
 
-    // Remover tudo exceto dígitos (garante que o sinal de menos seja removido)
-    let digits = value.toString().replace(/[^0-9]/g, '');
+    const str = value.toString();
+
+    // NOVO: Detectar se já possui decimal (ponto ou vírgula)
+    // Caso típico: valores importados de JSON com ".00" explícito
+    if (str.includes('.') || str.includes(',')) {
+      // Já tem decimal, converter diretamente SEM dividir por 100
+      const number = parseFloat(str.replace(',', '.'));
+
+      if (isNaN(number)) return '';
+
+      // Formatar com Intl.NumberFormat (padrão brasileiro)
+      const formatted = new Intl.NumberFormat(this.locale, {
+        style: 'currency',
+        currency: this.currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(number);
+
+      return formatted;
+    }
+
+    // Lógica ORIGINAL: Para digitação manual (sem decimais)
+    // Remover tudo exceto dígitos
+    let digits = str.replace(/[^0-9]/g, '');
 
     if (digits === '') return '';
 
@@ -108,8 +130,19 @@ class CurrencyMask {
   unformat(value) {
     if (!value) return 0;
 
+    const str = value.toString();
+
+    // NOVO: Detectar se já é um valor com decimal (antes da formatação)
+    // Caso típico: valor importado de JSON ainda não formatado
+    if (!str.includes('R$') && (str.includes('.') || str.includes(','))) {
+      // É um número decimal puro (ex: "9972000.00"), converter diretamente
+      const number = parseFloat(str.replace(',', '.'));
+      return isNaN(number) ? 0 : number;
+    }
+
+    // Lógica ORIGINAL: Para valores já formatados (com R$) ou digitados
     // Remover tudo exceto dígitos
-    const digits = value.toString().replace(/\D/g, '');
+    const digits = str.replace(/\D/g, '');
 
     if (digits === '') return 0;
 
