@@ -478,4 +478,153 @@ Concentração:
 
 ---
 
+## 10. ADDENDUM: Reversão das Correções (2025-10-29)
+
+### 10.1. O Que Aconteceu Após as Correções
+
+**Commits Aplicados**:
+- `6ddd067` - "fix(balanco): Corrige operações de contas retificadoras"
+- `449eab5` - "docs: Adiciona diagnóstico completo de arquitetura"
+
+**Expectativa**: Sistema balanceado e concentrações corretas (~30.96%)
+
+**Realidade**: Após análise dos relatórios gerados, o usuário identificou que **as correções pioraram o sistema significativamente**.
+
+### 10.2. Evidências de Falha
+
+**Análise dos Relatórios** (`/reports/*`):
+
+#### ANTES das Correções (Estado Original)
+```
+Concentração: 3095.9%
+Ativo Total: ~R$ 32.000.000 (próximo do esperado)
+Problema: Concentração 100x maior que o esperado
+```
+
+#### DEPOIS das Correções (Estado Piorado)
+```
+Concentração: 2346.9%  ❌ AINDA ERRADO
+Ativo Total: R$ 424.900  ❌ 75x MENOR!
+Análise Vertical: disponibilidades mostrando 10.000%  ❌ ABSURDO
+```
+
+**Comparação Direta**:
+| Métrica | Esperado | Estado Original | Após "Correções" | Piora |
+|---------|----------|----------------|------------------|-------|
+| Ativo Total | R$ 32.210.000 | ~R$ 30M | **R$ 424.900** | **75x menor** |
+| Concentração | 30.96% | 3095.9% | **2346.9%** | Continua errada |
+
+### 10.3. Análise da Falha
+
+**O Que Erramos**:
+1. **Hipótese Incorreta**: Assumimos que as operações matemáticas (`-` vs `+`) eram o problema
+2. **Validação Insuficiente**: Não testamos com dados reais antes de commitar
+3. **Efeito Colateral**: As mudanças causaram uma redução de 75x em todos os valores
+
+**Evidência do Problema Real**:
+```
+import.js calcula:     ativoTotal = 32.210.000  ✅
+balanco-totalizador:   ativoTotal = 424.900     ❌ (~32M ÷ 100)
+                                                     ⬆️ DIVISÃO POR 100!
+```
+
+**Conclusão**: O problema real NÃO era as operações `+/-`, mas sim uma **divisão por 100** ocorrendo em algum lugar do `balanco-totalizador.js`.
+
+### 10.4. Citação do Usuário
+
+> "leia os documentos em \reports e tire suas próprias conclusões. Achei que a emenda ficou pior que o soneto."
+
+**Interpretação**: A correção ("emenda") foi pior que o problema original ("soneto").
+
+### 10.5. Decisão de Reversão
+
+**Comando do Usuário**: "Retorne o último commit"
+
+**Ação Tomada**:
+```bash
+git revert 6ddd067 --no-edit
+```
+
+**Commit de Reversão**: `8fd3921` - "Revert 'fix(balanco): Corrige operações de contas retificadoras'"
+
+**Justificativa**:
+1. Honestidade técnica: reconhecer que a correção falhou
+2. Voltar a estado anterior (ainda problemático, mas menos pior)
+3. Permitir nova investigação com premissas corretas
+
+### 10.6. Investigação Recomendada
+
+**Próximo Foco**: Encontrar onde ocorre a divisão por 100
+
+**Suspeitos Principais**:
+
+1. **getValor() method** (balanco-totalizador.js ~linhas 260-266):
+```javascript
+getValor(inputId) {
+    const input = document.getElementById(inputId);
+    return window.unformatCurrency(input?.value);  // ⚠️ Investigar aqui
+}
+```
+
+**Perguntas a Responder**:
+- O que `input.value` contém? Valor formatado ou raw?
+- `unformatCurrency()` está sendo chamado com qual branch (decimal ou formatado)?
+- Há alguma divisão por 100 implícita acontecendo?
+
+2. **Verificar valores reais no DOM**:
+```javascript
+// Testar com console
+const input = document.getElementById('caixa_p4');
+console.log('Raw value:', input.value);
+console.log('Unformatted:', window.unformatCurrency(input.value));
+```
+
+3. **Comparar fluxo de import vs totalizador**:
+```
+import.js:
+  JSON → toNumber() → Cálculo ✅ (valores corretos)
+
+totalizador.js:
+  DOM → getValor() → unformatCurrency() → Cálculo ❌ (valores ÷100)
+
+Diferença: Como o valor chega ao unformatCurrency()?
+```
+
+### 10.7. Estado Atual do Sistema
+
+**Após Reversão**:
+- ✅ Código retornou ao estado anterior (commit antes de 6ddd067)
+- ⚠️ Problema original de concentração (3095.9%) ainda existe
+- ⚠️ Mas valores de Ativo Total estão próximos do correto (~R$ 30M)
+- 📝 Documentação atualizada com lições aprendidas
+
+**Próxima Sessão**: Investigar getValor() e encontrar a divisão por 100
+
+### 10.8. Lições Aprendidas (Atualizado)
+
+#### Lição 5: Testar Antes de Commitar
+**Erro**: Comitamos correções sem validar com dados reais
+**Impacto**: Publicamos código que piorou o sistema
+**Aprendizado**: SEMPRE testar com JSON completo antes de commit
+
+#### Lição 6: Validar Hipóteses com Evidências
+**Erro**: Confiamos em análise lógica sem teste empírico
+**Impacto**: Hipótese incorreta levou a correção errada
+**Aprendizado**: Código > Teoria - sempre testar no ambiente real
+
+#### Lição 7: Divisão por 100 é Recorrente
+**Padrão**: Bug de divisão por 100 apareceu em:
+- `currency-mask.js` (corrigido em 49fce8b)
+- Algum lugar em `balanco-totalizador.js` (ainda não encontrado)
+
+**Aprendizado**: Buscar TODOS os lugares onde `/100` ou `÷100` pode ocorrer
+
+---
+
+**Atualização**: 2025-10-29 14:15 BRT
+**Status**: Correções revertidas, investigação em aberto
+**Próxima Ação**: Encontrar divisão por 100 real em getValor() ou unformatCurrency()
+
+---
+
 **Fim do Documento**
