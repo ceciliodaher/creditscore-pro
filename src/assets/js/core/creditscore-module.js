@@ -564,29 +564,30 @@ class CreditScoreModule {
                 recomendacoes: []
             };
             
-            // 1. Calcular índices financeiros
-            if (this.indicesCalculator && dados.demonstracoes) {
-                resultado.indices = await this.indicesCalculator.calcularTodos(dados.demonstracoes);
+            // 1. Calcular índices financeiros (usa dados do último período)
+            if (this.indicesCalculator && dados.ultimoPeriodo) {
+                resultado.indices = await this.indicesCalculator.calcularTodos(dados.ultimoPeriodo);
                 console.log('✅ Índices financeiros calculados');
             }
             
-            // 2. Análise vertical e horizontal
-            if (this.analiseCalculator && dados.demonstracoes) {
-                resultado.analiseVerticalHorizontal = await this.analiseCalculator.analisar(dados.demonstracoes);
+            // 2. Análise vertical e horizontal (usa dados de todos os períodos)
+            if (this.analiseCalculator && dados.demonstracoesPorPeriodo) {
+                resultado.analiseVerticalHorizontal = await this.analiseCalculator.analisar(dados.demonstracoesPorPeriodo);
                 console.log('✅ Análise vertical/horizontal realizada');
             }
             
-            // 3. Análise de capital de giro
-            if (this.capitalGiroCalculator && dados.demonstracoes) {
-                resultado.capitalGiro = await this.capitalGiroCalculator.calcularTodos(dados.demonstracoes);
+            // 3. Análise de capital de giro (usa dados do último período)
+            if (this.capitalGiroCalculator && dados.ultimoPeriodo) {
+                resultado.capitalGiro = await this.capitalGiroCalculator.calcularTodos(dados.ultimoPeriodo);
                 console.log('✅ Análise de capital de giro realizada');
             }
             
-            // 4. Calcular scoring de crédito
+            // 4. Calcular scoring de crédito (usa dados do último período + resultados anteriores)
             if (this.scoringEngine) {
                 resultado.scoring = await this.scoringEngine.calcularScoring({
                     cadastro: dados.cadastro,
-                    demonstracoes: dados.demonstracoes,
+                    demonstracoes: dados.demonstracoesPorPeriodo, // Para evolução
+                    ultimoPeriodo: dados.ultimoPeriodo,         // Para outros critérios
                     endividamento: dados.endividamento,
                     compliance: dados.compliance,
                     indices: resultado.indices,
@@ -720,17 +721,11 @@ class CreditScoreModule {
                 // Os calculadores esperam um objeto com `balanco` e `dre`,
                 // não um objeto plano.
                 dadosParaAnalise = {
-                    cadastro: dadosAtuais,
-                    demonstracoes: {
-                        // Os dados do balanço e da DRE estão no mesmo nível em `dadosAtuais`
-                        balanco: dadosAtuais,
-                        dre: dadosAtuais
-                    },
-                    endividamento: dadosAtuais,
-                    compliance: dadosAtuais,
-                    // Adiciona outros dados que possam ser necessários
-                    clientes: dadosAtuais,
-                    fornecedores: dadosAtuais
+                // Esta transformação agora é feita no ImportManager.
+                // Se esta função for chamada de outro lugar, precisará
+                // de uma transformação similar à do `transformarParaCalculadores`.
+                // Por agora, assumimos que os dados já vêm estruturados.
+                ...this.coletarDadosFormulario()
                 };
             }
 

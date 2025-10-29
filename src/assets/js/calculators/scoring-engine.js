@@ -64,7 +64,7 @@ export class ScoringEngine {
 
         // Calcular pontuação de cada categoria
         const cadastral = this.#avaliarCadastral(data.cadastro, data.compliance);
-        const financeiro = this.#avaliarFinanceiro(data.demonstracoes, data.indices);
+        const financeiro = this.#avaliarFinanceiro(data.demonstracoes, data.indices, data.ultimoPeriodo);
         const capacidadePagamento = this.#avaliarCapacidadePagamento(data.indices, data.capitalGiro);
         const endividamento = this.#avaliarEndividamento(data.endividamento, data.demonstracoes);
         
@@ -208,7 +208,7 @@ export class ScoringEngine {
      * Avalia categoria Financeiro (25 pontos)
      * @private
      */
-    #avaliarFinanceiro(demonstracoes, indices) {
+    #avaliarFinanceiro(demonstracoes, indices, ultimoPeriodo) {
         const peso = 22; // Atualizado de 25 para 22 conforme novo scoring
         const msgCategoria = this.msg.categorias.financeiro;
 
@@ -221,12 +221,12 @@ export class ScoringEngine {
         pontos += evolucaoFaturamento.pontos;
 
         // Critério 2: Margens (6 pts) - consolidado de evolucaoLucratividade
-        const evolucaoLucratividade = this.#avaliarEvolucaoLucratividade(indices);
+        const evolucaoLucratividade = this.#avaliarEvolucaoLucratividade(ultimoPeriodo.dre);
         criterios.margens = evolucaoLucratividade;
         pontos += evolucaoLucratividade.pontos;
 
         // Critério 3: ROE/ROA (5 pts) - consolidado de qualidadeDemonstracoes
-        const qualidadeDemonstracoes = this.#avaliarQualidadeDemonstracoes(demonstracoes);
+        const qualidadeDemonstracoes = this.#avaliarQualidadeDemonstracoes(ultimoPeriodo);
         criterios.roeRoa = qualidadeDemonstracoes;
         pontos += qualidadeDemonstracoes.pontos;
 
@@ -286,7 +286,7 @@ export class ScoringEngine {
      * Avalia categoria Endividamento (20 pontos)
      * @private
      */
-    #avaliarEndividamento(endividamento, demonstracoes) {
+    #avaliarEndividamento(endividamento, ultimoPeriodo) {
         const peso = 20; // Mantido em 20 pontos
         const msgCategoria = this.msg.categorias.endividamento;
 
@@ -294,12 +294,12 @@ export class ScoringEngine {
         const criterios = {};
 
         // Critério 1: Nível de Endividamento (6 pts - antes 6.67)
-        const nivelEndividamento = this.#avaliarNivelEndividamento(demonstracoes);
+        const nivelEndividamento = this.#avaliarNivelEndividamento(ultimoPeriodo);
         criterios.nivelEndividamento = nivelEndividamento;
         pontos += nivelEndividamento.pontos;
 
         // Critério 2: Composição do Endividamento (4 pts - antes 6.67)
-        const composicaoEndividamento = this.#avaliarComposicaoEndividamento(demonstracoes);
+        const composicaoEndividamento = this.#avaliarComposicaoEndividamento(ultimoPeriodo);
         criterios.composicaoEndividamento = composicaoEndividamento;
         pontos += composicaoEndividamento.pontos;
 
@@ -599,11 +599,13 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.financeiro.criterios.evolucaoFaturamento;
         const pontosPossiveis = this.pontuacao.categorias.financeiro.evolucaoFaturamento;
 
-        if (!demonstracoes.dre?.periodos || demonstracoes.dre.periodos.length < 2) {
+        const dres = demonstracoes?.dre ? Object.values(demonstracoes.dre) : [];
+
+        if (dres.length < 2) {
             throw new Error('ScoringEngine: necessário pelo menos 2 períodos de DRE para avaliar evolução de faturamento');
         }
 
-        const dres = demonstracoes.dre.periodos;
+        // A estrutura já vem ordenada p1, p2, p3, p4
         const receitaInicial = dres[0].receitaLiquida;
         const receitaFinal = dres[dres.length - 1].receitaLiquida;
         const anos = dres.length - 1;
@@ -658,15 +660,15 @@ export class ScoringEngine {
      * Avalia Evolução da Lucratividade
      * @private
      */
-    #avaliarEvolucaoLucratividade(indices) {
+    #avaliarEvolucaoLucratividade(dre) {
         const msgCriterio = this.msg.categorias.financeiro.criterios.evolucaoLucratividade;
         const pontosPossiveis = this.pontuacao.categorias.financeiro.evolucaoLucratividade;
 
-        if (!indices || !indices.rentabilidade || typeof indices.rentabilidade.margemLiquida !== 'object') {
-            throw new Error('ScoringEngine: indices.rentabilidade.margemLiquida deve ter sido calculado antes - obrigatório');
+        if (!dre || typeof dre.lucroLiquido !== 'number' || typeof dre.receitaLiquida !== 'number' || dre.receitaLiquida === 0) {
+            return { nome: msgCriterio.nome, pontos: 0, nivel: 'critico', avaliacao: 'Dados insuficientes para margem.' };
         }
 
-        const margemLiquida = indices.rentabilidade.margemLiquida.valor;
+        const margemLiquida = (dre.lucroLiquido / dre.receitaLiquida) * 100;
         const margemPercentual = margemLiquida.toFixed(2);
         const thresholds = this.thresholds.financeiro.margemLiquida;
 
@@ -675,35 +677,35 @@ export class ScoringEngine {
                 nome: msgCriterio.nome,
                 pontos: pontosPossiveis,
                 nivel: 'excelente',
-                avaliacao: this.#formatMsg(msgCriterio.excelente, { margem: margemPercentual })
+                avaliacao: this.#formatMsg(msgCriterio.excelente, { margem: margemPercentual.toString() })
             };
-        } else if (margemLiquida > thresholds.bom * 100) {
+        } else if (margemLiquida > thresholds.bom) {
             return {
                 nome: msgCriterio.nome,
                 pontos: pontosPossiveis * this.pontuacao.niveis.bom,
                 nivel: 'bom',
-                avaliacao: this.#formatMsg(msgCriterio.bom, { margem: margemPercentual })
+                avaliacao: this.#formatMsg(msgCriterio.bom, { margem: margemPercentual.toString() })
             };
-        } else if (margemLiquida > thresholds.adequado * 100) {
+        } else if (margemLiquida > thresholds.adequado) {
             return {
                 nome: msgCriterio.nome,
                 pontos: pontosPossiveis * this.pontuacao.niveis.adequado,
                 nivel: 'adequado',
-                avaliacao: this.#formatMsg(msgCriterio.adequado, { margem: margemPercentual })
+                avaliacao: this.#formatMsg(msgCriterio.adequado, { margem: margemPercentual.toString() })
             };
         } else if (margemLiquida >= thresholds.baixo) {
             return {
                 nome: msgCriterio.nome,
                 pontos: pontosPossiveis * this.pontuacao.niveis.baixo,
                 nivel: 'baixo',
-                avaliacao: this.#formatMsg(msgCriterio.baixo, { margem: margemPercentual })
+                avaliacao: this.#formatMsg(msgCriterio.baixo, { margem: margemPercentual.toString() })
             };
         } else {
             return {
                 nome: msgCriterio.nome,
                 pontos: pontosPossiveis * this.pontuacao.niveis.critico,
                 nivel: 'critico',
-                avaliacao: this.#formatMsg(msgCriterio.critico, { margem: margemPercentual })
+                avaliacao: this.#formatMsg(msgCriterio.critico, { margem: margemPercentual.toString() })
             };
         }
     }
@@ -731,8 +733,8 @@ export class ScoringEngine {
         }
 
         // Obter PL do ano mais recente e anterior
-        const balancoAtual = demonstracoes[0]?.balanco;
-        const balancoAnterior = demonstracoes[1]?.balanco;
+        const balancoAtual = balancos[balancos.length - 1];
+        const balancoAnterior = balancos[0];
 
         if (!balancoAtual || !balancoAnterior) {
             return {
@@ -795,13 +797,13 @@ export class ScoringEngine {
      * Avalia Qualidade das Demonstrações
      * @private
      */
-    #avaliarQualidadeDemonstracoes(demonstracoes) {
+    #avaliarQualidadeDemonstracoes(ultimoPeriodo) {
         const msgCriterio = this.msg.categorias.financeiro.criterios.qualidadeDemonstracoes;
         const pontosPossiveis = this.pontuacao.categorias.financeiro.qualidadeDemonstracoes;
 
-        const temAuditoria = demonstracoes.auditoria !== undefined && demonstracoes.auditoria === true;
-        const temContadorCRC = demonstracoes.contadorCRC !== undefined && demonstracoes.contadorCRC !== '';
-        const demonstracoesCompletas = demonstracoes.balanco !== undefined && demonstracoes.dre !== undefined;
+        const temAuditoria = ultimoPeriodo.auditoria !== undefined && ultimoPeriodo.auditoria === true;
+        const temContadorCRC = ultimoPeriodo.contadorCRC !== undefined && ultimoPeriodo.contadorCRC !== '';
+        const demonstracoesCompletas = ultimoPeriodo.balanco !== undefined && ultimoPeriodo.dre !== undefined;
 
         if (temAuditoria) {
             return { nome: msgCriterio.nome, pontos: pontosPossiveis, nivel: 'excelente', avaliacao: msgCriterio.excelente };
@@ -811,8 +813,8 @@ export class ScoringEngine {
             return { nome: msgCriterio.nome, pontos: pontosPossiveis * this.pontuacao.niveis.adequado, nivel: 'adequado', avaliacao: msgCriterio.adequado };
         } else {
             const camposFaltando = [];
-            if (!demonstracoes.balanco) camposFaltando.push('balanco');
-            if (!demonstracoes.dre) camposFaltando.push('dre');
+            if (!ultimoPeriodo.balanco) camposFaltando.push('balanco');
+            if (!ultimoPeriodo.dre) camposFaltando.push('dre');
 
             const maxCamposBaixo = this.thresholds.financeiro.demonstracoes.camposFaltandoMaximoBaixo;
 
@@ -1012,13 +1014,13 @@ export class ScoringEngine {
         const msgCriterio = this.msg.categorias.capacidadePagamento.criterios.capitalGiro;
         const pontosPossiveis = this.pontuacao.categorias.capacidadePagamento.capitalGiro;
 
-        if (!capitalGiro || !capitalGiro.situacaoFinanceira) {
-            throw new Error('ScoringEngine: capitalGiro.situacaoFinanceira deve ter sido calculado antes - obrigatório');
+        if (!capitalGiro || !capitalGiro.situacao || !capitalGiro.capitalGiroLiquido) {
+            throw new Error('ScoringEngine: capitalGiro.situacao e capitalGiro.capitalGiroLiquido devem ter sido calculados antes - obrigatório');
         }
 
-        const situacao = capitalGiro.situacaoFinanceira.tipo;
-        const cgl = capitalGiro.cgl.valor;
-        const ac = capitalGiro.cgl.ativoCirculante;
+        const situacao = capitalGiro.situacao.tipo;
+        const cgl = capitalGiro.capitalGiroLiquido.valor;
+        const ac = capitalGiro.capitalGiroLiquido.ativoCirculante;
         const thresholds = this.thresholds.capacidadePagamento.cglSobreAC;
 
         if (situacao === 'situacao1' || situacao === 'situacao3') {
@@ -1038,20 +1040,27 @@ export class ScoringEngine {
      * Avalia Nível de Endividamento
      * @private
      */
-    #avaliarNivelEndividamento(demonstracoes) {
+    #avaliarNivelEndividamento(ultimoPeriodo) {
         const msgCriterio = this.msg.categorias.endividamento.criterios.nivelEndividamento;
         const pontosPossiveis = this.pontuacao.categorias.endividamento.nivelEndividamento;
 
-        if (!demonstracoes.balanco?.periodos || demonstracoes.balanco.periodos.length === 0) {
-            throw new Error('ScoringEngine: demonstracoes.balanco.periodos obrigatório para avaliar endividamento');
+        if (!ultimoPeriodo.balanco) {
+            throw new Error('ScoringEngine: ultimoPeriodo.balanco obrigatório para avaliar endividamento');
         }
 
-        const balanco = demonstracoes.balanco.periodos[demonstracoes.balanco.periodos.length - 1];
-        const passivoExigivel = balanco.passivoTotal;
+        const balanco = ultimoPeriodo.balanco;
+        const passivoExigivel = balanco.passivoTotal || 0;
         const pl = this.#somarValores(balanco.patrimonioLiquido);
 
         if (pl === 0) {
-            throw new Error('ScoringEngine: Patrimônio Líquido não pode ser zero para calcular endividamento');
+            // Se PL é zero e há passivo, o endividamento é infinito (crítico).
+            // Se não há passivo, o endividamento é zero (excelente).
+            return {
+                nome: msgCriterio.nome,
+                pontos: passivoExigivel > 0 ? pontosPossiveis * this.pontuacao.niveis.critico : pontosPossiveis,
+                nivel: passivoExigivel > 0 ? 'critico' : 'excelente',
+                avaliacao: passivoExigivel > 0 ? 'Patrimônio Líquido nulo com dívidas existentes.' : 'Sem dívidas e sem patrimônio líquido.'
+            };
         }
 
         const endividamento = (passivoExigivel / pl) * 100;
@@ -1100,17 +1109,17 @@ export class ScoringEngine {
      * Avalia Composição do Endividamento
      * @private
      */
-    #avaliarComposicaoEndividamento(demonstracoes) {
+    #avaliarComposicaoEndividamento(ultimoPeriodo) {
         const msgCriterio = this.msg.categorias.endividamento.criterios.composicaoEndividamento;
         const pontosPossiveis = this.pontuacao.categorias.endividamento.composicaoEndividamento;
 
-        if (!demonstracoes.balanco?.periodos || demonstracoes.balanco.periodos.length === 0) {
-            throw new Error('ScoringEngine: demonstracoes.balanco.periodos obrigatório para avaliar composição de endividamento');
+        if (!ultimoPeriodo.balanco) {
+            throw new Error('ScoringEngine: ultimoPeriodo.balanco obrigatório para avaliar composição de endividamento');
         }
 
-        const balanco = demonstracoes.balanco.periodos[demonstracoes.balanco.periodos.length - 1];
-        const pc = this.#somarValores(balanco.passivo.circulante);
-        const pnc = this.#somarValores(balanco.passivo.naoCirculante);
+        const balanco = ultimoPeriodo.balanco;
+        const pc = balanco.passivoCirculanteTotal || 0;
+        const pnc = balanco.passivoNaoCirculanteTotal || 0;
         const total = pc + pnc;
 
         if (total === 0) {
@@ -1524,8 +1533,8 @@ export class ScoringEngine {
      * @private
      */
     #avaliarGarantiasDisponiveis(garantias) {
-        const msgCriterio = this.msg.categorias.garantias.criterios.garantiasDisponiveis;
-        const pontosPossiveis = this.pontuacao.categorias.garantias.garantiasDisponiveis;
+        const msgCriterio = this.msg.categorias.estruturaConcentracao.criterios.garantiasDisponiveis;
+        const pontosPossiveis = this.pontuacao.categorias.estruturaConcentracao.garantiasDisponiveis;
 
         // Se não houver dados, pontuar como adequado
         if (!garantias || !garantias.valorSolicitado || !garantias.valorGarantias) {
@@ -1565,8 +1574,8 @@ export class ScoringEngine {
      * @private
      */
     #avaliarTempoRelacionamento(relacionamento) {
-        const msgCriterio = this.msg.categorias.garantias.criterios.tempoRelacionamento;
-        const pontosPossiveis = this.pontuacao.categorias.garantias.tempoRelacionamento;
+        const msgCriterio = this.msg.categorias.estruturaConcentracao.criterios.tempoRelacionamento;
+        const pontosPossiveis = this.pontuacao.categorias.estruturaConcentracao.tempoRelacionamento;
 
         // Se não houver dados, pontuar como adequado
         if (!relacionamento || !relacionamento.dataInicio) {
@@ -1926,8 +1935,8 @@ export class ScoringEngine {
             recomendacoes.push(this.msg.recomendacoes.melhorarEndividamento);
         }
 
-        if (categorias.garantias.pontuacao / categorias.garantias.peso < percentualMinimo) {
-            recomendacoes.push(this.msg.recomendacoes.melhorarGarantias);
+        if (categorias.estruturaConcentracao.pontuacao / categorias.estruturaConcentracao.peso < percentualMinimo) {
+            recomendacoes.push(this.msg.recomendacoes.melhorarEstrutura);
         }
 
         return recomendacoes;

@@ -688,7 +688,7 @@
             }
           }
         },
-        "garantias": {
+        "estruturaConcentracao": {
           "nome": "Garantias e Relacionamento",
           "peso": 10,
           "descricao": "Avalia garantias disponíveis, tempo de relacionamento e operações anteriores",

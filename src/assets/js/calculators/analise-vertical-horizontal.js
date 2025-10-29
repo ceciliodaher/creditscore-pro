@@ -218,7 +218,9 @@ export class AnaliseVerticalHorizontal {
             // Validar estrutura do balanço
             this.#validarEstruturaBalanco(balanco, ano);
 
+            // Confiar nos totais já calculados pelo ImportManager (Single Source of Truth)
             const ativoTotal = balanco.ativoTotal;
+            const passivoPLTotal = balanco.passivoPLTotal;
 
             // CORREÇÃO: Calcular Passivo Total corretamente (apenas PC + PNC, sem PL)
             // Se o objeto já tem os totais calculados, usar; senão, somar os componentes
@@ -235,6 +237,7 @@ export class AnaliseVerticalHorizontal {
                     `AnaliseVerticalHorizontal: balanço ${ano} desbalanceado - ` +
                     `Ativo Total (${ativoTotal}) ≠ Passivo + PL (${passivoMaisPL}), ` +
                     `[Passivo: ${passivoTotal}, PL: ${patrimonioLiquidoTotal}], ` +
+                    `Ativo Total (${ativoTotal}) ≠ Passivo + PL (${passivoPLTotal}), ` +
                     `diferença: ${diferenca.toFixed(2)}`
                 );
             }
@@ -250,6 +253,9 @@ export class AnaliseVerticalHorizontal {
                     passivoTotal,
                     patrimonioLiquidoTotal,
                     passivoMaisPL,
+                    passivoTotal: balanco.passivoTotal,
+                    patrimonioLiquidoTotal: balanco.patrimonioLiquidoTotal,
+                    passivoMaisPL: passivoPLTotal,
                     diferenca,
                     balanceado: true,
                 },

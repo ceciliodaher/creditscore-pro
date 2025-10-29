@@ -379,75 +379,44 @@ class ImportManager {
         console.log('   - Ativo Total (p4):', periodos[3].ativoTotal);
         console.log('   - Receita Líquida (p4):', periodosDRE[3].receitaLiquida);
 
-        // Estrutura de balanco hierárquica (compatível com IndicesFinanceirosCalculator)
-        const balancoTransformado = {
-            // Períodos individuais (estrutura flat para cada período)
-            p1: periodos[0],
-            p2: periodos[1],
-            p3: periodos[2],
-            p4: periodos[3],
-
-            // Array representation (para scoring-engine que usa .sort(), .filter(), etc)
-            periodos: balancoPeriodsArray,
-
-            // Estrutura hierárquica para cálculos (usa dados do p4 - último período)
-            ativo: {
-                circulante: {
-                    total: periodos[3].ativoCirculanteTotal,
-                    disponibilidades: periodos[3].disponibilidadesTotal,
-                    contasReceber: periodos[3].contasReceberLiquido,
-                    estoques: periodos[3].estoquesTotal
-                },
-                naoCirculante: {
-                    total: periodos[3].ativoNaoCirculanteTotal,
-                    realizavelLP: periodos[3].realizavelLPTotal,
-                    investimentos: periodos[3].investimentosTotal,
-                    imobilizado: periodos[3].imobilizadoLiquido,
-                    intangivel: periodos[3].intangivelLiquido
-                },
-                total: periodos[3].ativoTotal
+        // ESTRUTURA PARA ANÁLISES TEMPORAIS (Vertical/Horizontal)
+        // Objeto onde cada chave é um período.
+        const demonstracoesPorPeriodo = {
+            balanco: {
+                p1: periodos[0],
+                p2: periodos[1],
+                p3: periodos[2],
+                p4: periodos[3]
             },
-            passivo: {
-                circulante: {
-                    total: periodos[3].passivoCirculanteTotal
-                },
-                naoCirculante: {
-                    total: periodos[3].passivoNaoCirculanteTotal
-                },
-                total: periodos[3].passivoTotal
-            },
-            patrimonioLiquido: periodos[3].patrimonioLiquido, // Correção: Usar o objeto completo
-
-            // Valores diretos para retrocompatibilidade (flat)
-            ativoTotal: periodos[3].ativoTotal,
-            passivoTotal: periodos[3].passivoTotal,
-            ativoCirculante: periodos[3].ativoCirculanteTotal,
-            passivoCirculante: periodos[3].passivoCirculanteTotal,
-            ativoNaoCirculante: periodos[3].ativoNaoCirculanteTotal,
-            passivoNaoCirculante: periodos[3].passivoNaoCirculanteTotal,
-            disponibilidades: periodos[3].disponibilidadesTotal,
-            estoques: periodos[3].estoquesTotal
+            dre: {
+                p1: periodosDRE[0],
+                p2: periodosDRE[1],
+                p3: periodosDRE[2],
+                p4: periodosDRE[3]
+            }
         };
 
-        // Estrutura de DRE semanticamente correta (SOLID/DRY)
-        const dreTransformada = {
-            // Períodos individuais
-            p1: periodosDRE[0],
-            p2: periodosDRE[1],
-            p3: periodosDRE[2],
-            p4: periodosDRE[3],
+        // ESTRUTURA PARA ANÁLISES DE POSIÇÃO (Índices, Capital de Giro, Scoring)
+        // Objeto contendo apenas os dados do último período (p4) em formato hierárquico.
+        const ultimoPeriodo = {
+            balanco: {
+                // Adiciona os totais no nível raiz para compatibilidade
+                ativoTotal: periodos[3].ativoTotal,
+                passivoTotal: periodos[3].passivoTotal,
+                ativoCirculante: periodos[3].ativoCirculanteTotal,
+                passivoCirculante: periodos[3].passivoCirculanteTotal,
+                estoques: periodos[3].estoquesTotal,
+                disponibilidades: periodos[3].disponibilidadesTotal,
+                patrimonioLiquidoTotal: periodos[3].patrimonioLiquidoTotal,
 
-            // Array representation (para scoring-engine que usa .sort(), .filter(), etc)
-            periodos: drePeriodsArray,
-
-            // Valores do último período (p4) para uso direto
-            receitaLiquida: periodosDRE[3].receitaLiquida,
-            lucroBruto: periodosDRE[3].lucroBruto,
-            lucroOperacional: periodosDRE[3].lucroOperacional,
-            lajir: periodosDRE[3].lajir,
-            lucroLiquido: periodosDRE[3].lucroLiquido,
-            // ✅ ADICIONADO: Garante compatibilidade com IndicesFinanceirosCalculator
-            custosProdutos: periodosDRE[3].custosProdutos
+                // Adiciona a estrutura hierárquica completa que os calculadores esperam
+                ativo: periodos[3].ativo,
+                passivo: periodos[3].passivo,
+                patrimonioLiquido: periodos[3].patrimonioLiquido
+            },
+            dre: {
+                ...periodosDRE[3] // Mantém a estrutura da DRE do último período
+            }
         };
 
         // ========== TRANSFORMAÇÕES ADICIONAIS PARA SCORING ENGINE ==========
@@ -524,12 +493,8 @@ class ImportManager {
         // Retorna estrutura compatível com recalcularAnaliseCompleta
         return {
             cadastro: cadastroTransformado,
-            demonstracoes: {
-                balanco: balancoTransformado,
-                dre: dreTransformada
-            },
-            balanco: balancoTransformado,
-            dre: dreTransformada,
+            demonstracoesPorPeriodo, // Para análises temporais
+            ultimoPeriodo, // Para análises de posição
             endividamento: endividamentoTransformado,
             compliance: complianceTransformado,
             relacionamento: relacionamentoTransformado,
